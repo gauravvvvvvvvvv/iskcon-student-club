@@ -18,7 +18,7 @@ Once Node.js is installed, follow these steps:
 
 1. Navigate to the project directory:
    ```bash
-   cd iskconstudentcenter
+   cd iskcon-student-club
    ```
 
 2. Install the dependencies:
@@ -36,7 +36,7 @@ Once Node.js is installed, follow these steps:
 ## Project Structure
 
 ```
-iskconstudentcenter/
+iskcon-student-club/
 ├── src/
 │   └── app/
 │       ├── globals.css      # Global styles with Tailwind CSS
@@ -103,7 +103,7 @@ If you prefer manual deployment:
 
 2. Deploy from your project directory:
    ```bash
-   cd iskconstudentcenter
+   cd iskcon-student-club
    vercel
    ```
 
