@@ -66,6 +66,29 @@ export default function Home() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          border: '2px solid rgba(255, 255, 255, 0.3)',
+          backdropFilter: 'blur(10px)',
+          fontSize: '0.75rem',
+          fontWeight: '600'
+        }}>
+          IMG
+        </div>
+
+        {/* Main Hero Content */}
+        <div style={{
+          textAlign: 'center',
+          maxWidth: '1200px',
+          padding: '0 2rem',
+          position: 'relative',
+          zIndex: 10
+        }}>
+          <h1 style={{
+            fontSize: 'clamp(2.5rem, 8vw, 6rem)',
+            fontWeight: '800',
+            marginBottom: '1rem',
+            textShadow: '0 4px 20px rgba(0,0,0,0.3)',
+            lineHeight: '1.1'
+          }}>
             Welcome to the<br />
             <span style={{
               background: 'linear-gradient(45deg, #fbbf24, #f59e0b, #fbbf24)',
