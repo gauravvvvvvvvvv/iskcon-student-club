@@ -6,8 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "export": "next export"
+    "lint": "next lint"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -24,5 +23,8 @@
     "postcss": "^8.4.39",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

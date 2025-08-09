@@ -6,11 +6,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  distDir: '.next',
-  trailingSlash: false,
-  images: {
-    unoptimized: false
-  }
 };
 
 export default nextConfig;
