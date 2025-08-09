@@ -1,3 +1,86 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Ensure base styles are loaded */
+@layer base {
+  html {
+    font-family: system-ui, sans-serif;
+  }
+  body {
+    background-color: #fef3c7;
+  }
+}
+
+/* Custom components for fallback */
+@layer components {
+  .btn-primary {
+    @apply bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-orange-700 transition-colors;
+  }
+  
+  .card {
+    @apply bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow;
+  }
+  
+  .gradient-header {
+    background: linear-gradient(135deg, #ea580c 0%, #f59e0b 50%, #d97706 100%);
+  }
+  
+  .gradient-text {
+    background: linear-gradient(135deg, #ea580c, #f59e0b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+/* Fallback styles in case Tailwind doesn't load */
+.fallback-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.fallback-header {
+  background: linear-gradient(135deg, #ea580c 0%, #f59e0b 50%, #d97706 100%);
+  color: white;
+  padding: 4rem 0;
+  text-align: center;
+}
+
+.fallback-card {
+  background: white;
+  padding: 2rem;
+  margin: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.fallback-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.fallback-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.fallback-button {
+  background: #ea580c;
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.fallback-button:hover {
+  background: #c2410c;
+  transform: scale(1.05);
+}

@@ -2,9 +2,9 @@ import React from 'react';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50" style={{minHeight: '100vh', background: 'linear-gradient(135deg, #fff7ed 0%, #fef3c7 50%, #fefce8 100%)'}}>
       {/* Header with Image Spaces and CTA */}
-      <header className="relative bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 shadow-2xl overflow-hidden">
+      <header className="relative bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 shadow-2xl overflow-hidden gradient-header" style={{background: 'linear-gradient(135deg, #ea580c 0%, #f59e0b 50%, #d97706 100%)', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'}}>
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0 bg-gradient-to-br from-yellow-400 to-orange-600"></div>
@@ -14,37 +14,37 @@ export default function Home() {
         </div>
         
         {/* Top Left Image Space */}
-        <div className="absolute top-6 left-6 w-20 h-20 bg-white/20 backdrop-blur-sm border-2 border-dashed border-white/50 rounded-xl flex items-center justify-center shadow-lg">
-          <span className="text-xs text-white font-medium">Logo</span>
+        <div className="absolute top-6 left-6 w-20 h-20 bg-white/20 backdrop-blur-sm border-2 border-dashed border-white/50 rounded-xl flex items-center justify-center shadow-lg" style={{background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(10px)', border: '2px dashed rgba(255,255,255,0.5)', borderRadius: '12px', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'}}>
+          <span className="text-xs text-white font-medium" style={{color: 'white', fontSize: '12px', fontWeight: '500'}}>Logo</span>
         </div>
         
         {/* Top Right Image Space */}
-        <div className="absolute top-6 right-6 w-20 h-20 bg-white/20 backdrop-blur-sm border-2 border-dashed border-white/50 rounded-xl flex items-center justify-center shadow-lg">
-          <span className="text-xs text-white font-medium">Image</span>
+        <div className="absolute top-6 right-6 w-20 h-20 bg-white/20 backdrop-blur-sm border-2 border-dashed border-white/50 rounded-xl flex items-center justify-center shadow-lg" style={{background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(10px)', border: '2px dashed rgba(255,255,255,0.5)', borderRadius: '12px', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'}}>
+          <span className="text-xs text-white font-medium" style={{color: 'white', fontSize: '12px', fontWeight: '500'}}>Image</span>
         </div>
 
-        <div className="relative container mx-auto px-4 py-16">
-          <div className="text-center">
-            <h1 className="text-6xl md:text-7xl font-bold text-white mb-6 drop-shadow-lg">
+        <div className="relative container mx-auto px-4 py-16 fallback-container" style={{maxWidth: '1200px', margin: '0 auto', padding: '4rem 1rem', position: 'relative'}}>
+          <div className="text-center" style={{textAlign: 'center'}}>
+            <h1 className="text-6xl md:text-7xl font-bold text-white mb-6 drop-shadow-lg" style={{fontSize: 'clamp(3rem, 8vw, 7rem)', fontWeight: '700', color: 'white', marginBottom: '2rem', textShadow: '0 10px 15px rgba(0,0,0,0.3)'}}>
               Welcome to the
             </h1>
-            <h2 className="text-4xl md:text-5xl font-bold text-amber-100 mb-8 drop-shadow-lg">
+            <h2 className="text-4xl md:text-5xl font-bold text-amber-100 mb-8 drop-shadow-lg" style={{fontSize: 'clamp(2rem, 6vw, 5rem)', fontWeight: '700', color: '#fef3c7', marginBottom: '2rem', textShadow: '0 10px 15px rgba(0,0,0,0.3)'}}>
               ISKCON Student Center
             </h2>
-            <p className="text-xl md:text-2xl text-orange-100 mb-10 max-w-4xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-orange-100 mb-10 max-w-4xl mx-auto leading-relaxed" style={{fontSize: 'clamp(1.25rem, 3vw, 2rem)', color: '#fed7aa', marginBottom: '3rem', maxWidth: '64rem', margin: '0 auto 3rem auto', lineHeight: '1.6'}}>
               A comprehensive platform for spiritual growth, learning, and community building
             </p>
             
             {/* Prominent Join Now Button */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <button className="group relative bg-white text-orange-600 font-bold py-4 px-10 rounded-2xl hover:bg-orange-50 transition-all duration-300 transform hover:scale-105 shadow-2xl border-4 border-white/20">
-                <span className="relative z-10 text-lg">🙏 Join Our Community</span>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center" style={{display: 'flex', flexDirection: 'column', gap: '1rem', justifyContent: 'center', alignItems: 'center'}}>
+              <button className="group relative bg-white text-orange-600 font-bold py-4 px-10 rounded-2xl hover:bg-orange-50 transition-all duration-300 transform hover:scale-105 shadow-2xl border-4 border-white/20 fallback-button" style={{background: 'white', color: '#ea580c', fontWeight: '700', padding: '1rem 2.5rem', borderRadius: '16px', border: '4px solid rgba(255,255,255,0.2)', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)', transition: 'all 0.3s ease', cursor: 'pointer'}}>
+                <span className="relative z-10 text-lg" style={{fontSize: '1.125rem', position: 'relative', zIndex: '10'}}>🙏 Join Our Community</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-orange-200 to-amber-200 rounded-2xl opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
               </button>
               
-              <div className="flex items-center space-x-2 text-orange-100">
-                <span className="text-sm">📞</span>
-                <span className="font-medium">+91 83183 42494</span>
+              <div className="flex items-center space-x-2 text-orange-100" style={{display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#fed7aa'}}>
+                <span className="text-sm" style={{fontSize: '14px'}}>📞</span>
+                <span className="font-medium" style={{fontWeight: '500'}}>+91 83183 42494</span>
               </div>
             </div>
           </div>
