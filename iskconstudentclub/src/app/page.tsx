@@ -7,7 +7,7 @@ export default function Home() {
       <header className="bg-white shadow-md">
         <div className="container mx-auto px-4 py-6">
           <h1 className="text-4xl font-bold text-orange-800 text-center">
-            Welcome to the ISKCON Student Club
+            Welcome to the ISKCON Student Center
           </h1>
         </div>
       </header>
@@ -64,7 +64,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="bg-gray-800 text-white py-8 mt-16">
         <div className="container mx-auto px-4 text-center">
-          <p>&copy; 2025 ISKCON Student Club. All rights reserved.</p>
+          <p>&copy; 2025 ISKCON Student Center. All rights reserved.</p>
         </div>
       </footer>
     </div>

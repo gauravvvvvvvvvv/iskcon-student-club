@@ -1,6 +1,6 @@
-# ISKCON Student Club Website
+# ISKCON Student Center Website
 
-A beautiful website for the ISKCON Student Club built with Next.js, React, and Tailwind CSS.
+A beautiful website for the ISKCON Student Center built with Next.js, React, and Tailwind CSS.
 
 ## Getting Started
 
@@ -18,7 +18,7 @@ Once Node.js is installed, follow these steps:
 
 1. Navigate to the project directory:
    ```bash
-   cd iskconstudentclub
+   cd iskconstudentcenter
    ```
 
 2. Install the dependencies:
@@ -36,7 +36,7 @@ Once Node.js is installed, follow these steps:
 ## Project Structure
 
 ```
-iskconstudentclub/
+iskconstudentcenter/
 ├── src/
 │   └── app/
 │       ├── globals.css      # Global styles with Tailwind CSS
@@ -103,7 +103,7 @@ If you prefer manual deployment:
 
 2. Deploy from your project directory:
    ```bash
-   cd iskconstudentclub
+   cd iskconstudentcenter
    vercel
    ```
 

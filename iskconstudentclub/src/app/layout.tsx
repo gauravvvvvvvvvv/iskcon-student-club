@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "ISKCON Student Club",
+  title: "ISKCON Student Center",
   description: "A platform for students to connect and share their experiences",
 };
 
