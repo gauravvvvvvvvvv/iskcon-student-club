@@ -2,38 +2,64 @@ import React from 'react';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50">
-      {/* Header with Image Spaces */}
-      <header className="relative bg-white shadow-md overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50">
+      {/* Header with Image Spaces and CTA */}
+      <header className="relative bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 shadow-2xl overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0 bg-gradient-to-br from-yellow-400 to-orange-600"></div>
+          <div className="absolute inset-0" style={{
+            backgroundImage: 'radial-gradient(circle at 25% 25%, rgba(255,255,255,0.2) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 0%, transparent 50%)'
+          }}></div>
+        </div>
+        
         {/* Top Left Image Space */}
-        <div className="absolute top-4 left-4 w-16 h-16 bg-orange-100 border-2 border-dashed border-orange-300 rounded-lg flex items-center justify-center">
-          <span className="text-xs text-orange-600">Logo</span>
+        <div className="absolute top-6 left-6 w-20 h-20 bg-white/20 backdrop-blur-sm border-2 border-dashed border-white/50 rounded-xl flex items-center justify-center shadow-lg">
+          <span className="text-xs text-white font-medium">Logo</span>
         </div>
         
         {/* Top Right Image Space */}
-        <div className="absolute top-4 right-4 w-16 h-16 bg-orange-100 border-2 border-dashed border-orange-300 rounded-lg flex items-center justify-center">
-          <span className="text-xs text-orange-600">Image</span>
+        <div className="absolute top-6 right-6 w-20 h-20 bg-white/20 backdrop-blur-sm border-2 border-dashed border-white/50 rounded-xl flex items-center justify-center shadow-lg">
+          <span className="text-xs text-white font-medium">Image</span>
         </div>
 
-        <div className="container mx-auto px-4 py-12">
-          <h1 className="text-5xl font-bold text-orange-800 text-center mb-4">
-            Welcome to the ISKCON Student Center
-          </h1>
-          <p className="text-xl text-gray-700 text-center max-w-3xl mx-auto">
-            A comprehensive platform for spiritual growth, learning, and community building
-          </p>
+        <div className="relative container mx-auto px-4 py-16">
+          <div className="text-center">
+            <h1 className="text-6xl md:text-7xl font-bold text-white mb-6 drop-shadow-lg">
+              Welcome to the
+            </h1>
+            <h2 className="text-4xl md:text-5xl font-bold text-amber-100 mb-8 drop-shadow-lg">
+              ISKCON Student Center
+            </h2>
+            <p className="text-xl md:text-2xl text-orange-100 mb-10 max-w-4xl mx-auto leading-relaxed">
+              A comprehensive platform for spiritual growth, learning, and community building
+            </p>
+            
+            {/* Prominent Join Now Button */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <button className="group relative bg-white text-orange-600 font-bold py-4 px-10 rounded-2xl hover:bg-orange-50 transition-all duration-300 transform hover:scale-105 shadow-2xl border-4 border-white/20">
+                <span className="relative z-10 text-lg">🙏 Join Our Community</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-200 to-amber-200 rounded-2xl opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+              </button>
+              
+              <div className="flex items-center space-x-2 text-orange-100">
+                <span className="text-sm">📞</span>
+                <span className="font-medium">+91 83183 42494</span>
+              </div>
+            </div>
+          </div>
         </div>
       </header>
 
-      {/* Navigation */}
-      <nav className="bg-orange-600 shadow-lg">
+      {/* Modern Navigation */}
+      <nav className="bg-white/95 backdrop-blur-md shadow-xl sticky top-0 z-50 border-b border-orange-200">
         <div className="container mx-auto px-4">
-          <div className="flex flex-wrap justify-center space-x-6 py-4">
-            <a href="#programs" className="text-white hover:text-orange-200 transition-colors">Programs</a>
-            <a href="#events" className="text-white hover:text-orange-200 transition-colors">Events</a>
-            <a href="#accommodation" className="text-white hover:text-orange-200 transition-colors">Accommodation</a>
-            <a href="#schedule" className="text-white hover:text-orange-200 transition-colors">Schedule</a>
-            <a href="#contact" className="text-white hover:text-orange-200 transition-colors">Contact</a>
+          <div className="flex flex-wrap justify-center space-x-8 py-6">
+            <a href="#programs" className="text-orange-700 hover:text-orange-500 transition-colors font-semibold text-lg hover:scale-105 transform duration-200">Programs</a>
+            <a href="#events" className="text-orange-700 hover:text-orange-500 transition-colors font-semibold text-lg hover:scale-105 transform duration-200">Events</a>
+            <a href="#accommodation" className="text-orange-700 hover:text-orange-500 transition-colors font-semibold text-lg hover:scale-105 transform duration-200">Accommodation</a>
+            <a href="#schedule" className="text-orange-700 hover:text-orange-500 transition-colors font-semibold text-lg hover:scale-105 transform duration-200">Schedule</a>
+            <a href="#contact" className="text-orange-700 hover:text-orange-500 transition-colors font-semibold text-lg hover:scale-105 transform duration-200">Contact</a>
           </div>
         </div>
       </nav>
@@ -204,54 +230,71 @@ export default function Home() {
       </section>
 
       {/* Call to Action */}
-      <section className="bg-orange-600 py-16">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold text-white mb-6">Join Our Spiritual Community</h2>
-          <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
+      <section className="bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 py-20 relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" style={{
+            backgroundImage: 'radial-gradient(circle at 30% 40%, rgba(255,255,255,0.2) 0%, transparent 50%), radial-gradient(circle at 70% 70%, rgba(255,255,255,0.1) 0%, transparent 50%)'
+          }}></div>
+        </div>
+        
+        <div className="relative container mx-auto px-4 text-center">
+          <h2 className="text-5xl font-bold text-white mb-8 drop-shadow-lg">Join Our Spiritual Community</h2>
+          <p className="text-2xl text-orange-100 mb-12 max-w-3xl mx-auto leading-relaxed">
             Begin your journey of spiritual growth, make lifelong friendships, and discover your true potential
           </p>
-          <div className="space-x-4">
-            <button className="bg-white text-orange-600 font-bold py-3 px-8 rounded-lg hover:bg-orange-50 transition duration-300">
-              Join Now
-            </button>
-            <button className="border-2 border-white text-white font-bold py-3 px-8 rounded-lg hover:bg-white hover:text-orange-600 transition duration-300">
-              Learn More
+          <div className="space-y-4">
+            <button className="group relative bg-white text-orange-600 font-bold py-4 px-12 rounded-2xl hover:bg-orange-50 transition-all duration-300 transform hover:scale-105 shadow-2xl">
+              <span className="relative z-10 text-xl">🙏 Join Now</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-orange-200 to-amber-200 rounded-2xl opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
             </button>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-12">
+      <footer className="bg-gradient-to-b from-gray-900 to-black text-white py-16">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8">
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Contact Info</h3>
-              <p className="text-gray-300 mb-2">📍 Address: [Your Center Address]</p>
-              <p className="text-gray-300 mb-2">📞 Phone: [Your Phone Number]</p>
-              <p className="text-gray-300">✉️ Email: [Your Email]</p>
+          <div className="grid md:grid-cols-3 gap-12">
+            <div className="space-y-6">
+              <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">Contact Info</h3>
+              <div className="space-y-4">
+                <div className="flex items-start space-x-3">
+                  <span className="text-orange-400 mt-1">📍</span>
+                  <p className="text-gray-300 leading-relaxed">26 Prem Niwas First Floor, Malka Ganj, New Delhi, Delhi 110007</p>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <span className="text-orange-400">📞</span>
+                  <p className="text-gray-300">+91 83183 42494</p>
+                </div>
+              </div>
             </div>
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Quick Links</h3>
-              <ul className="space-y-2 text-gray-300">
-                <li><a href="#programs" className="hover:text-orange-400">Programs</a></li>
-                <li><a href="#events" className="hover:text-orange-400">Events</a></li>
-                <li><a href="#accommodation" className="hover:text-orange-400">Accommodation</a></li>
-                <li><a href="#schedule" className="hover:text-orange-400">Schedule</a></li>
+            <div className="space-y-6">
+              <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">Quick Links</h3>
+              <ul className="space-y-3 text-gray-300">
+                <li><a href="#programs" className="hover:text-orange-400 transition-colors">Programs</a></li>
+                <li><a href="#events" className="hover:text-orange-400 transition-colors">Events</a></li>
+                <li><a href="#accommodation" className="hover:text-orange-400 transition-colors">Accommodation</a></li>
+                <li><a href="#schedule" className="hover:text-orange-400 transition-colors">Schedule</a></li>
               </ul>
             </div>
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Follow Us</h3>
-              <div className="flex space-x-4">
-                <a href="#" className="text-gray-300 hover:text-orange-400">Facebook</a>
-                <a href="#" className="text-gray-300 hover:text-orange-400">Instagram</a>
-                <a href="#" className="text-gray-300 hover:text-orange-400">YouTube</a>
+            <div className="space-y-6">
+              <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">Follow Us</h3>
+              <div className="flex space-x-6">
+                <a href="https://www.instagram.com/iskcondelhiuniversity" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-orange-400 transition-colors text-lg">
+                  📷 Instagram
+                </a>
+                <a href="https://www.youtube.com/@ISKCONDelhiUniversity" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-orange-400 transition-colors text-lg">
+                  📺 YouTube
+                </a>
               </div>
             </div>
           </div>
-          <div className="border-t border-gray-700 mt-8 pt-8 text-center">
-            <p>&copy; 2025 ISKCON Student Center. All rights reserved.</p>
-            <p className="text-orange-400 mt-2">Hare Kṛṣṇa Hare Kṛṣṇa Kṛṣṇa Kṛṣṇa Hare Hare Hare Rāma Hare Rāma Rāma Rāma Hare Hare</p>
+          <div className="border-t border-gray-700 mt-12 pt-8 text-center">
+            <p className="text-gray-400 mb-4">&copy; 2025 ISKCON Student Center. All rights reserved.</p>
+            <p className="text-orange-400 text-lg font-medium">
+              Hare Kṛṣṇa Hare Kṛṣṇa Kṛṣṇa Kṛṣṇa Hare Hare Hare Rāma Hare Rāma Rāma Rāma Hare Hare
+            </p>
           </div>
         </div>
       </footer>
