@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 
 export default function Home() {
@@ -612,27 +614,6 @@ export default function Home() {
           </button>
         </div>
       </section>
-
-      {/* Animations CSS */}
-      <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-20px) rotate(180deg); }
-        }
-        
-        @keyframes bounce {
-          0%, 20%, 53%, 80%, 100% { transform: translateX(-50%) translateY(0); }
-          40%, 43% { transform: translateX(-50%) translateY(-30px); }
-          70% { transform: translateX(-50%) translateY(-15px); }
-          90% { transform: translateX(-50%) translateY(-4px); }
-        }
-        
-        @keyframes scroll {
-          0% { opacity: 0; transform: translateX(-50%) translateY(0); }
-          10%, 90% { opacity: 1; }
-          100% { opacity: 0; transform: translateX(-50%) translateY(15px); }
-        }
-      `}</style>
     </div>
   );
 }
