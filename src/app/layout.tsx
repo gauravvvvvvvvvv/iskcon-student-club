@@ -5,6 +5,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "ISKCON Student Center",
   description: "A platform for students to connect and share their experiences",
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({
