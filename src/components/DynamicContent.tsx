@@ -122,7 +122,7 @@ export function DynamicCarousel() {
               opacity: currentSlide === index ? 1 : 0,
               transition: 'opacity 0.8s ease-in-out',
               backgroundImage: `url('${image.url}')`,
-              backgroundSize: 'contain',
+              backgroundSize: 'cover',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
               backgroundColor: 'white'
