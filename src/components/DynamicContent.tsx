@@ -142,132 +142,100 @@ export function DynamicCarousel() {
         }} />
       </div>
 
-      {/* Content Container */}
+      {/* Content Container - Repositioned */}
       <div style={{
-        position: 'relative',
-        zIndex: 3,
-        height: '100%',
+        position: 'absolute',
+        bottom: '80px', // Above navigation
+        left: '50%',
+        transform: 'translateX(-50%)',
+        zIndex: 4,
         display: 'flex',
-        flexDirection: 'column',
+        gap: '1rem',
         justifyContent: 'center',
-        alignItems: 'center',
-        padding: 'clamp(1rem, 4vw, 2rem)',
-        maxWidth: '1200px',
-        margin: '0 auto',
-        textAlign: 'center'
-      }} className="carousel-content">
-        {/* Center Title */}
-        <div style={{ textAlign: 'center', marginBottom: '2rem' }} className="carousel-title">
-          <h1 style={{
-            fontSize: 'clamp(2rem, 6vw, 4rem)',
-            fontWeight: '900',
-            color: 'white',
-            textShadow: '0 4px 8px rgba(0, 0, 0, 0.5)',
-            margin: 0,
-            letterSpacing: '0.05em',
-            lineHeight: '1.1'
-          }}>
-            ISKCON Student Center
-          </h1>
-          <p style={{
-            fontSize: 'clamp(1rem, 3vw, 1.5rem)',
-            color: 'rgba(255, 255, 255, 0.9)',
-            margin: '1rem 0 0 0',
-            fontWeight: '500'
-          }}>
-            International Society for Krishna Consciousness
-          </p>
-        </div>
-
+        flexWrap: 'wrap',
+        padding: '0 1rem'
+      }}>
         {/* Call to Action Buttons */}
-        <div style={{ 
-          display: 'flex', 
-          gap: '1rem', 
-          justifyContent: 'center', 
-          marginBottom: '3rem',
-          flexWrap: 'wrap'
-        }}>
-          <a 
-            href="https://forms.google.com/your-form-id"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.95)',
-              color: '#ea580c',
-              padding: '1rem 2rem',
-              borderRadius: '999px',
-              textDecoration: 'none',
-              fontWeight: '700',
-              fontSize: '1.1rem',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              backdropFilter: 'blur(10px)',
-              border: '2px solid rgba(255, 255, 255, 0.3)'
-            }}
-            className="card-hover animate-fadeInUp material-btn"
-          >
-            <span style={{ 
-              width: '20px', 
-              height: '20px', 
-              backgroundColor: '#ea580c', 
-              borderRadius: '50%', 
-              display: 'inline-block', 
-              marginRight: '0.5rem',
-              position: 'relative'
-            }}>
-              <span style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                color: 'white',
-                fontSize: '12px',
-                fontWeight: 'bold'
-              }}>★</span>
-            </span>
-            Join Now
-          </a>
-          <a 
-            href="#programs"
-            style={{
-              border: '2px solid rgba(255, 255, 255, 0.9)',
+        <a 
+          href="https://forms.google.com/your-form-id"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            color: '#ea580c',
+            padding: 'clamp(0.75rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem)',
+            borderRadius: '999px',
+            textDecoration: 'none',
+            fontWeight: '700',
+            fontSize: 'clamp(0.9rem, 2.5vw, 1.1rem)',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            backdropFilter: 'blur(10px)',
+            border: '2px solid rgba(255, 255, 255, 0.3)',
+            transition: 'all 0.3s ease'
+          }}
+          className="card-hover animate-fadeInUp material-btn"
+        >
+          <span style={{ 
+            width: '18px', 
+            height: '18px', 
+            backgroundColor: '#ea580c', 
+            borderRadius: '50%', 
+            display: 'inline-block',
+            position: 'relative'
+          }}>
+            <span style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
               color: 'white',
-              backgroundColor: 'transparent',
-              padding: '1rem 2rem',
-              borderRadius: '999px',
-              textDecoration: 'none',
-              fontWeight: '700',
-              fontSize: '1.1rem',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              backdropFilter: 'blur(10px)'
-            }}
-            className="card-hover animate-fadeInUp material-btn"
-          >
-            <span style={{ 
-              width: '20px', 
-              height: '20px', 
-              backgroundColor: 'rgba(255, 255, 255, 0.3)', 
-              borderRadius: '50%', 
-              display: 'inline-block', 
-              marginRight: '0.5rem',
-              position: 'relative'
-            }}>
-              <span style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                color: 'white',
-                fontSize: '12px',
-                fontWeight: 'bold'
-              }}>+</span>
-            </span>
-            Explore Programs
-          </a>
-        </div>
+              fontSize: '10px',
+              fontWeight: 'bold'
+            }}>★</span>
+          </span>
+          Join Now
+        </a>
+        <a 
+          href="#programs"
+          style={{
+            border: '2px solid rgba(255, 255, 255, 0.9)',
+            color: 'white',
+            backgroundColor: 'transparent',
+            padding: 'clamp(0.75rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem)',
+            borderRadius: '999px',
+            textDecoration: 'none',
+            fontWeight: '700',
+            fontSize: 'clamp(0.9rem, 2.5vw, 1.1rem)',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            backdropFilter: 'blur(10px)',
+            transition: 'all 0.3s ease'
+          }}
+          className="card-hover animate-fadeInUp material-btn"
+        >
+          <span style={{ 
+            width: '18px', 
+            height: '18px', 
+            backgroundColor: 'rgba(255, 255, 255, 0.3)', 
+            borderRadius: '50%', 
+            display: 'inline-block',
+            position: 'relative'
+          }}>
+            <span style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              color: 'white',
+              fontSize: '10px',
+              fontWeight: 'bold'
+            }}>+</span>
+          </span>
+          Explore Programs
+        </a>
       </div>
 
       {/* Carousel Navigation */}

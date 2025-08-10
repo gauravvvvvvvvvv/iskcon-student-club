@@ -188,6 +188,16 @@ export default function Home() {
           .carousel-content p {
             font-size: clamp(0.9rem, 2.5vw, 1.2rem) !important;
           }
+          
+          .founder-text {
+            display: none !important;
+          }
+        }
+        
+        @media (max-width: 768px) {
+          .founder-text {
+            display: none !important;
+          }
         }
         `
       }} />
@@ -208,22 +218,22 @@ export default function Home() {
           width: '100%',
           display: 'flex', 
           alignItems: 'center',
-          padding: '0',
+          padding: '0 clamp(0.5rem, 2vw, 1rem)',
           flexWrap: 'nowrap',
-          height: '60px',
-          justifyContent: 'flex-start'
+          height: 'clamp(50px, 10vw, 60px)',
+          justifyContent: 'space-between'
         }}>
           {/* Left corner - ISKCON and Prabhupada images with text */}
           <div style={{ 
             display: 'flex',
             alignItems: 'center',
-            gap: '0.1rem',
+            gap: 'clamp(0.1rem, 1vw, 0.3rem)',
             flexShrink: 0,
-            paddingLeft: '0.5rem'
+            minWidth: '0'
           }}>
             <div style={{ 
-              width: '70px',
-              height: '70px',
+              width: 'clamp(40px, 8vw, 70px)',
+              height: 'clamp(40px, 8vw, 70px)',
               backgroundImage: "url('/image.png')",
               backgroundSize: 'contain',
               backgroundPosition: 'center',
@@ -231,22 +241,22 @@ export default function Home() {
               borderRadius: '50%'
             }} />
             <div style={{ 
-              width: '70px',
-              height: '70px',
+              width: 'clamp(40px, 8vw, 70px)',
+              height: 'clamp(40px, 8vw, 70px)',
               backgroundImage: "url('/prabhupada.jpg')",
               backgroundSize: 'contain',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
               borderRadius: '50%'
             }} />
-            <div style={{
-              fontSize: '0.6rem',
+            <div className="founder-text" style={{
+              fontSize: 'clamp(0.45rem, 1.2vw, 0.6rem)',
               fontWeight: '600',
               color: 'black',
-              lineHeight: '1',
+              lineHeight: '1.1',
               whiteSpace: 'nowrap',
               textTransform: 'uppercase',
-              letterSpacing: '0.5px'
+              letterSpacing: '0.3px'
             }}>
               FOUNDER ACHARYA: HDG AC BHAKTIVEDANTA SWAMI SRILA PRABHUPADA
             </div>
@@ -255,27 +265,29 @@ export default function Home() {
           <div style={{ 
             flex: 1,
             textAlign: 'center',
-            paddingLeft: '2rem',
-            paddingRight: '2rem'
+            padding: '0 clamp(0.5rem, 2vw, 2rem)',
+            minWidth: '0'
           }}>
             <h1 style={{ 
-              fontSize: '1.25rem', 
+              fontSize: 'clamp(0.9rem, 3vw, 1.25rem)', 
               fontWeight: '700',
-              letterSpacing: '0.5px', 
+              letterSpacing: 'clamp(0.3px, 0.5vw, 0.5px)', 
               background: 'linear-gradient(135deg, #ea580c, #f97316)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               margin: 0,
-              whiteSpace: 'nowrap'
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
             }} className="animate-fadeInUp">
               ISKCON STUDENT CENTER
             </h1>
             <div style={{
-              fontSize: '0.8rem',
+              fontSize: 'clamp(0.6rem, 1.8vw, 0.8rem)',
               fontWeight: '500',
               color: '#6b7280',
               marginTop: '0.2rem',
-              letterSpacing: '1px'
+              letterSpacing: 'clamp(0.5px, 1vw, 1px)'
             }}>
               DELHI UNIVERSITY
             </div>
@@ -283,9 +295,8 @@ export default function Home() {
           
           {/* Right Image - ISKCON Logo */}
           <div style={{ 
-            marginLeft: '1rem',
-            width: '40px',
-            height: '40px',
+            width: 'clamp(30px, 6vw, 40px)',
+            height: 'clamp(30px, 6vw, 40px)',
             backgroundImage: "url('/iskcon.png')",
             backgroundSize: 'contain',
             backgroundPosition: 'center',
@@ -501,7 +512,7 @@ export default function Home() {
                 </h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   {[
-                    { name: 'Kirtans / Music / Cultural Events/Festivals', desc: 'Devotional music & celebrations' },
+                    { name: 'Kirtans / Cultural Events', desc: 'Devotional music & celebrations' },
                     { name: 'Dham Yatra', desc: 'Sacred pilgrimage journeys' },
                     { name: 'Debate', desc: 'Philosophical discussions' },
                     { name: 'Drama', desc: 'Spiritual theater & performances' },
