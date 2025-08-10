@@ -372,8 +372,17 @@ export function DynamicCarousel() {
 
 // Dynamic Announcements Component
 export function DynamicAnnouncements() {
-  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
-  const [loading, setLoading] = useState(true);
+  // Default announcement that shows immediately
+  const defaultAnnouncement = {
+    id: 'iskcon-default',
+    text: 'Welcome to ISKCON Student Center • Join us for daily morning programs at 6:30 AM • Bhagavad Gita classes every Sunday at 5 PM • Free prasadam for all students',
+    isActive: true,
+    createdAt: '2024-01-01',
+    updatedAt: '2024-01-01'
+  };
+
+  const [announcements, setAnnouncements] = useState<Announcement[]>([defaultAnnouncement]);
+  const [loading, setLoading] = useState(false); // Start as false for immediate display
 
   useEffect(() => {
     loadAnnouncements();
@@ -381,64 +390,19 @@ export function DynamicAnnouncements() {
 
   const loadAnnouncements = async () => {
     try {
-      // Default ISKCON announcement (always present) - show immediately
-      const defaultAnnouncement = {
-        id: 'iskcon-default',
-        text: 'Welcome to ISKCON Student Center • Join us for daily morning programs at 6:30 AM • Bhagavad Gita classes every Sunday at 5 PM • Free prasadam for all students',
-        isActive: true,
-        createdAt: '2024-01-01',
-        updatedAt: '2024-01-01'
-      };
-      
-      // Set default first for immediate display
-      setAnnouncements([defaultAnnouncement]);
-      setLoading(false);
-      
-      // Then load dynamic announcements in background
+      // Load dynamic announcements in background
       const announcementsData = await fetchAnnouncements();
       
       if (announcementsData.length > 0) {
         // If there are uploaded announcements, put them first and default at the end
         setAnnouncements([...announcementsData, defaultAnnouncement]);
       }
+      // If no announcements, keep showing default (already set in useState)
     } catch (error) {
       console.error('Error loading announcements:', error);
-      // On error, show only default
-      setAnnouncements([{
-        id: 'iskcon-default',
-        text: 'Welcome to ISKCON Student Center • Join us for daily morning programs at 6:30 AM • Bhagavad Gita classes every Sunday at 5 PM • Free prasadam for all students',
-        isActive: true,
-        createdAt: '2024-01-01',
-        updatedAt: '2024-01-01'
-      }]);
-      setLoading(false);
+      // On error, keep showing default (already set in useState)
     }
   };
-
-  if (loading) {
-    return (
-      <div style={{
-        backgroundColor: '#f8f9fa',
-        color: '#1f2937',
-        padding: '0.75rem 0',
-        overflow: 'hidden',
-        position: 'relative',
-        whiteSpace: 'nowrap',
-        marginTop: '70px',
-        borderTop: '3px solid #ea580c',
-        borderBottom: '3px solid #ea580c'
-      }}>
-        <div style={{
-          display: 'inline-block',
-          animation: 'scroll-announcement 25s linear infinite',
-          fontSize: '1rem',
-          fontWeight: '500'
-        }}>
-          Loading announcements...
-        </div>
-      </div>
-    );
-  }
 
   const activeAnnouncements = announcements.filter(ann => ann.isActive);
   
