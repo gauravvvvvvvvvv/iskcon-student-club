@@ -150,8 +150,7 @@ export default function Home() {
           }
           
           .carousel-container {
-            height: 400px !important;
-            min-height: 400px !important;
+            height: clamp(300px, 40vh, 450px) !important;
           }
           
           .carousel-content {
@@ -173,6 +172,10 @@ export default function Home() {
             width: 8px !important;
             height: 8px !important;
           }
+          
+          .carousel-container img {
+            border-radius: 4px !important;
+          }
         }
         
         @media (max-width: 480px) {
@@ -181,7 +184,7 @@ export default function Home() {
           }
           
           .carousel-container {
-            height: 350px !important;
+            height: clamp(250px, 35vh, 350px) !important;
           }
           
           .carousel-nav {
@@ -194,6 +197,14 @@ export default function Home() {
             width: 30px !important;
             height: 30px !important;
             font-size: 0.9rem !important;
+          }
+          
+          .carousel-content h1 {
+            font-size: clamp(1.5rem, 5vw, 2.5rem) !important;
+          }
+          
+          .carousel-content p {
+            font-size: clamp(0.9rem, 2.5vw, 1.2rem) !important;
           }
         }
         `
@@ -332,9 +343,12 @@ export default function Home() {
         {/* Image Carousel Section */}
         <section style={{
           position: 'relative',
-          height: 'clamp(400px, 60vh, 600px)',
+          height: 'clamp(350px, 50vh, 600px)',
           overflow: 'hidden',
-          backgroundColor: '#1e40af'
+          backgroundColor: 'white',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
         }} className="carousel-container">
           {/* Background Image Carousel */}
           <div style={{
@@ -346,13 +360,14 @@ export default function Home() {
             zIndex: 1
           }}>
             {[
-              'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&h=600&fit=crop',
-              'https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=1200&h=600&fit=crop',
-              'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1200&h=600&fit=crop',
-              'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=600&fit=crop',
-              'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?w=1200&h=600&fit=crop',
-              'https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=1200&h=600&fit=crop',
-              'https://images.unsplash.com/photo-1516738901171-8eb4fc13bd20?w=1200&h=600&fit=crop'
+              // Colorful placeholder images for testing
+              'https://via.placeholder.com/1200x600/FF6B35/FFFFFF?text=ISKCON+Image+1',
+              'https://via.placeholder.com/1200x600/1E40AF/FFFFFF?text=ISKCON+Image+2',
+              'https://via.placeholder.com/1200x600/EA580C/FFFFFF?text=ISKCON+Image+3',
+              'https://via.placeholder.com/1200x600/10B981/FFFFFF?text=ISKCON+Image+4',
+              'https://via.placeholder.com/1200x600/8B5CF6/FFFFFF?text=ISKCON+Image+5',
+              'https://via.placeholder.com/1200x600/F59E0B/FFFFFF?text=ISKCON+Image+6',
+              'https://via.placeholder.com/1200x600/EF4444/FFFFFF?text=ISKCON+Image+7'
             ].map((imageUrl, index) => (
               <div
                 key={index}
@@ -364,11 +379,31 @@ export default function Home() {
                   height: '100%',
                   opacity: currentSlide === index ? 1 : 0,
                   transition: 'opacity 0.8s ease-in-out',
-                  backgroundImage: `url(${imageUrl})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center'
+                  backgroundColor: 'white',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }}
-              />
+              >
+                <img 
+                  src={imageUrl}
+                  alt={`ISKCON Slide ${index + 1}`}
+                  style={{
+                    maxWidth: '100%',
+                    maxHeight: '100%',
+                    width: 'auto',
+                    height: 'auto',
+                    objectFit: 'contain',
+                    borderRadius: '8px'
+                  }}
+                  onError={(e) => {
+                    // Fallback if image fails to load
+                    e.target.style.display = 'none';
+                    e.target.parentElement.style.backgroundColor = `hsl(${index * 50}, 70%, 60%)`;
+                    e.target.parentElement.innerHTML = `<div style="color: white; font-size: 2rem; font-weight: bold; text-align: center;">ISKCON<br/>Image ${index + 1}</div>`;
+                  }}
+                />
+              </div>
             ))}
             
             {/* Overlay */}
@@ -378,7 +413,7 @@ export default function Home() {
               left: 0,
               width: '100%',
               height: '100%',
-              backgroundColor: 'rgba(30, 64, 175, 0.3)',
+              backgroundColor: 'rgba(0, 0, 0, 0.15)',
               zIndex: 2
             }} />
           </div>
@@ -533,8 +568,8 @@ export default function Home() {
                 setCurrentSlide(currentSlide === 0 ? 6 : currentSlide - 1);
               }}
               style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                border: '2px solid rgba(255, 255, 255, 0.3)',
+                backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                border: '2px solid rgba(255, 255, 255, 0.6)',
                 color: 'white',
                 width: 'clamp(35px, 8vw, 45px)',
                 height: 'clamp(35px, 8vw, 45px)',
@@ -545,13 +580,14 @@ export default function Home() {
                 justifyContent: 'center',
                 fontSize: 'clamp(0.9rem, 3vw, 1.2rem)',
                 transition: 'all 0.3s ease',
-                backdropFilter: 'blur(10px)'
+                backdropFilter: 'blur(10px)',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)'
               }}
               onMouseEnter={(e) => {
-                e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+                e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
               }}
               onMouseLeave={(e) => {
-                e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+                e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.4)';
               }}
             >
               ‹
@@ -570,10 +606,11 @@ export default function Home() {
                     width: 'clamp(8px, 2vw, 10px)',
                     height: 'clamp(8px, 2vw, 10px)',
                     borderRadius: '50%',
-                    border: 'none',
-                    backgroundColor: currentSlide === index ? 'white' : 'rgba(255, 255, 255, 0.5)',
+                    border: '1px solid rgba(0, 0, 0, 0.3)',
+                    backgroundColor: currentSlide === index ? '#ea580c' : 'rgba(255, 255, 255, 0.8)',
                     cursor: 'pointer',
-                    transition: 'all 0.3s ease'
+                    transition: 'all 0.3s ease',
+                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.2)'
                   }}
                 />
               ))}
@@ -586,8 +623,8 @@ export default function Home() {
                 setCurrentSlide(currentSlide === 6 ? 0 : currentSlide + 1);
               }}
               style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                border: '2px solid rgba(255, 255, 255, 0.3)',
+                backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                border: '2px solid rgba(255, 255, 255, 0.6)',
                 color: 'white',
                 width: 'clamp(35px, 8vw, 45px)',
                 height: 'clamp(35px, 8vw, 45px)',
@@ -598,13 +635,14 @@ export default function Home() {
                 justifyContent: 'center',
                 fontSize: 'clamp(0.9rem, 3vw, 1.2rem)',
                 transition: 'all 0.3s ease',
-                backdropFilter: 'blur(10px)'
+                backdropFilter: 'blur(10px)',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)'
               }}
               onMouseEnter={(e) => {
-                e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+                e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
               }}
               onMouseLeave={(e) => {
-                e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+                e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.4)';
               }}
             >
               ›
