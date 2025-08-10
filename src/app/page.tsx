@@ -337,25 +337,6 @@ export default function Home() {
         }} />
       </div>
 
-      {/* Announcement Banner */}
-      <div style={{
-        backgroundColor: '#1e40af',
-        color: 'white',
-        padding: '12px 0',
-        overflow: 'hidden',
-        position: 'relative',
-        borderBottom: '2px solid rgba(255, 255, 255, 0.2)'
-      }} className="announcement-banner">
-          <div style={{
-            whiteSpace: 'nowrap',
-            animation: 'scrollText 20s linear infinite',
-            fontSize: '1.1rem',
-            fontWeight: '600'
-          }}>
-            Welcome to ISKCON Student Center! Join our community for spiritual growth and learning • Weekly programs available • Register now for upcoming events •
-          </div>
-        </div>
-
       {/* Main Content Container */}
       <div>
         {/* Image Carousel Section */}
