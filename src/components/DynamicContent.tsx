@@ -428,35 +428,7 @@ export function DynamicAnnouncements() {
   };
 
   // Get current announcement with safety checks
-  const currentAnnouncement = announcements[currentAnnouncementIndex] || fallbackAnnouncement;
-  
-  // Create announcement content with safety checks
-  const createAnnouncementContent = (announcement: Announcement) => {
-    if (!announcement || !announcement.text) {
-      return 'Welcome to ISKCON Student Center • Join us for daily programs';
-    }
-    
-    const baseText = announcement.text;
-    if (announcement.link) {
-      return (
-        <span>
-          {baseText} • <a 
-            href={announcement.link} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            style={{
-              color: '#ea580c',
-              textDecoration: 'underline',
-              fontWeight: 'bold'
-            }}
-          >
-            Click here
-          </a>
-        </span>
-      );
-    }
-    return baseText;
-  };
+  const currentAnnouncement = announcements[0] || fallbackAnnouncement;
 
   return (
     <div style={{
