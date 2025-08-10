@@ -88,26 +88,24 @@ export default function Home() {
             {/* Left image placeholder */}
             <Grid item xs={12} md={3} sx={{ display: { xs: 'none', md: 'block' } }}>
               <Box sx={{
+                position: 'relative',
                 height: '100%',
-                minHeight: 280,
-                borderRadius: 4,
-                border: '2px dashed #f59e0b',
-                background: 'repeating-linear-gradient(45deg,#fff8ed,#fff8ed 10px,#fff 10px,#fff 20px)',
+                minHeight: 320,
+                borderRadius: '36px 36px 12px 12px',
+                overflow: 'hidden',
+                background: 'linear-gradient(160deg,#fff3e0,#ffe8cc)',
+                boxShadow: '0 10px 30px -10px rgba(234,88,12,0.25)',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                color: 'warning.main',
-                fontWeight: 600,
-                letterSpacing: 1,
-                fontSize: 14
+                justifyContent: 'center'
               }}>
-                IMAGE SPACE
+                <Box sx={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 30% 20%,rgba(245,158,11,0.25),transparent 60%)' }} />
+                <Typography sx={{ position: 'relative', fontSize: 13, letterSpacing: 2, fontWeight: 700, color: 'warning.main', textTransform: 'uppercase' }}>Add Image</Typography>
               </Box>
             </Grid>
             {/* Center heading */}
             <Grid item xs={12} md={6}>
               <Stack spacing={4} alignItems="center" textAlign="center" height="100%" justifyContent="center">
-                <Chip label="STUDENT SPIRITUAL HUB" color="warning" variant="outlined" sx={{ fontWeight: 600 }} />
                 <Stack spacing={2}>
                   <Typography variant="h3" sx={{ fontSize: { xs: '1.6rem', md: '2.2rem' }, fontWeight: 800, lineHeight: 1.15, letterSpacing: -0.5 }}>
                     INTERNATIONAL SOCIETY FOR KRISHNA CONSCIOUSNESS
@@ -142,20 +140,19 @@ export default function Home() {
             {/* Right image placeholder */}
             <Grid item xs={12} md={3} sx={{ display: { xs: 'none', md: 'block' } }}>
               <Box sx={{
+                position: 'relative',
                 height: '100%',
-                minHeight: 280,
-                borderRadius: 4,
-                border: '2px dashed #f59e0b',
-                background: 'repeating-linear-gradient(45deg,#fff8ed,#fff8ed 10px,#fff 10px,#fff 20px)',
+                minHeight: 320,
+                borderRadius: '36px 36px 12px 12px',
+                overflow: 'hidden',
+                background: 'linear-gradient(200deg,#fff3e0,#ffe8cc)',
+                boxShadow: '0 10px 30px -10px rgba(234,88,12,0.25)',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                color: 'warning.main',
-                fontWeight: 600,
-                letterSpacing: 1,
-                fontSize: 14
+                justifyContent: 'center'
               }}>
-                IMAGE SPACE
+                <Box sx={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 70% 20%,rgba(245,158,11,0.25),transparent 60%)' }} />
+                <Typography sx={{ position: 'relative', fontSize: 13, letterSpacing: 2, fontWeight: 700, color: 'warning.main', textTransform: 'uppercase' }}>Add Image</Typography>
               </Box>
             </Grid>
           </Grid>
