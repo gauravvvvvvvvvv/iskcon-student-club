@@ -158,17 +158,20 @@ export default function Home() {
             padding: 1rem !important;
           }
           
-          .carousel-images {
-            margin-bottom: 1rem !important;
-          }
-          
-          .carousel-title {
-            margin: 1rem 0 !important;
-          }
-          
           .carousel-nav {
-            margin-top: 1rem !important;
+            bottom: 10px !important;
             gap: 0.5rem !important;
+          }
+          
+          .carousel-nav button {
+            width: 35px !important;
+            height: 35px !important;
+            font-size: 1rem !important;
+          }
+          
+          .carousel-nav .indicators button {
+            width: 8px !important;
+            height: 8px !important;
           }
         }
         
@@ -181,10 +184,16 @@ export default function Home() {
             height: 350px !important;
           }
           
-          .carousel-images-container {
-            flex-direction: column !important;
-            align-items: center !important;
-            gap: 1rem !important;
+          .carousel-nav {
+            bottom: 5px !important;
+            gap: 0.3rem !important;
+            padding: 0 1rem !important;
+          }
+          
+          .carousel-nav button {
+            width: 30px !important;
+            height: 30px !important;
+            font-size: 0.9rem !important;
           }
         }
         `
@@ -505,7 +514,7 @@ export default function Home() {
           {/* Carousel Navigation - Positioned outside content container */}
           <div style={{
             position: 'absolute',
-            bottom: '20px',
+            bottom: '15px',
             left: '50%',
             transform: 'translateX(-50%)',
             zIndex: 4,
@@ -514,23 +523,27 @@ export default function Home() {
             alignItems: 'center',
             gap: 'clamp(0.5rem, 2vw, 1rem)',
             width: '100%',
-            maxWidth: '400px'
+            maxWidth: '400px',
+            padding: '0 1rem'
           }} className="carousel-nav">
             {/* Previous Button */}
             <button
-              onClick={() => setCurrentSlide(currentSlide === 0 ? 6 : currentSlide - 1)}
+              onClick={(e) => {
+                e.preventDefault();
+                setCurrentSlide(currentSlide === 0 ? 6 : currentSlide - 1);
+              }}
               style={{
                 backgroundColor: 'rgba(255, 255, 255, 0.2)',
                 border: '2px solid rgba(255, 255, 255, 0.3)',
                 color: 'white',
-                width: 'clamp(40px, 8vw, 50px)',
-                height: 'clamp(40px, 8vw, 50px)',
+                width: 'clamp(35px, 8vw, 45px)',
+                height: 'clamp(35px, 8vw, 45px)',
                 borderRadius: '50%',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: 'clamp(1rem, 3vw, 1.5rem)',
+                fontSize: 'clamp(0.9rem, 3vw, 1.2rem)',
                 transition: 'all 0.3s ease',
                 backdropFilter: 'blur(10px)'
               }}
@@ -545,14 +558,17 @@ export default function Home() {
             </button>
 
             {/* Indicators */}
-            <div style={{ display: 'flex', gap: 'clamp(0.3rem, 1vw, 0.5rem)' }}>
+            <div style={{ display: 'flex', gap: 'clamp(0.2rem, 1vw, 0.4rem)' }} className="indicators">
               {[0, 1, 2, 3, 4, 5, 6].map((index) => (
                 <button
                   key={index}
-                  onClick={() => setCurrentSlide(index)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setCurrentSlide(index);
+                  }}
                   style={{
-                    width: 'clamp(10px, 2vw, 12px)',
-                    height: 'clamp(10px, 2vw, 12px)',
+                    width: 'clamp(8px, 2vw, 10px)',
+                    height: 'clamp(8px, 2vw, 10px)',
                     borderRadius: '50%',
                     border: 'none',
                     backgroundColor: currentSlide === index ? 'white' : 'rgba(255, 255, 255, 0.5)',
@@ -565,19 +581,22 @@ export default function Home() {
 
             {/* Next Button */}
             <button
-              onClick={() => setCurrentSlide(currentSlide === 6 ? 0 : currentSlide + 1)}
+              onClick={(e) => {
+                e.preventDefault();
+                setCurrentSlide(currentSlide === 6 ? 0 : currentSlide + 1);
+              }}
               style={{
                 backgroundColor: 'rgba(255, 255, 255, 0.2)',
                 border: '2px solid rgba(255, 255, 255, 0.3)',
                 color: 'white',
-                width: 'clamp(40px, 8vw, 50px)',
-                height: 'clamp(40px, 8vw, 50px)',
+                width: 'clamp(35px, 8vw, 45px)',
+                height: 'clamp(35px, 8vw, 45px)',
                 borderRadius: '50%',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: 'clamp(1rem, 3vw, 1.5rem)',
+                fontSize: 'clamp(0.9rem, 3vw, 1.2rem)',
                 transition: 'all 0.3s ease',
                 backdropFilter: 'blur(10px)'
               }}
@@ -590,65 +609,6 @@ export default function Home() {
             >
               ›
             </button>
-          </div>
-        </section>
-
-        {/* Action Buttons Section - Below Carousel */}
-        <section style={{
-          padding: '2rem 1rem',
-          textAlign: 'center',
-          backgroundColor: '#f8fafc'
-        }}>
-          <div style={{ 
-            display: 'flex', 
-            gap: '1rem', 
-            justifyContent: 'center',
-            flexWrap: 'wrap',
-            maxWidth: '600px',
-            margin: '0 auto'
-          }}>
-            <a 
-              href="https://forms.google.com/your-form-id"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                backgroundColor: '#ea580c',
-                color: 'white',
-                padding: '1rem 2rem',
-                borderRadius: '999px',
-                textDecoration: 'none',
-                fontWeight: '700',
-                fontSize: '1.1rem',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                transition: 'all 0.3s ease',
-                border: 'none'
-              }}
-              className="card-hover"
-            >
-              Join Now
-            </a>
-            <a 
-              href="#programs"
-              style={{
-                border: '2px solid #ea580c',
-                color: '#ea580c',
-                backgroundColor: 'transparent',
-                padding: '1rem 2rem',
-                borderRadius: '999px',
-                textDecoration: 'none',
-                fontWeight: '700',
-                fontSize: '1.1rem',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                transition: 'all 0.3s ease'
-              }}
-              className="card-hover"
-            >
-              Explore Programs
-            </a>
           </div>
         </section>
 
