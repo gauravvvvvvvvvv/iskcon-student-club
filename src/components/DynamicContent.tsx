@@ -370,76 +370,92 @@ export function DynamicCarousel() {
   );
 }
 
-// Dynamic Announcements Component
+// Dynamic Announcements Component - Clean and Fast
 export function DynamicAnnouncements() {
-  // Default announcement that shows immediately
-  const defaultAnnouncement = {
-    id: 'iskcon-default',
+  // Default fallback announcement
+  const fallbackAnnouncement = {
+    id: 'iskcon-fallback',
     text: 'Welcome to ISKCON Student Center • Join us for daily morning programs at 6:30 AM • Bhagavad Gita classes every Sunday at 5 PM • Free prasadam for all students',
     isActive: true,
     createdAt: '2024-01-01',
     updatedAt: '2024-01-01'
   };
 
-  const [announcements, setAnnouncements] = useState<Announcement[]>([defaultAnnouncement]);
-  const [loading, setLoading] = useState(false); // Start as false for immediate display
+  const [announcements, setAnnouncements] = useState<Announcement[]>([fallbackAnnouncement]);
+  const [currentAnnouncementIndex, setCurrentAnnouncementIndex] = useState(0);
 
   useEffect(() => {
     loadAnnouncements();
   }, []);
 
+  useEffect(() => {
+    if (announcements.length > 0) {
+      const rotationTimer = setInterval(() => {
+        setCurrentAnnouncementIndex(prev => {
+          const nextIndex = (prev + 1) % announcements.length;
+          return nextIndex < announcements.length ? nextIndex : 0;
+        });
+      }, 8000);
+
+      return () => clearInterval(rotationTimer);
+    }
+  }, [announcements.length]);
+
   const loadAnnouncements = async () => {
     try {
-      // Load dynamic announcements from admin panel
-      const announcementsData = await fetchAnnouncements();
+      // Quick timeout for fast loading
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Timeout')), 800)
+      );
       
-      if (announcementsData.length > 0) {
-        // If there are uploaded announcements, put them first and default at the end
-        setAnnouncements([...announcementsData, defaultAnnouncement]);
+      const announcementsData = await Promise.race([
+        fetchAnnouncements(),
+        timeoutPromise
+      ]) as Announcement[];
+      
+      const activeAnnouncements = announcementsData.filter(ann => ann.isActive);
+      
+      if (activeAnnouncements.length > 0) {
+        setAnnouncements(activeAnnouncements);
       }
-      // If no announcements, keep showing default (already set in useState)
+      // If no announcements, keep the fallback that's already set
     } catch (error) {
       console.error('Error loading announcements:', error);
-      // On error, keep showing default (already set in useState)
+      // Keep the fallback announcement that's already set
+    } finally {
+      // No loading state change needed
     }
   };
 
-  const activeAnnouncements = announcements.filter(ann => ann.isActive);
+  // Get current announcement with safety checks
+  const currentAnnouncement = announcements[currentAnnouncementIndex] || fallbackAnnouncement;
   
-  // Create announcement text with clickable links
-  const createAnnouncementContent = () => {
-    if (activeAnnouncements.length === 0) {
-      return 'Welcome to ISKCON Student Center • Join us for daily morning programs at 6:30 AM • Bhagavad Gita classes every Sunday at 5 PM • Free prasadam for all students';
+  // Create announcement content with safety checks
+  const createAnnouncementContent = (announcement: Announcement) => {
+    if (!announcement || !announcement.text) {
+      return 'Welcome to ISKCON Student Center • Join us for daily programs';
     }
-
-    return activeAnnouncements.map((ann, index) => {
-      const baseText = ann.text;
-      if (ann.link) {
-        return (
-          <span key={ann.id}>
-            {baseText} • <a 
-              href={ann.link} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              style={{
-                color: '#ea580c',
-                textDecoration: 'underline',
-                fontWeight: 'bold'
-              }}
-            >
-              Click here
-            </a>
-            {index < activeAnnouncements.length - 1 ? ' • ' : ''}
-          </span>
-        );
-      }
+    
+    const baseText = announcement.text;
+    if (announcement.link) {
       return (
-        <span key={ann.id}>
-          {baseText}
-          {index < activeAnnouncements.length - 1 ? ' • ' : ''}
+        <span>
+          {baseText} • <a 
+            href={announcement.link} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            style={{
+              color: '#ea580c',
+              textDecoration: 'underline',
+              fontWeight: 'bold'
+            }}
+          >
+            Click here
+          </a>
         </span>
       );
-    });
+    }
+    return baseText;
   };
 
   return (
@@ -460,8 +476,9 @@ export function DynamicAnnouncements() {
         fontSize: '1rem',
         fontWeight: '500'
       }}>
-        {createAnnouncementContent()}
+        {createAnnouncementContent(currentAnnouncement)}
       </div>
+      
       <style dangerouslySetInnerHTML={{
         __html: `
           @keyframes scroll-announcement {
