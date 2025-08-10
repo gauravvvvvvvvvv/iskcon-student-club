@@ -181,6 +181,7 @@ export function DynamicCarousel() {
         padding: '0 1rem'
       }}>
         {/* Call to Action Buttons */}
+        
         <a 
           href="https://docs.google.com/forms/d/e/1FVlLR7QJUP-8BedM3oRQYFact6stIYMFFo0OKGzmWvg/viewform"
           target="_blank"
