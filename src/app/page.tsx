@@ -788,14 +788,14 @@ export default function Home() {
                   textTransform: 'uppercase',
                   letterSpacing: '1px'
                 }}>
-                  Spiritual Practices
+                  Learning & Practice
                 </h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   {[
-                    { name: 'Bhagavad Gita Study', desc: 'Weekly scripture discussions' },
-                    { name: 'Japa Meditation', desc: 'Daily chanting practice' },
-                    { name: 'Kirtan Sessions', desc: 'Devotional music & singing' },
-                    { name: 'Temple Worship', desc: 'Deity darshan & prayers' }
+                    { name: 'Learning Gitä & Vedic Wisdom', desc: 'Structured study of sacred texts' },
+                    { name: 'Chanting / Mantra Meditation', desc: 'Daily meditation practice' },
+                    { name: 'Sattvik Lifestyle', desc: 'Balanced spiritual living' },
+                    { name: 'Spreading Vedic Wisdom', desc: 'Sharing spiritual knowledge' }
                   ].map((item, i) => (
                     <div key={i} style={{
                       display: 'flex',
@@ -825,7 +825,7 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Community & Learning Column */}
+              {/* Community & Support Column */}
               <div style={{
                 backgroundColor: 'white',
                 padding: '2rem',
@@ -844,14 +844,14 @@ export default function Home() {
                   textTransform: 'uppercase',
                   letterSpacing: '1px'
                 }}>
-                  Community
+                  Community & Support
                 </h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   {[
-                    { name: 'Leadership Training', desc: 'Character development programs' },
-                    { name: 'Spiritual Mentorship', desc: 'Personal guidance & counseling' },
-                    { name: 'Youth Programs', desc: 'Age-appropriate activities' },
-                    { name: 'Community Service', desc: 'Social outreach projects' }
+                    { name: 'Leadership Development', desc: 'Character & leadership building' },
+                    { name: 'Spiritual Friendship', desc: 'Meaningful spiritual connections' },
+                    { name: 'Personal Mentorship', desc: 'One-on-one spiritual guidance' },
+                    { name: 'Spiritual Counseling', desc: 'Life-related problem solving' }
                   ].map((item, i) => (
                     <div key={i} style={{
                       display: 'flex',
@@ -881,7 +881,7 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Events & Lifestyle Column */}
+              {/* Events & Experiences Column */}
               <div style={{
                 backgroundColor: 'white',
                 padding: '2rem',
@@ -900,14 +900,13 @@ export default function Home() {
                   textTransform: 'uppercase',
                   letterSpacing: '1px'
                 }}>
-                  Events & Lifestyle
+                  Events & Experiences
                 </h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   {[
-                    { name: 'Festival Celebrations', desc: 'Traditional spiritual festivals' },
-                    { name: 'Pilgrimage Tours', desc: 'Sacred place visits' },
-                    { name: 'Healthy Lifestyle', desc: 'Yoga, meditation & wellness' },
-                    { name: 'Prasadam Cooking', desc: 'Sacred food preparation' }
+                    { name: 'Kirtans / Music / Cultural Events', desc: 'Devotional music & celebrations' },
+                    { name: 'Festivals', desc: 'Traditional spiritual festivals' },
+                    { name: 'Dham Yatra', desc: 'Sacred pilgrimage journeys' }
                   ].map((item, i) => (
                     <div key={i} style={{
                       display: 'flex',
@@ -955,67 +954,155 @@ export default function Home() {
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent'
             }} className="animate-fadeInUp">
-              Daily Schedule
+              Program Schedule
             </h2>
             
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '1rem',
-              maxWidth: '800px',
-              margin: '0 auto'
-            }}>
-              {[
-                { time: '4:30 AM', event: 'Mangala Arati & Tulasi Puja', desc: 'Morning prayer and worship' },
-                { time: '5:00 AM', event: 'Japa Meditation', desc: 'Chanting of the Holy Name' },
-                { time: '7:00 AM', event: 'Guru Puja & Kirtan', desc: 'Devotional songs and prayers' },
-                { time: '8:00 AM', event: 'Srimad Bhagavatam Class', desc: 'Scripture study and discussion' },
-                { time: '12:30 PM', event: 'Raj Bhoga Arati', desc: 'Midday offering to the deities' },
-                { time: '1:00 PM', event: 'Prasadam', desc: 'Sacred vegetarian meal' },
-                { time: '6:30 PM', event: 'Sandhya Arati', desc: 'Evening prayer ceremony' },
-                { time: '7:00 PM', event: 'Evening Programs', desc: 'Special classes and discussions' }
-              ].map((schedule, i) => (
-                <div 
-                  key={i}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    backgroundColor: i % 2 === 0 ? '#f8fafc' : 'white',
-                    padding: '1.5rem',
-                    borderRadius: '8px',
-                    borderLeft: '4px solid #ea580c',
-                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
-                  }}
-                  className="card-hover animate-fadeInUp"
-                >
-                  <div style={{
-                    minWidth: '80px',
-                    fontSize: '1rem',
-                    fontWeight: '700',
-                    color: '#ea580c',
-                    marginRight: '2rem'
-                  }}>
-                    {schedule.time}
-                  </div>
-                  <div style={{ flexGrow: 1 }}>
-                    <h3 style={{ 
-                      fontSize: '1.125rem', 
-                      fontWeight: '600',
-                      color: '#111827',
-                      marginBottom: '0.25rem'
+            {/* Daily Schedule */}
+            <div style={{ marginBottom: '3rem' }}>
+              <h3 style={{
+                fontSize: '1.5rem',
+                fontWeight: '700',
+                color: '#ea580c',
+                textAlign: 'center',
+                marginBottom: '2rem',
+                textTransform: 'uppercase',
+                letterSpacing: '1px'
+              }}>
+                Daily Schedule
+              </h3>
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1rem',
+                maxWidth: '800px',
+                margin: '0 auto'
+              }}>
+                {[
+                  { time: '5:30 - 6:30 AM', event: 'Meditation', desc: 'Morning meditation session' },
+                  { time: '6:30 AM', event: 'Aarti', desc: 'Sacred prayer ceremony' },
+                  { time: '7:00 - 7:30 AM', event: 'Spiritual Discourses', desc: 'Inspiring spiritual teachings' }
+                ].map((schedule, i) => (
+                  <div 
+                    key={i}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      backgroundColor: i % 2 === 0 ? '#f8fafc' : 'white',
+                      padding: '1.5rem',
+                      borderRadius: '8px',
+                      borderLeft: '4px solid #ea580c',
+                      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
+                    }}
+                    className="card-hover animate-fadeInUp"
+                  >
+                    <div style={{
+                      minWidth: '120px',
+                      fontSize: '1rem',
+                      fontWeight: '700',
+                      color: '#ea580c',
+                      marginRight: '2rem'
                     }}>
-                      {schedule.event}
-                    </h3>
-                    <p style={{ 
-                      fontSize: '0.875rem', 
-                      color: '#6b7280',
-                      margin: 0
-                    }}>
-                      {schedule.desc}
-                    </p>
+                      {schedule.time}
+                    </div>
+                    <div style={{ flexGrow: 1 }}>
+                      <h3 style={{ 
+                        fontSize: '1.125rem', 
+                        fontWeight: '600',
+                        color: '#111827',
+                        marginBottom: '0.25rem'
+                      }}>
+                        {schedule.event}
+                      </h3>
+                      <p style={{ 
+                        fontSize: '0.875rem', 
+                        color: '#6b7280',
+                        margin: 0
+                      }}>
+                        {schedule.desc}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+            </div>
+
+            {/* Weekly Schedule */}
+            <div>
+              <h3 style={{
+                fontSize: '1.5rem',
+                fontWeight: '700',
+                color: '#ea580c',
+                textAlign: 'center',
+                marginBottom: '2rem',
+                textTransform: 'uppercase',
+                letterSpacing: '1px'
+              }}>
+                Weekly Schedule
+              </h3>
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1rem',
+                maxWidth: '800px',
+                margin: '0 auto'
+              }}>
+                {[
+                  { time: 'Saturday 6-8 PM*', event: 'Weekly Program', desc: 'Special weekend spiritual gathering' },
+                  { time: 'Sunday 6-8 PM*', event: 'Weekly Program', desc: 'Sunday evening spiritual activities' }
+                ].map((schedule, i) => (
+                  <div 
+                    key={i}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      backgroundColor: i % 2 === 0 ? '#f8fafc' : 'white',
+                      padding: '1.5rem',
+                      borderRadius: '8px',
+                      borderLeft: '4px solid #ea580c',
+                      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
+                    }}
+                    className="card-hover animate-fadeInUp"
+                  >
+                    <div style={{
+                      minWidth: '140px',
+                      fontSize: '1rem',
+                      fontWeight: '700',
+                      color: '#ea580c',
+                      marginRight: '2rem'
+                    }}>
+                      {schedule.time}
+                    </div>
+                    <div style={{ flexGrow: 1 }}>
+                      <h3 style={{ 
+                        fontSize: '1.125rem', 
+                        fontWeight: '600',
+                        color: '#111827',
+                        marginBottom: '0.25rem'
+                      }}>
+                        {schedule.event}
+                      </h3>
+                      <p style={{ 
+                        fontSize: '0.875rem', 
+                        color: '#6b7280',
+                        margin: 0
+                      }}>
+                        {schedule.desc}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              {/* Note */}
+              <p style={{
+                textAlign: 'center',
+                fontSize: '0.875rem',
+                color: '#6b7280',
+                fontStyle: 'italic',
+                marginTop: '1.5rem'
+              }}>
+                * Subject to change
+              </p>
             </div>
           </div>
         </section>
