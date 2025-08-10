@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { fetchCarouselImages, fetchAnnouncements, type CarouselImage, type Announcement } from '../lib/cms';
 
 // Dynamic Carousel Component
@@ -34,12 +34,15 @@ export function DynamicCarousel() {
       };
       
       if (imagesData.length > 0) {
+        // If there are uploaded images, put them first and Jagannath at the end
         setImages([...imagesData, jagannathImage]);
       } else {
+        // If no uploaded images, show only Jagannath
         setImages([jagannathImage]);
       }
     } catch (error) {
       console.error('Error loading carousel images:', error);
+      // On error, show only Jagannath
       setImages([{
         id: 'jagannath-default',
         url: '/jagannath.jpg',
@@ -98,6 +101,7 @@ export function DynamicCarousel() {
       alignItems: 'center',
       justifyContent: 'center'
     }} className="carousel-container">
+      {/* Background Image Carousel */}
       <div style={{
         position: 'absolute',
         top: 0,
@@ -119,6 +123,7 @@ export function DynamicCarousel() {
               transition: 'opacity 0.8s ease-in-out'
             }}
           >
+            {/* Blurred background version of the same image */}
             <div style={{
               position: 'absolute',
               top: 0,
@@ -130,10 +135,11 @@ export function DynamicCarousel() {
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
               filter: 'blur(20px) brightness(0.3)',
-              transform: 'scale(1.1)',
+              transform: 'scale(1.1)', // Slightly larger to avoid blur edges
               zIndex: 1
             }} />
             
+            {/* Main image on top */}
             <div style={{
               position: 'absolute',
               top: 0,
@@ -149,6 +155,7 @@ export function DynamicCarousel() {
           </div>
         ))}
         
+        {/* Overlay */}
         <div style={{
           position: 'absolute',
           top: 0,
@@ -160,9 +167,10 @@ export function DynamicCarousel() {
         }} />
       </div>
 
+      {/* Content Container - Repositioned */}
       <div style={{
         position: 'absolute',
-        bottom: '80px',
+        bottom: '80px', // Above navigation
         left: '50%',
         transform: 'translateX(-50%)',
         zIndex: 4,
@@ -172,6 +180,8 @@ export function DynamicCarousel() {
         flexWrap: 'wrap',
         padding: '0 1rem'
       }}>
+        {/* Call to Action Buttons */}
+
         <a 
           href="https://docs.google.com/forms/d/e/1FVlLR7QJUP-8BedM3oRQYFact6stIYMFFo0OKGzmWvg/viewform"
           target="_blank"
@@ -254,6 +264,7 @@ export function DynamicCarousel() {
         </a>
       </div>
 
+      {/* Carousel Navigation */}
       <div style={{
         position: 'absolute',
         bottom: '15px',
@@ -268,6 +279,7 @@ export function DynamicCarousel() {
         maxWidth: '400px',
         padding: '0 1rem'
       }} className="carousel-nav">
+        {/* Previous Button */}
         <button
           onClick={(e) => {
             e.preventDefault();
@@ -299,6 +311,7 @@ export function DynamicCarousel() {
           ‹
         </button>
 
+        {/* Indicators */}
         <div style={{ display: 'flex', gap: 'clamp(0.2rem, 1vw, 0.4rem)' }} className="indicators">
           {images.map((_, index) => (
             <button
@@ -321,6 +334,7 @@ export function DynamicCarousel() {
           ))}
         </div>
 
+        {/* Next Button */}
         <button
           onClick={(e) => {
             e.preventDefault();
@@ -356,55 +370,92 @@ export function DynamicCarousel() {
   );
 }
 
-// Dynamic Announcements Component - Continuous Scrolling Ticker
+// Dynamic Announcements Component - Clean and Fast
 export function DynamicAnnouncements() {
-  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  // Default fallback announcement
+  const fallbackAnnouncement = {
+    id: 'iskcon-fallback',
+    text: 'Welcome to ISKCON Student Center • Join us for daily morning programs at 6:30 AM • Bhagavad Gita classes every Sunday at 5 PM • Free prasadam for all students',
+    isActive: true,
+    createdAt: '2024-01-01',
+    updatedAt: '2024-01-01'
+  };
+
+  const [announcements, setAnnouncements] = useState<Announcement[]>([fallbackAnnouncement]);
+  const [currentAnnouncementIndex, setCurrentAnnouncementIndex] = useState(0);
 
   useEffect(() => {
-    // Set default announcement immediately
-    const defaultAnnouncement = {
-      id: 'iskcon-default',
-      text: 'Welcome to ISKCON Student Center • Join us for daily morning programs at 6:30 AM • Bhagavad Gita classes every Sunday at 5 PM • Free prasadam for all students',
-      isActive: true,
-      createdAt: '2024-01-01',
-      updatedAt: '2024-01-01'
-    };
-    
-    setAnnouncements([defaultAnnouncement]);
-    
-    // Load dynamic announcements in background
-    loadDynamicAnnouncements();
+    loadAnnouncements();
   }, []);
 
-  const loadDynamicAnnouncements = async () => {
+  useEffect(() => {
+    if (announcements.length > 0) {
+      const rotationTimer = setInterval(() => {
+        setCurrentAnnouncementIndex(prev => {
+          const nextIndex = (prev + 1) % announcements.length;
+          return nextIndex < announcements.length ? nextIndex : 0;
+        });
+      }, 8000);
+
+      return () => clearInterval(rotationTimer);
+    }
+  }, [announcements.length]);
+
+  const loadAnnouncements = async () => {
     try {
-      const announcementsData = await fetchAnnouncements();
+      // Quick timeout for fast loading
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Timeout')), 800)
+      );
+      
+      const announcementsData = await Promise.race([
+        fetchAnnouncements(),
+        timeoutPromise
+      ]) as Announcement[];
+      
       const activeAnnouncements = announcementsData.filter(ann => ann.isActive);
       
       if (activeAnnouncements.length > 0) {
-        // Add dynamic announcements to the continuous scroll
-        setAnnouncements(prev => [...activeAnnouncements, ...prev]);
+        setAnnouncements(activeAnnouncements);
       }
+      // If no announcements, keep the fallback that's already set
     } catch (error) {
       console.error('Error loading announcements:', error);
+      // Keep the fallback announcement that's already set
+    } finally {
+      // No loading state change needed
     }
   };
 
-  // Create continuous scrolling text from all announcements
-  const getContinuousText = () => {
-    if (announcements.length === 0) {
-      return 'Welcome to ISKCON Student Center • Join us for daily programs • ';
+  // Get current announcement with safety checks
+  const currentAnnouncement = announcements[currentAnnouncementIndex] || fallbackAnnouncement;
+  
+  // Create announcement content with safety checks
+  const createAnnouncementContent = (announcement: Announcement) => {
+    if (!announcement || !announcement.text) {
+      return 'Welcome to ISKCON Student Center • Join us for daily programs';
     }
-
-    return announcements.map(announcement => {
-      if (!announcement?.text) return '';
-      
-      let text = announcement.text;
-      if (announcement.link) {
-        text += ` (More info available)`;
-      }
-      return text;
-    }).filter(text => text.length > 0).join(' • ') + ' • ';
+    
+    const baseText = announcement.text;
+    if (announcement.link) {
+      return (
+        <span>
+          {baseText} • <a 
+            href={announcement.link} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            style={{
+              color: '#ea580c',
+              textDecoration: 'underline',
+              fontWeight: 'bold'
+            }}
+          >
+            Click here
+          </a>
+        </span>
+      );
+    }
+    return baseText;
   };
 
   return (
@@ -421,11 +472,11 @@ export function DynamicAnnouncements() {
     }}>
       <div style={{
         display: 'inline-block',
-        animation: 'scroll-announcement 35s linear infinite',
+        animation: 'scroll-announcement 25s linear infinite',
         fontSize: '1rem',
         fontWeight: '500'
       }}>
-        {getContinuousText()}
+        {createAnnouncementContent(currentAnnouncement)}
       </div>
       
       <style dangerouslySetInnerHTML={{
