@@ -109,51 +109,48 @@ export default function Home() {
       </HideOnScroll>
       <Toolbar />
 
-      {/* Hero with left/right images and full form centered */}
-      <Box id="home" sx={{ pt: { xs: 18, md: 24 }, pb: { xs: 10, md: 14 }, position: 'relative', overflow: 'hidden' }}>
+      {/* Hero with Prabhupada (left), ISKCON logo (right) and full form centered */}
+      <Box id="home" sx={{ pt: { xs: 18, md: 22 }, pb: { xs: 10, md: 14 }, position: 'relative', overflow: 'hidden' }}>
         <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(115deg,#ffffff,#fff9f1 55%,#fff3e0)', zIndex: -3 }} />
         {/* Subtle decorative orbs */}
         <Box sx={{ position: 'absolute', width: 380, height: 380, top: -120, left: -120, borderRadius: '50%', background: 'radial-gradient(circle,#ffd9b0,transparent 60%)', filter: 'blur(40px)', opacity: 0.55 }} />
         <Box sx={{ position: 'absolute', width: 420, height: 420, bottom: -160, right: -140, borderRadius: '50%', background: 'radial-gradient(circle,#ffe4c4,transparent 70%)', filter: 'blur(50px)', opacity: 0.55 }} />
-        {/* Horizontal hero banner with images */}
-        <Box sx={{
-          position: 'absolute',
-          top: { xs: 80, md: 90 },
-          left: '50%',
-            transform: 'translateX(-50%)',
-          display: { xs: 'none', sm: 'flex' },
-          alignItems: 'center',
-          gap: { sm: 4, md: 8 },
-          px: 2,
-          zIndex: 2
-        }}>
-          <Box sx={{ position: 'relative', width: { sm: 160, md: 220 }, height: { sm: 160, md: 220 } }}>
-            <Image src="/prabhupada.jpg" alt="Srila Prabhupada" fill style={{ objectFit: 'cover', borderRadius: '50%' }} />
-          </Box>
-          <Typography variant="h4" sx={{
-            fontWeight: 800,
-            lineHeight: 1.1,
-            textAlign: 'center',
-            maxWidth: { sm: 360, md: 520 },
-            fontSize: { sm: '1.4rem', md: '1.9rem' },
-            letterSpacing: { sm: 1, md: 2 },
-            background: 'linear-gradient(90deg,#ea580c,#f59e0b)',
-            WebkitBackgroundClip: 'text',
-            color: 'transparent'
-          }}>
-            INTERNATIONAL SOCIETY FOR KRISHNA CONSCIOUSNESS
-          </Typography>
-          <Box sx={{ position: 'relative', width: { sm: 160, md: 220 }, height: { sm: 160, md: 220 } }}>
-            <Image src="/iskcon-logo.png" alt="ISKCON Logo" fill style={{ objectFit: 'contain' }} />
-          </Box>
-        </Box>
         <Container maxWidth="lg">
           <Stack spacing={5} alignItems="center" textAlign="center">
-            <Stack spacing={2} sx={{ mt: { xs: 0, md: 20 } }}>
-              <Typography variant="h3" sx={{ fontSize: { xs: '1.9rem', md: '2.7rem' }, fontWeight: 800, lineHeight: 1.1, letterSpacing: -0.75, color: 'warning.main' }}>
-                ISKCON STUDENT CENTER
+            {/* Row with images & full form */}
+            <Box sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: { xs: 2, md: 6 },
+              flexWrap: 'nowrap',
+              width: '100%',
+              px: 2,
+              mb: { xs: 4, md: 6 }
+            }}>
+              <Box sx={{ position: 'relative', width: { xs: 90, sm: 140, md: 180 }, height: { xs: 90, sm: 140, md: 180 }, borderRadius: '50%', overflow: 'hidden', flexShrink: 0, boxShadow: '0 6px 18px -6px rgba(0,0,0,0.25)' }}>
+                <Image src="/prabhupada.jpg" alt="Srila Prabhupada" fill style={{ objectFit: 'cover' }} />
+              </Box>
+              <Typography component="h1" sx={{
+                fontWeight: 800,
+                textAlign: 'center',
+                fontSize: { xs: '1.15rem', sm: '1.6rem', md: '2.1rem' },
+                letterSpacing: { xs: 1, sm: 2 },
+                lineHeight: 1.15,
+                background: 'linear-gradient(90deg,#ea580c,#f59e0b)',
+                WebkitBackgroundClip: 'text',
+                color: 'transparent',
+                maxWidth: { xs: 260, sm: 520, md: 680 }
+              }}>
+                INTERNATIONAL SOCIETY FOR KRISHNA CONSCIOUSNESS
               </Typography>
-            </Stack>
+              <Box sx={{ position: 'relative', width: { xs: 90, sm: 140, md: 180 }, height: { xs: 90, sm: 180, md: 210 }, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Image src="/iskcon-logo.png" alt="ISKCON Logo" fill style={{ objectFit: 'contain', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.25))' }} />
+              </Box>
+            </Box>
+            <Typography variant="h3" sx={{ fontSize: { xs: '1.9rem', md: '2.7rem' }, fontWeight: 800, lineHeight: 1.1, letterSpacing: -0.75, color: 'warning.main' }}>
+              ISKCON STUDENT CENTER
+            </Typography>
             <Typography variant="h6" sx={{ fontWeight: 400, color: 'text.secondary', lineHeight: 1.6, maxWidth: 860, fontSize: { xs: '1.05rem', md: '1.15rem' } }}>
               Meditation • Wisdom • Leadership • Friendship • Festivals • Mentorship • Lifestyle • Pilgrimage • Counseling • Service.
             </Typography>
