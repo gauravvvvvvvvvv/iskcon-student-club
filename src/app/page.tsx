@@ -172,13 +172,39 @@ export default function Home() {
           <Grid container spacing={4}>
             {programs.map((p, i) => (
               <Grid item xs={12} sm={6} md={4} key={i}>
-                <Card elevation={4} sx={{ height: '100%', borderRadius: 6, position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', background: 'linear-gradient(145deg,#ffffff,#fffaf5)', transition: '0.35s', '&:before': { content: '""', position: 'absolute', inset: 0, background: 'radial-gradient(circle at 25% 18%,rgba(245,158,11,0.12),transparent 62%)' }, '&:hover': { transform: 'translateY(-6px)', boxShadow: '0 14px 32px -8px rgba(234,88,12,0.25)' } }}>
-                  <CardContent sx={{ position: 'relative', flexGrow: 1 }}>
-                    <Stack spacing={1.8} alignItems="flex-start">
-                      <IconButton size="large" color="warning" sx={{ bgcolor: 'warning.light', boxShadow: '0 4px 12px -2px rgba(234,88,12,0.35)', '&:hover': { bgcolor: 'warning.light', transform: 'scale(1.08)' }, transition: '0.35s' }}>{p.icon}</IconButton>
-                      <Tooltip title={p.title} placement="top-start"><Typography variant="h6" fontWeight={700} sx={{ pr: 1 }}>{p.title}</Typography></Tooltip>
-                      <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.5 }}>{p.description}</Typography>
-                    </Stack>
+                <Card elevation={0} sx={{
+                  height: '100%',
+                  borderRadius: 4,
+                  position: 'relative',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  background: (theme) => theme.palette.mode === 'light' ? 'linear-gradient(180deg,#ffffff,#fffdf9)' : 'linear-gradient(180deg,#1e2124,#1b1d20)',
+                  boxShadow: (theme) => theme.palette.mode === 'light' ? '0 2px 4px rgba(0,0,0,0.06)' : '0 2px 4px rgba(0,0,0,0.5)',
+                  transition: 'all .25s ease',
+                  '&:hover': {
+                    boxShadow: (theme) => theme.palette.mode === 'light' ? '0 8px 18px -4px rgba(0,0,0,0.15)' : '0 8px 18px -4px rgba(0,0,0,0.7)',
+                    transform: 'translateY(-4px)'
+                  }
+                }}>
+                  <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', gap: 1.25, pb: 3 }}>
+                    <Box sx={{
+                      width: 42,
+                      height: 42,
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      bgcolor: 'warning.light',
+                      color: 'warning.main',
+                      boxShadow: '0 2px 6px rgba(234,88,12,0.35)',
+                      mb: 0.5
+                    }}>
+                      {p.icon}
+                    </Box>
+                    <Tooltip title={p.title} placement="top-start"><Typography variant="subtitle1" fontWeight={700}>{p.title}</Typography></Tooltip>
+                    <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.45 }}>{p.description}</Typography>
                   </CardContent>
                 </Card>
               </Grid>
@@ -227,13 +253,20 @@ export default function Home() {
           <Grid container spacing={4}>
             {facilities.map((f, i) => (
               <Grid key={i} item xs={12} sm={6} md={3}>
-                <Card elevation={5} sx={{ height: '100%', borderRadius: 6, p: 0.5, display: 'flex', flexDirection: 'column', transition: '0.35s', background: 'linear-gradient(140deg,#ffffff,#fffaf5)', '&:hover': { boxShadow: '0 14px 30px -10px rgba(234,88,12,0.22)', transform: 'translateY(-5px)' } }}>
-                  <CardContent sx={{ flexGrow: 1, position: 'relative' }}>
-                    <Stack spacing={1.6}>
-                      <IconButton color="warning" sx={{ alignSelf: 'flex-start', bgcolor: 'warning.light', boxShadow: '0 4px 10px -2px rgba(234,88,12,0.3)', '&:hover': { bgcolor: 'warning.light', transform: 'scale(1.08)' }, transition: '0.35s' }}>{f.icon}</IconButton>
-                      <Typography variant="subtitle1" fontWeight={700}>{f.title}</Typography>
-                      <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.5 }}>{f.description}</Typography>
-                    </Stack>
+                <Card elevation={0} sx={{
+                  height: '100%',
+                  borderRadius: 4,
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  background: (theme) => theme.palette.mode === 'light' ? '#ffffff' : '#1e2124',
+                  boxShadow: (theme) => theme.palette.mode === 'light' ? '0 2px 4px rgba(0,0,0,0.06)' : '0 2px 4px rgba(0,0,0,0.5)',
+                  transition: 'all .25s ease',
+                  '&:hover': { boxShadow: (theme) => theme.palette.mode === 'light' ? '0 6px 16px -4px rgba(0,0,0,0.15)' : '0 6px 16px -4px rgba(0,0,0,0.6)', transform: 'translateY(-4px)' }
+                }}>
+                  <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 1.25 }}>
+                    <Box sx={{ width: 40, height: 40, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'warning.light', color: 'warning.main', boxShadow: '0 2px 5px rgba(234,88,12,0.3)' }}>{f.icon}</Box>
+                    <Typography variant="subtitle1" fontWeight={700}>{f.title}</Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.45 }}>{f.description}</Typography>
                   </CardContent>
                 </Card>
               </Grid>
