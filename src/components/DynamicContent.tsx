@@ -428,7 +428,7 @@ export function DynamicAnnouncements() {
       }}>
         <div style={{
           display: 'inline-block',
-          animation: 'scroll-announcement 30s linear infinite',
+          animation: 'scroll-announcement 15s linear infinite',
           fontSize: '1rem',
           fontWeight: '500'
         }}>
@@ -490,11 +490,11 @@ export function DynamicAnnouncements() {
     }}>
       <div style={{
         display: 'inline-block',
-        animation: 'scroll-announcement 30s linear infinite',
+        animation: 'scroll-announcement 15s linear infinite',
         fontSize: '1rem',
         fontWeight: '500'
       }}>
-        {createAnnouncementContent()} • {createAnnouncementContent()} • {createAnnouncementContent()}
+        {createAnnouncementContent()}
       </div>
       <style dangerouslySetInnerHTML={{
         __html: `
