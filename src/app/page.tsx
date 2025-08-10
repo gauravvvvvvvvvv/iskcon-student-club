@@ -190,13 +190,19 @@ export default function Home() {
           }
           
           .founder-text {
-            display: none !important;
+            font-size: 0.3rem !important;
+            line-height: 1.1 !important;
+            letter-spacing: 0.2px !important;
+            max-width: 100px !important;
           }
         }
         
         @media (max-width: 768px) {
           .founder-text {
-            display: none !important;
+            font-size: 0.35rem !important;
+            line-height: 1.1 !important;
+            letter-spacing: 0.25px !important;
+            max-width: 110px !important;
           }
         }
         `
@@ -250,13 +256,16 @@ export default function Home() {
               borderRadius: '50%'
             }} />
             <div className="founder-text" style={{
-              fontSize: 'clamp(0.45rem, 1.2vw, 0.6rem)',
+              fontSize: 'clamp(0.35rem, 1.2vw, 0.6rem)',
               fontWeight: '600',
               color: 'black',
               lineHeight: '1.1',
-              whiteSpace: 'nowrap',
               textTransform: 'uppercase',
-              letterSpacing: '0.3px'
+              letterSpacing: '0.3px',
+              wordWrap: 'break-word',
+              whiteSpace: 'normal',
+              maxWidth: '120px',
+              textAlign: 'left'
             }}>
               FOUNDER ACHARYA: HDG AC BHAKTIVEDANTA SWAMI SRILA PRABHUPADA
             </div>
