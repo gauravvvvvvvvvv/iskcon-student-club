@@ -232,17 +232,17 @@ export default function Home() {
             paddingLeft: '0.5rem'
           }}>
             <div style={{ 
-              width: '50px',
-              height: '50px',
+              width: '140px',
+              height: '140px',
               backgroundImage: "url('/prabhupada.png')",
               backgroundSize: 'contain',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat'
             }} />
             <div style={{ 
-              width: '50px',
-              height: '50px',
-              backgroundImage: "url('/iskcon.png')",
+              width: '140px',
+              height: '140px',
+              backgroundImage: "url('/image.png')",
               backgroundSize: 'contain',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat'
