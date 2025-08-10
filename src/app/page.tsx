@@ -241,12 +241,13 @@ export default function Home() {
               borderRadius: '50%'
             }} />
             <div style={{ 
-              width: '130px',
-              height: '130px',
+              width: '70px',
+              height: '70px',
               backgroundImage: "url('/prabhupada.jpg')",
               backgroundSize: 'contain',
               backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat'
+              backgroundRepeat: 'no-repeat',
+              borderRadius: '50%'
             }} />
             <div style={{
               fontSize: '0.6rem',
