@@ -3,6 +3,10 @@ import React from 'react';
 import {
   AppBar, Box, Toolbar, Typography, Container, Button, IconButton, Stack, Grid, Card, CardContent, Chip, Divider, List, ListItem, ListItemIcon, ListItemText, useScrollTrigger, Slide, Tooltip
 } from '@mui/material';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import { useContext } from 'react';
+import { ColorModeContext } from './theme/AppThemeProvider';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
@@ -75,6 +79,7 @@ const schedule = [
 ];
 
 export default function Home() {
+  const { mode, toggle } = useContext(ColorModeContext);
   return (
     <Box sx={{ bgcolor: 'background.default', color: 'text.primary', minHeight: '100vh' }}>
       <HideOnScroll>
@@ -90,9 +95,14 @@ export default function Home() {
                 </Button>
               ))}
             </Stack>
-            <Button href="#contact" variant="contained" color="warning" sx={{ borderRadius: '999px', px: 3, fontWeight: 700, ml: 2 }}>
-              Join Now
-            </Button>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Button href="#contact" variant="contained" color="warning" sx={{ borderRadius: '999px', px: 3, fontWeight: 700 }}>
+                Join Now
+              </Button>
+              <IconButton onClick={toggle} color="warning" aria-label="Toggle color mode" sx={{ ml: 0.5 }}>
+                {mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
+              </IconButton>
+            </Stack>
           </Toolbar>
         </AppBar>
       </HideOnScroll>
@@ -105,11 +115,11 @@ export default function Home() {
         <Box sx={{ position: 'absolute', width: 380, height: 380, top: -120, left: -120, borderRadius: '50%', background: 'radial-gradient(circle,#ffd9b0,transparent 60%)', filter: 'blur(40px)', opacity: 0.55 }} />
         <Box sx={{ position: 'absolute', width: 420, height: 420, bottom: -160, right: -140, borderRadius: '50%', background: 'radial-gradient(circle,#ffe4c4,transparent 70%)', filter: 'blur(50px)', opacity: 0.55 }} />
         {/* Top corner image placeholders */}
-  <Box sx={{ position: 'absolute', top: 24, left: 24, width: { xs: 110, md: 190 }, height: { xs: 130, md: 230 }, borderRadius: '46px 46px 18px 18px', background: 'linear-gradient(160deg,#fff3e0 0%,#ffe1bc 60%)', boxShadow: '0 12px 34px -14px rgba(234,88,12,0.28)', overflow: 'hidden', display: { xs: 'none', sm: 'block' }, border: '1px solid rgba(234,88,12,0.25)' }}>
+  <Box sx={{ position: 'absolute', top: 24, left: 24, width: { xs: 110, md: 190 }, height: { xs: 130, md: 230 }, borderRadius: 6, background: 'linear-gradient(160deg,#fff3e0 0%,#ffe1bc 60%)', boxShadow: '0 10px 26px -12px rgba(234,88,12,0.25)', overflow: 'hidden', display: { xs: 'none', sm: 'block' }, border: '1px solid rgba(234,88,12,0.2)' }}>
           <Box sx={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 30% 25%,rgba(245,158,11,0.35),transparent 60%)' }} />
           <Typography sx={{ position: 'absolute', bottom: 8, left: 0, right: 0, textAlign: 'center', fontSize: 10, letterSpacing: 2, fontWeight: 700, color: 'warning.main' }}>ADD IMAGE</Typography>
         </Box>
-  <Box sx={{ position: 'absolute', top: 24, right: 24, width: { xs: 110, md: 190 }, height: { xs: 130, md: 230 }, borderRadius: '46px 46px 18px 18px', background: 'linear-gradient(210deg,#fff3e0 0%,#ffe1bc 65%)', boxShadow: '0 12px 34px -14px rgba(234,88,12,0.28)', overflow: 'hidden', display: { xs: 'none', sm: 'block' }, border: '1px solid rgba(234,88,12,0.25)' }}>
+  <Box sx={{ position: 'absolute', top: 24, right: 24, width: { xs: 110, md: 190 }, height: { xs: 130, md: 230 }, borderRadius: 6, background: 'linear-gradient(210deg,#fff3e0 0%,#ffe1bc 65%)', boxShadow: '0 10px 26px -12px rgba(234,88,12,0.25)', overflow: 'hidden', display: { xs: 'none', sm: 'block' }, border: '1px solid rgba(234,88,12,0.2)' }}>
           <Box sx={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 70% 25%,rgba(245,158,11,0.35),transparent 60%)' }} />
           <Typography sx={{ position: 'absolute', bottom: 8, left: 0, right: 0, textAlign: 'center', fontSize: 10, letterSpacing: 2, fontWeight: 700, color: 'warning.main' }}>ADD IMAGE</Typography>
         </Box>
@@ -162,7 +172,7 @@ export default function Home() {
           <Grid container spacing={4}>
             {programs.map((p, i) => (
               <Grid item xs={12} sm={6} md={4} key={i}>
-                <Card elevation={5} sx={{ height: '100%', borderRadius: 5, position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', background: 'linear-gradient(145deg,#ffffff,#fff5eb)', transition: '0.45s', '&:before': { content: '""', position: 'absolute', inset: 0, background: 'radial-gradient(circle at 20% 15%,rgba(245,158,11,0.15),transparent 60%)' }, '&:hover': { transform: 'translateY(-8px)', boxShadow: '0 18px 40px -10px rgba(234,88,12,0.28)' } }}>
+                <Card elevation={4} sx={{ height: '100%', borderRadius: 6, position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', background: 'linear-gradient(145deg,#ffffff,#fffaf5)', transition: '0.35s', '&:before': { content: '""', position: 'absolute', inset: 0, background: 'radial-gradient(circle at 25% 18%,rgba(245,158,11,0.12),transparent 62%)' }, '&:hover': { transform: 'translateY(-6px)', boxShadow: '0 14px 32px -8px rgba(234,88,12,0.25)' } }}>
                   <CardContent sx={{ position: 'relative', flexGrow: 1 }}>
                     <Stack spacing={1.8} alignItems="flex-start">
                       <IconButton size="large" color="warning" sx={{ bgcolor: 'warning.light', boxShadow: '0 4px 12px -2px rgba(234,88,12,0.35)', '&:hover': { bgcolor: 'warning.light', transform: 'scale(1.08)' }, transition: '0.35s' }}>{p.icon}</IconButton>
@@ -217,7 +227,7 @@ export default function Home() {
           <Grid container spacing={4}>
             {facilities.map((f, i) => (
               <Grid key={i} item xs={12} sm={6} md={3}>
-                <Card elevation={6} sx={{ height: '100%', borderRadius: 5, p: 0.5, display: 'flex', flexDirection: 'column', transition: '0.45s', background: 'linear-gradient(140deg,#ffffff,#fff5eb)', '&:hover': { boxShadow: '0 16px 38px -12px rgba(234,88,12,0.25)', transform: 'translateY(-6px)' } }}>
+                <Card elevation={5} sx={{ height: '100%', borderRadius: 6, p: 0.5, display: 'flex', flexDirection: 'column', transition: '0.35s', background: 'linear-gradient(140deg,#ffffff,#fffaf5)', '&:hover': { boxShadow: '0 14px 30px -10px rgba(234,88,12,0.22)', transform: 'translateY(-5px)' } }}>
                   <CardContent sx={{ flexGrow: 1, position: 'relative' }}>
                     <Stack spacing={1.6}>
                       <IconButton color="warning" sx={{ alignSelf: 'flex-start', bgcolor: 'warning.light', boxShadow: '0 4px 10px -2px rgba(234,88,12,0.3)', '&:hover': { bgcolor: 'warning.light', transform: 'scale(1.08)' }, transition: '0.35s' }}>{f.icon}</IconButton>
