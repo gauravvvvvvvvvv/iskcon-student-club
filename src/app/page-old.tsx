@@ -1,487 +1,1331 @@
 "use client";
-import React from 'react';
-import {
-  AppBar, Box, Toolbar, Typography, Container, Button, IconButton, Stack, Grid, Card, CardContent, Chip, Divider, List, ListItem, ListItemIcon, ListItemText, useScrollTrigger, Slide, Tooltip, Paper, Avatar
-} from '@mui/material';
-import { useContext } from 'react';
-import { ColorModeContext } from './theme/AppThemeProvider';
-
-// Import Material Icons
-import DarkModeIcon from '@mui/icons-material/DarkMode';
-import LightModeIcon from '@mui/icons-material/LightMode';
-import MenuBookIcon from '@mui/icons-material/MenuBook';
-import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
-import MusicNoteIcon from '@mui/icons-material/MusicNote';
-import RestaurantIcon from '@mui/icons-material/Restaurant';
-import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
-import TheaterComedyIcon from '@mui/icons-material/TheaterComedy';
-import HomeIcon from '@mui/icons-material/Home';
-import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
-import LocalDiningIcon from '@mui/icons-material/LocalDining';
-import SpaIcon from '@mui/icons-material/Spa';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import YouTubeIcon from '@mui/icons-material/YouTube';
-import PhoneIcon from '@mui/icons-material/Phone';
-import PlaceIcon from '@mui/icons-material/Place';
-import GroupIcon from '@mui/icons-material/Group';
-import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
-import GavelIcon from '@mui/icons-material/Gavel';
-import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
-import HikingIcon from '@mui/icons-material/Hiking';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import SupportAgentIcon from '@mui/icons-material/SupportAgent';
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-
-function HideOnScroll({ children }: { children: React.ReactElement }) {
-  const trigger = useScrollTrigger();
-  return (
-    <Slide appear={false} direction="down" in={!trigger}>
-      {children}
-    </Slide>
-  );
-}
-
-const programs = [
-  { icon: <span style={{fontSize:'1.5rem'}}>📖</span>, title: 'Learning Gita & Vedic Wisdom', description: 'Structured deep dive into Bhagavad Gita & Vedic philosophy.' },
-  { icon: <span style={{fontSize:'1.5rem'}}>🧘</span>, title: 'Chanting / Mantra Meditation', description: 'Daily japa & kirtan to sharpen focus and purify mind.' },
-  { icon: <span style={{fontSize:'1.5rem'}}>🎖️</span>, title: 'Leadership Development', description: 'Cultivating responsibility, clarity & servant-leadership.' },
-  { icon: <span style={{fontSize:'1.5rem'}}>👥</span>, title: 'Spiritual Friendship', description: 'Uplifting association & accountability circles.' },
-  { icon: <span style={{fontSize:'1.5rem'}}>🎵</span>, title: 'Kirtans / Festivals', description: 'High-energy devotional music & cultural celebrations.' },
-  { icon: <span style={{fontSize:'1.5rem'}}>🤝</span>, title: 'Personal Mentorship', description: 'One-on-one guidance for growth & sadhana alignment.' },
-  { icon: <span style={{fontSize:'1.5rem'}}>🥾</span>, title: 'Dham Yatra', description: 'Transformative pilgrimages to sacred holy places.' },
-  { icon: <span style={{fontSize:'1.5rem'}}>💆</span>, title: 'Sattvik Lifestyle', description: 'Balanced routine: purity, nutrition, discipline & seva.' },
-  { icon: <span style={{fontSize:'1.5rem'}}>📚</span>, title: 'Spreading Vedic Wisdom', description: 'Outreach, seminars & distribution of sacred texts.' },
-  { icon: <span style={{fontSize:'1.5rem'}}>🎧</span>, title: 'Spiritual Counseling', description: 'Support for life decisions & inner emotional balance.' },
-  { icon: <span style={{fontSize:'1.5rem'}}>🏠</span>, title: 'Accommodation', description: 'Focused spiritual student residential environment.' },
-  { icon: <span style={{fontSize:'1.5rem'}}>🍽️</span>, title: 'Prasadam', description: 'Wholesome sanctified vegetarian nourishment.' },
-  { icon: <span style={{fontSize:'1.5rem'}}>❤️</span>, title: 'Mental / Physical Detox', description: 'Habit reset using mantra, regulated sleep & diet.' },
-  { icon: <span style={{fontSize:'1.5rem'}}>⚖️</span>, title: 'Debate Circles', description: 'Structured philosophical dialogue & reasoning.' },
-  { icon: <span style={{fontSize:'1.5rem'}}>🎭</span>, title: 'Drama', description: 'Devotional theater & expressive arts seva.' },
-  { icon: <span style={{fontSize:'1.5rem'}}>🏆</span>, title: 'Competitions', description: 'Quizzes, recitation & character challenges.' },
-];
-
-const facilities = [
-  { icon: <span style={{fontSize:'1.5rem'}}>🏠</span>, title: 'Accommodation', description: 'Comfortable, focused student living.' },
-  { icon: <span style={{fontSize:'1.5rem'}}>🏛️</span>, title: 'Library', description: 'Spiritual & academic study space.' },
-  { icon: <span style={{fontSize:'1.5rem'}}>🍴</span>, title: 'Dining Hall', description: 'Nutritious daily prasadam meals.' },
-  { icon: <span style={{fontSize:'1.5rem'}}>💆</span>, title: 'Meditation Hall', description: 'Quiet space for reflection & prayer.' },
-];
-
-const schedule = [
-  { time: '5:00 AM', activity: 'Morning Prayer & Meditation' },
-  { time: '6:00 AM', activity: 'Yoga & Exercise' },
-  { time: '7:30 AM', activity: 'Breakfast Prasadam' },
-  { time: '9:00 AM', activity: 'Bhagavad Gita Class' },
-  { time: '12:00 PM', activity: 'Lunch & Rest' },
-  { time: '4:00 PM', activity: 'Cultural Activities' },
-  { time: '6:00 PM', activity: 'Evening Kirtan' },
-  { time: '7:30 PM', activity: 'Dinner Prasadam' },
-  { time: '9:00 PM', activity: 'Personal Study & Rest' },
-];
+import { useState, useEffect } from 'react';
+import { DynamicCarousel, DynamicAnnouncements } from '../components/DynamicContent';
 
 export default function Home() {
-  const { mode, toggle } = useContext(ColorModeContext);
+  
   return (
-    <Box sx={{ bgcolor: 'background.default', color: 'text.primary', minHeight: '100vh' }}>
-      <HideOnScroll>
-        <AppBar elevation={0} color="default" sx={{ backdropFilter: 'blur(16px)', bgcolor: (theme) => theme.palette.background.paper, borderBottom: 1, borderColor: 'divider' }}>
-          <Toolbar sx={{ maxWidth: 1280, mx: 'auto', width: '100%' }}>
-            <Typography variant="h6" sx={{ fontWeight: 700, flexGrow: 1, letterSpacing: 0.5, color: 'warning.main' }}>
-              ISKCON Student Center
-            </Typography>
-            <Stack direction="row" spacing={1} sx={{ display: { xs: 'none', md: 'flex' } }}>
-              {['Programs', 'Schedule', 'Facilities', 'Contact'].map(item => (
-                <Button key={item} href={`#${item.toLowerCase()}`} color="warning" variant="text" sx={{ fontWeight: 600 }}>
-                  {item}
-                </Button>
-              ))}
-            </Stack>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Button href="#contact" variant="contained" color="warning" sx={{ borderRadius: '999px', px: 3, fontWeight: 700 }}>
-                Join Now
-              </Button>
-              <IconButton onClick={toggle} color="warning" aria-label="Toggle color mode" sx={{ ml: 0.5 }}>
-                {mode === 'light' ? <span style={{fontSize:'1.5rem'}}>🌙</span> : <span style={{fontSize:'1.5rem'}}>☀️</span>}
-              </IconButton>
-            </Stack>
-          </Toolbar>
-        </AppBar>
-      </HideOnScroll>
-      <Toolbar />
-
-      {/* Hero with Prabhupada (left), ISKCON logo (right) and full form centered */}
-        <Box id="home" sx={{ pt: { xs: 18, md: 20 }, pb: { xs: 10, md: 14 }, position: 'relative', overflow: 'hidden' }}>
-          <Box sx={{ position: 'absolute', inset: 0, zIndex: -3, background: (theme) => theme.palette.mode === 'light' ? 'linear-gradient(135deg, #fffcf2, #fff3e0)' : 'linear-gradient(135deg, #111416, #181b1e)' }} />
-        {/* Subtle decorative orbs */}
-        <Box sx={{ position: 'absolute', width: 380, height: 380, top: -120, left: -120, borderRadius: '50%', background: 'radial-gradient(circle,#ffd9b0,transparent 60%)', filter: 'blur(40px)', opacity: 0.55 }} />
-        <Box sx={{ position: 'absolute', width: 420, height: 420, bottom: -160, right: -140, borderRadius: '50%', background: 'radial-gradient(circle,#ffe4c4,transparent 70%)', filter: 'blur(50px)', opacity: 0.55 }} />
-          {/* Full-width banner row (outside container to span edge-to-edge) */}
-          <Box sx={{
-            width: '100%',
-            px: { xs: 2, sm: 4, md: 8 },
+    <div style={{ minHeight: '100vh', backgroundColor: '#ffffff', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+      <style dangerouslySetInnerHTML={{
+        __html: `
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideInLeft {
+          from { opacity: 0; transform: translateX(-50px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes slideInRight {
+          from { opacity: 0; transform: translateX(50px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes gradientShift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes scrollText {
+          0% { transform: translateX(100%); }
+          100% { transform: translateX(-100%); }
+        }
+        
+        .animate-fadeInUp {
+          animation: fadeInUp 0.8s ease-out forwards;
+          opacity: 0;
+        }
+        
+        .animate-slideInLeft {
+          animation: slideInLeft 0.8s ease-out forwards;
+          opacity: 0;
+        }
+        
+        .animate-slideInRight {
+          animation: slideInRight 0.8s ease-out forwards;
+          opacity: 0;
+        }
+        
+        .card-hover {
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          cursor: pointer;
+        }
+        
+        .card-hover:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .button-primary {
+          background: linear-gradient(135deg, #ff6b35, #f7931e);
+          transition: all 0.3s ease;
+          border: none;
+        }
+        
+        .button-primary:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 15px 30px rgba(255, 107, 53, 0.4);
+        }
+        
+        .hero-gradient {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #ff6b35 100%);
+          background-size: 400% 400%;
+          animation: gradientShift 8s ease infinite;
+        }
+        
+        .material-icon {
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 24px;
+          font-weight: bold;
+          margin: 0 auto 1rem auto;
+          transition: all 0.3s ease;
+          color: white;
+        }
+        
+        .icon-prayer { background: linear-gradient(135deg, #ff9a9e, #fecfef); }
+        .icon-book { background: linear-gradient(135deg, #a8edea, #fed6e3); }
+        .icon-music { background: linear-gradient(135deg, #d299c2, #fef9d7); }
+        .icon-community { background: linear-gradient(135deg, #89f7fe, #66a6ff); }
+        .icon-event { background: linear-gradient(135deg, #fdbb2d, #22c1c3); }
+        .icon-food { background: linear-gradient(135deg, #ff9a9e, #fad0c4); }
+        
+        .material-btn {
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .material-btn::before {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 0;
+          height: 0;
+          background: rgba(255, 255, 255, 0.2);
+          border-radius: 50%;
+          transition: width 0.4s, height 0.4s, top 0.4s, left 0.4s;
+          transform: translate(-50%, -50%);
+        }
+        
+        .material-btn:hover::before {
+          width: 300px;
+          height: 300px;
+        }
+        
+        @media (max-width: 768px) {
+          .grid-responsive { grid-template-columns: 1fr !important; }
+          .text-responsive { font-size: 1.5rem !important; }
+          .nav-desktop { display: none !important; }
+        }
+        
+        /* Additional responsive styles */counselling
+        @media (max-width: 768px) {
+          .announcement-banner {
+            font-size: 0.9rem !important;
+            padding: 8px 0 !important;
+          }
+          
+          .carousel-container {
+            height: clamp(500px, 70vh, 750px) !important;
+          }
+          
+          .carousel-content {
+            padding: 1rem !important;
+          }
+          
+          .carousel-nav {
+            bottom: 10px !important;
+            gap: 0.5rem !important;
+          }
+          
+          .carousel-nav button {
+            width: 35px !important;
+            height: 35px !important;
+            font-size: 1rem !important;
+          }
+          
+          .carousel-nav .indicators button {
+            width: 8px !important;
+            height: 8px !important;
+          }
+          
+          .carousel-container img {
+            border-radius: 4px !important;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .announcement-banner {
+            font-size: 0.8rem !important;
+          }
+          
+          .carousel-container {
+            height: clamp(450px, 60vh, 650px) !important;
+          }
+          
+          .carousel-nav {
+            bottom: 5px !important;
+            gap: 0.3rem !important;
+            padding: 0 1rem !important;
+          }
+          
+          .carousel-nav button {
+            width: 30px !important;
+            height: 30px !important;
+            font-size: 0.9rem !important;
+          }
+          
+          .carousel-content h1 {
+            font-size: clamp(1.5rem, 5vw, 2.5rem) !important;
+          }
+          
+          .carousel-content p {
+            font-size: clamp(0.9rem, 2.5vw, 1.2rem) !important;
+          }
+        }
+        `
+      }} />
+      
+      {/* Header */}
+      <header style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        backdropFilter: 'blur(16px)',
+        borderBottom: '1px solid #e5e7eb',
+        zIndex: 1000,
+        padding: '0.5rem 0'
+      }} className="animate-slideInLeft">
+        <div style={{ 
+          width: '100%',
+          display: 'flex', 
+          alignItems: 'center',
+          padding: '0',
+          flexWrap: 'nowrap',
+          height: '60px',
+          justifyContent: 'flex-start'
+        }}>
+          {/* Left corner - ISKCON and Prabhupada images with text */}
+          <div style={{ 
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: { xs: 2, md: 4 },
-            mb: { xs: 6, md: 8 },
-            flexWrap: 'nowrap'
+            gap: '0.1rem',
+            flexShrink: 0,
+            paddingLeft: '0.5rem'
           }}>
-            {/* Srila Prabhupada image */}
-            <Box sx={{
-              position: 'relative',
-              width: { xs: 80, sm: 130, md: 170 },
-              height: { xs: 80, sm: 130, md: 170 },
-              borderRadius: '50%',
-              overflow: 'hidden',
-              boxShadow: '0 6px 18px -6px rgba(0,0,0,0.25)',
-              flexShrink: 0
-            }}>
-              <img src="/prabhupada.jpg" alt="Srila Prabhupada" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            </Box>
-            <Typography component="h1" sx={{
-              flexGrow: 1,
-              fontWeight: 800,
-              textAlign: 'center',
-              fontSize: { xs: '1rem', sm: '1.3rem', md: '2.1rem' },
-              letterSpacing: { xs: 1, sm: 3, md: 6 },
-              lineHeight: 1.15,
-              background: 'linear-gradient(90deg,#ea580c,#f59e0b)',
-              WebkitBackgroundClip: 'text',
-              color: 'transparent',
-              whiteSpace: 'normal'
-            }}>
-              INTERNATIONAL SOCIETY FOR KRISHNA CONSCIOUSNESS
-            </Typography>
-            {/* ISKCON Logo image */}
-            <Box sx={{
-              position: 'relative',
-              width: { xs: 80, sm: 130, md: 180 },
-              height: { xs: 80, sm: 150, md: 200 },
-              flexShrink: 0,
-              overflow: 'hidden',
+            <div style={{ 
+              width: '70px',
+              height: '70px',
+              backgroundImage: "url('/image.png')",
+              backgroundSize: 'contain',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
               borderRadius: '50%'
+            }} />
+            <div style={{ 
+              width: '70px',
+              height: '70px',
+              backgroundImage: "url('/prabhupada.jpg')",
+              backgroundSize: 'contain',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              borderRadius: '50%'
+            }} />
+            <div style={{
+              fontSize: '0.6rem',
+              fontWeight: '600',
+              color: 'black',
+              lineHeight: '1',
+              whiteSpace: 'nowrap',
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px'
             }}>
-              <img src="/iskcon-logo.png" alt="ISKCON Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-            </Box>
-          </Box>
-          <Container maxWidth="lg">
-            <Stack spacing={5} alignItems="center" textAlign="center">
-              <Typography variant="h3" sx={{ fontSize: { xs: '1.9rem', md: '2.7rem' }, fontWeight: 800, lineHeight: 1.1, letterSpacing: -0.75, color: 'warning.main' }}>
-                ISKCON STUDENT CENTER
-              </Typography>
-              <Typography variant="h6" sx={{ fontWeight: 400, color: 'text.secondary', lineHeight: 1.6, maxWidth: 860, fontSize: { xs: '1.05rem', md: '1.15rem' } }}>
-                Meditation • Wisdom • Leadership • Friendship • Festivals • Mentorship • Lifestyle • Pilgrimage • Counseling • Service.
-              </Typography>
-              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                <Button href="#programs" size="large" variant="contained" color="warning" sx={{ fontWeight: 700, px: 5, borderRadius: '999px', boxShadow: '0 0 0 0 rgba(245,158,11,0.5)', animation: 'pulseJoin 2.5s infinite' }}>Explore Programs</Button>
-                <Button href="#contact" size="large" variant="outlined" color="warning" sx={{ fontWeight: 700, px: 5, borderRadius: '999px' }}>Visit Center</Button>
-              </Stack>
-              <Stack direction="row" spacing={6} pt={2} flexWrap="wrap" justifyContent="center">
-                <Stack alignItems="center" minWidth={120}>
-                  <Typography variant="h5" fontWeight={800}>250+</Typography>
-                  <Typography variant="caption" color="text.secondary" fontWeight={600}>Active Students</Typography>
-                </Stack>
-                <Stack alignItems="center" minWidth={120}>
-                  <Typography variant="h5" fontWeight={800}>365</Typography>
-                  <Typography variant="caption" color="text.secondary" fontWeight={600}>Days / Year</Typography>
-                </Stack>
-                <Stack alignItems="center" minWidth={120}>
-                  <Typography variant="h5" fontWeight={800}>100%</Typography>
-                  <Typography variant="caption" color="text.secondary" fontWeight={600}>Authentic Tradition</Typography>
-                </Stack>
-              </Stack>
-            </Stack>
-          </Container>
-        <style>{`
-          @keyframes pulseJoin { 0% { box-shadow: 0 0 0 0 rgba(245,158,11,0.5);} 70% { box-shadow: 0 0 0 28px rgba(245,158,11,0); } 100% { box-shadow: 0 0 0 0 rgba(245,158,11,0);} }
-        `}</style>
-      </Box>
+              FOUNDER ACHARYA: HDG AC BHAKTIVEDANTA SWAMI SRILA PRABHUPADA
+            </div>
+          </div>
+          
+          <div style={{ 
+            flex: 1,
+            textAlign: 'center',
+            paddingLeft: '2rem',
+            paddingRight: '2rem'
+          }}>
+            <h1 style={{ 
+              fontSize: '1.25rem', 
+              fontWeight: '700',
+              letterSpacing: '0.5px', 
+              background: 'linear-gradient(135deg, #ea580c, #f97316)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              margin: 0,
+              whiteSpace: 'nowrap'
+            }} className="animate-fadeInUp">
+              ISKCON STUDENT CENTER
+            </h1>
+            <div style={{
+              fontSize: '0.8rem',
+              fontWeight: '500',
+              color: '#6b7280',
+              marginTop: '0.2rem',
+              letterSpacing: '1px'
+            }}>
+              DELHI UNIVERSITY
+            </div>
+          </div>
+          
+          {/* Right Image - ISKCON Logo */}
+          <div style={{ 
+            marginLeft: '1rem',
+            width: '40px',
+            height: '40px',
+            backgroundImage: "url('/iskcon.png')",
+            backgroundSize: 'contain',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }} className="floating" />
+          
+          <nav style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginLeft: '2rem', flexShrink: 0 }} className="nav-desktop">
+            <a href="#programs" style={{ color: '#ea580c', textDecoration: 'none', fontWeight: '600', whiteSpace: 'nowrap' }}>Programs</a>
+            <a href="#schedule" style={{ color: '#ea580c', textDecoration: 'none', fontWeight: '600', whiteSpace: 'nowrap' }}>Schedule</a>
+            <a href="#facilities" style={{ color: '#ea580c', textDecoration: 'none', fontWeight: '600', whiteSpace: 'nowrap' }}>Facilities</a>
+            <a href="#location" style={{ color: '#ea580c', textDecoration: 'none', fontWeight: '600', whiteSpace: 'nowrap' }}>Location</a>
+            <a href="#contact" style={{ color: '#ea580c', textDecoration: 'none', fontWeight: '600', whiteSpace: 'nowrap' }}>Contact</a>
+            <a 
+              href="https://forms.google.com/your-form-id" 
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                backgroundColor: '#ea580c',
+                color: 'white',
+                padding: '0.75rem 1.5rem',
+                borderRadius: '999px',
+                textDecoration: 'none',
+                fontWeight: '700',
+                marginLeft: '1rem',
+                whiteSpace: 'nowrap',
+                flexShrink: 0
+              }}
+              className="button-primary"
+            >
+              Join Now
+            </a>
+          </nav>
+        </div>
+      </header>
 
-  {/* Programs / Features */}
-  <Box id="programs" py={12} sx={{ 
-    background: (theme) => theme.palette.mode === 'light' 
-      ? 'linear-gradient(135deg, #ffffff 0%, #fff9f2 50%, #fef3e7 100%)' 
-      : 'linear-gradient(135deg, #1e2124 0%, #181b1e 50%, #161a1d 100%)', 
-    transition: 'background 0.4s',
-    position: 'relative'
-  }}>
-    <Box sx={{ 
-      position: 'absolute', 
-      inset: 0, 
-      background: 'radial-gradient(circle at 20% 80%, rgba(245,158,11,0.05), transparent 50%)',
-      pointerEvents: 'none'
-    }} />
-        <Container maxWidth="lg">
-          <Stack spacing={2} textAlign="center" mb={6}>
-    <Typography variant="overline" fontWeight={700} color="warning.main">FEATURES</Typography>
-    <Typography variant="h3" fontWeight={800} sx={{ letterSpacing: -1 }}>Holistic Offerings</Typography>
-    <Typography variant="subtitle1" color="text.secondary" maxWidth={780} mx="auto">Integrated spiritual ecosystem: learning, meditation, leadership, friendship, lifestyle transformation and joyful seva.</Typography>
-          </Stack>
-          <Grid container spacing={4}>
-            {programs.map((p, i) => (
-              <Grid item xs={12} sm={6} md={4} key={i}>
-                <Card elevation={2} sx={{
-                  height: '100%',
-                  borderRadius: 6,
-                  position: 'relative',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  border: 'none',
-                  background: (theme) => theme.palette.mode === 'light' 
-                    ? `linear-gradient(145deg, #ffffff 0%, #fffaf0 100%)` 
-                    : `linear-gradient(145deg, #1e2124 0%, #1a1f20 100%)`,
-                  boxShadow: (theme) => theme.palette.mode === 'light' 
-                    ? '0 4px 8px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04)' 
-                    : '0 4px 8px rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.4)',
-                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                  overflow: 'hidden',
-                  '&:hover': {
-                    boxShadow: (theme) => theme.palette.mode === 'light' 
-                      ? '0 12px 24px rgba(0,0,0,0.15), 0 6px 12px rgba(0,0,0,0.08)' 
-                      : '0 12px 24px rgba(0,0,0,0.7), 0 6px 12px rgba(0,0,0,0.5)',
-                    transform: 'translateY(-6px)'
-                  },
-                  '&:before': {
-                    content: '""',
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: 4,
-                    background: 'linear-gradient(90deg, #ea580c, #f59e0b)',
-                    opacity: 0,
-                    transition: 'opacity 0.3s ease'
-                  },
-                  '&:hover:before': {
-                    opacity: 1
-                  }
+      {/* Dynamic Announcement Section */}
+      <DynamicAnnouncements />
+
+      {/* Main Content Container */}
+      <div>
+        {/* Image Carousel Section */}
+        <section style={{
+          position: 'relative',
+          height: 'clamp(600px, 80vh, 900px)',
+          overflow: 'hidden',
+          backgroundColor: 'white',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }} className="carousel-container">
+          {/* Background Image Carousel */}
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            zIndex: 1
+          }}>
+            {/* Slide 1: Krishna */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                opacity: currentSlide === 0 ? 1 : 0,
+                transition: 'opacity 0.8s ease-in-out',
+                backgroundImage: "url('/krishna.jpg')",
+                backgroundSize: 'contain',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                backgroundColor: 'white'
+              }}
+            />
+
+            {/* Slide 2: Mahaprabhu */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                opacity: currentSlide === 1 ? 1 : 0,
+                transition: 'opacity 0.8s ease-in-out',
+                backgroundImage: "url('/mahaprabhu.jpg')",
+                backgroundSize: 'contain',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                backgroundColor: 'white'
+              }}
+            />
+
+            {/* Slide 3: Radha Krishna */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                opacity: currentSlide === 2 ? 1 : 0,
+                transition: 'opacity 0.8s ease-in-out',
+                backgroundImage: "url('/radhakrishna.jpg')",
+                backgroundSize: 'contain',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                backgroundColor: 'white'
+              }}
+            />
+
+            {/* Slide 4: Siyaram */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                opacity: currentSlide === 3 ? 1 : 0,
+                transition: 'opacity 0.8s ease-in-out',
+                backgroundImage: "url('/siyaram.jpg')",
+                backgroundSize: 'contain',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                backgroundColor: 'white'
+              }}
+            />
+
+            {/* Slide 5: Charan */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                opacity: currentSlide === 4 ? 1 : 0,
+                transition: 'opacity 0.8s ease-in-out',
+                backgroundImage: "url('/charan.jpeg')",
+                backgroundSize: 'contain',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                backgroundColor: 'white'
+              }}
+            />
+
+            {/* Slide 6: Hogwarts */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                opacity: currentSlide === 5 ? 1 : 0,
+                transition: 'opacity 0.8s ease-in-out',
+                backgroundImage: "url('/hogwarts.jpg')",
+                backgroundSize: 'contain',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                backgroundColor: 'white'
+              }}
+            />
+
+            {/* Slide 7: Mahaprabhu 2 */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                opacity: currentSlide === 6 ? 1 : 0,
+                transition: 'opacity 0.8s ease-in-out',
+                backgroundImage: "url('/mahaprabhu 2.jpg')",
+                backgroundSize: 'contain',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                backgroundColor: 'white'
+              }}
+            />
+            
+            {/* Overlay */}
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'rgba(0, 0, 0, 0.15)',
+              zIndex: 2
+            }} />
+          </div>
+
+          {/* Content Container */}
+          <div style={{
+            position: 'relative',
+            zIndex: 3,
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: 'clamp(1rem, 4vw, 2rem)',
+            maxWidth: '1200px',
+            margin: '0 auto',
+            textAlign: 'center'
+          }} className="carousel-content">
+            {/* Center Title */}
+            <div style={{ textAlign: 'center', marginBottom: '2rem' }} className="carousel-title">
+              <h1 style={{
+                fontSize: 'clamp(2rem, 6vw, 4rem)',
+                fontWeight: '900',
+                color: 'white',
+                textShadow: '0 4px 8px rgba(0, 0, 0, 0.5)',
+                margin: 0,
+                letterSpacing: '0.05em',
+                lineHeight: '1.1'
+              }}>
+                ISKCON Student Center
+              </h1>
+              <p style={{
+                fontSize: 'clamp(1rem, 3vw, 1.5rem)',
+                color: 'rgba(255, 255, 255, 0.9)',
+                margin: '1rem 0 0 0',
+                fontWeight: '500'
+              }}>
+                International Society for Krishna Consciousness
+              </p>
+            </div>
+
+            {/* Call to Action Buttons */}
+            <div style={{ 
+              display: 'flex', 
+              gap: '1rem', 
+              justifyContent: 'center', 
+              marginBottom: '3rem',
+              flexWrap: 'wrap'
+            }}>
+              <a 
+                href="https://forms.google.com/your-form-id"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                  color: '#ea580c',
+                  padding: '1rem 2rem',
+                  borderRadius: '999px',
+                  textDecoration: 'none',
+                  fontWeight: '700',
+                  fontSize: '1.1rem',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  backdropFilter: 'blur(10px)',
+                  border: '2px solid rgba(255, 255, 255, 0.3)'
+                }}
+                className="card-hover animate-fadeInUp material-btn"
+              >
+                <span style={{ 
+                  width: '20px', 
+                  height: '20px', 
+                  backgroundColor: '#ea580c', 
+                  borderRadius: '50%', 
+                  display: 'inline-block', 
+                  marginRight: '0.5rem',
+                  position: 'relative'
                 }}>
-                  <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', gap: 1.25, pb: 3 }}>
-                    <Box sx={{
-                      width: 42,
-                      height: 42,
-                      borderRadius: '50%',
+                  <span style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    color: 'white',
+                    fontSize: '12px',
+                    fontWeight: 'bold'
+                  }}>★</span>
+                </span>
+                Join Now
+              </a>
+              <a 
+                href="#programs"
+                style={{
+                  border: '2px solid rgba(255, 255, 255, 0.9)',
+                  color: 'white',
+                  backgroundColor: 'transparent',
+                  padding: '1rem 2rem',
+                  borderRadius: '999px',
+                  textDecoration: 'none',
+                  fontWeight: '700',
+                  fontSize: '1.1rem',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  backdropFilter: 'blur(10px)'
+                }}
+                className="card-hover animate-fadeInUp material-btn"
+              >
+                <span style={{ 
+                  width: '20px', 
+                  height: '20px', 
+                  backgroundColor: 'rgba(255, 255, 255, 0.3)', 
+                  borderRadius: '50%', 
+                  display: 'inline-block', 
+                  marginRight: '0.5rem',
+                  position: 'relative'
+                }}>
+                  <span style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    color: 'white',
+                    fontSize: '12px',
+                    fontWeight: 'bold'
+                  }}>+</span>
+                </span>
+                Explore Programs
+              </a>
+            </div>
+          </div>
+
+          {/* Carousel Navigation - Positioned outside content container */}
+          <div style={{
+            position: 'absolute',
+            bottom: '15px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 4,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: 'clamp(0.5rem, 2vw, 1rem)',
+            width: '100%',
+            maxWidth: '400px',
+            padding: '0 1rem'
+          }} className="carousel-nav">
+            {/* Previous Button */}
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setCurrentSlide(currentSlide === 0 ? 6 : currentSlide - 1);
+              }}
+              style={{
+                backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                border: '2px solid rgba(255, 255, 255, 0.6)',
+                color: 'white',
+                width: 'clamp(35px, 8vw, 45px)',
+                height: 'clamp(35px, 8vw, 45px)',
+                borderRadius: '50%',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 'clamp(0.9rem, 3vw, 1.2rem)',
+                transition: 'all 0.3s ease',
+                backdropFilter: 'blur(10px)',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.4)';
+              }}
+            >
+              ‹
+            </button>
+
+            {/* Indicators */}
+            <div style={{ display: 'flex', gap: 'clamp(0.2rem, 1vw, 0.4rem)' }} className="indicators">
+              {[0, 1, 2, 3, 4, 5, 6].map((index) => (
+                <button
+                  key={index}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setCurrentSlide(index);
+                  }}
+                  style={{
+                    width: 'clamp(8px, 2vw, 10px)',
+                    height: 'clamp(8px, 2vw, 10px)',
+                    borderRadius: '50%',
+                    border: '1px solid rgba(0, 0, 0, 0.3)',
+                    backgroundColor: currentSlide === index ? '#ea580c' : 'rgba(255, 255, 255, 0.8)',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.2)'
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* Next Button */}
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setCurrentSlide(currentSlide === 6 ? 0 : currentSlide + 1);
+              }}
+              style={{
+                backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                border: '2px solid rgba(255, 255, 255, 0.6)',
+                color: 'white',
+                width: 'clamp(35px, 8vw, 45px)',
+                height: 'clamp(35px, 8vw, 45px)',
+                borderRadius: '50%',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 'clamp(0.9rem, 3vw, 1.2rem)',
+                transition: 'all 0.3s ease',
+                backdropFilter: 'blur(10px)',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.4)';
+              }}
+            >
+              ›
+            </button>
+          </div>
+        </section>
+
+        {/* Programs Section */}
+        <section id="programs" style={{ 
+          padding: '4rem 2rem', 
+          backgroundColor: '#f9fafb'
+        }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            <h2 style={{ 
+              fontSize: '2.5rem', 
+              fontWeight: '800', 
+              textAlign: 'center', 
+              marginBottom: '0.5rem',
+              background: 'linear-gradient(135deg, #111827, #374151)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }} className="animate-fadeInUp">
+              What We Offer
+            </h2>
+            <p style={{
+              fontSize: '1.1rem',
+              color: '#6b7280',
+              textAlign: 'center',
+              marginBottom: '3rem',
+              maxWidth: '600px',
+              margin: '0 auto 3rem auto'
+            }} className="animate-fadeInUp">
+              Comprehensive spiritual development through study, practice, and community
+            </p>
+            
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
+              gap: '2rem',
+              alignItems: 'start'
+            }} className="grid-responsive">
+              
+              {/* Spiritual Practices Column */}
+              <div style={{
+                backgroundColor: 'white',
+                padding: '2rem',
+                borderRadius: '16px',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                border: '1px solid #e5e7eb'
+              }} className="card-hover animate-fadeInUp">
+                <h3 style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '700',
+                  color: '#ea580c',
+                  marginBottom: '1.5rem',
+                  textAlign: 'center',
+                  borderBottom: '2px solid #fed7aa',
+                  paddingBottom: '0.5rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px'
+                }}>
+                  Learning & Practice
+                </h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  {[
+                    { name: 'Learning Gitä & Vedic Wisdom', desc: 'Structured study of sacred texts' },
+                    { name: 'Chanting / Mantra Meditation', desc: 'Daily meditation practice' },
+                    { name: 'Sattvik Lifestyle', desc: 'Balanced spiritual living' },
+                    { name: 'Spreading Vedic Wisdom', desc: 'Sharing spiritual knowledge' },
+                    { name: 'Mental Physical Detox', desc: 'Holistic wellness programs' }
+                  ].map((item, i) => (
+                    <div key={i} style={{
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center',
-                      bgcolor: 'warning.light',
-                      color: 'warning.main',
-                      boxShadow: '0 2px 6px rgba(234,88,12,0.35)',
-                      mb: 0.5
+                      padding: '0.75rem',
+                      backgroundColor: '#fef7ed',
+                      borderRadius: '8px',
+                      borderLeft: '3px solid #ea580c'
                     }}>
-                      {p.icon}
-                    </Box>
-                    <Tooltip title={p.title} placement="top-start"><Typography variant="subtitle1" fontWeight={700}>{p.title}</Typography></Tooltip>
-                    <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.45 }}>{p.description}</Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </Box>
-
-      {/* Schedule */}
-      <Box id="schedule" py={12} sx={{ position: 'relative', background: (theme) => theme.palette.mode === 'light' ? 'linear-gradient(135deg, #fef3c7, #fff)' : 'linear-gradient(135deg, #181b1e, #111416)' }}>
-        <Box sx={{ position: 'absolute', inset: 0, background: (theme) => theme.palette.mode === 'light' ? 'radial-gradient(circle at 85% 15%,rgba(245,158,11,0.08),transparent 55%)' : 'radial-gradient(circle at 85% 15%,rgba(245,158,11,0.15),transparent 60%)' }} />
-        <Container maxWidth="md">
-          <Stack spacing={2} textAlign="center" mb={6}>
-            <Typography variant="overline" fontWeight={700} color="warning.main">DAILY FLOW</Typography>
-            <Typography variant="h3" fontWeight={800} sx={{ letterSpacing: -1 }}>Daily Schedule</Typography>
-            <Typography variant="subtitle1" color="text.secondary" maxWidth={640} mx="auto">Balanced routine blending meditation, study, service, culture and personal development.</Typography>
-          </Stack>
-          <Card elevation={6} sx={{ borderRadius: 5, p: { xs: 2, md: 4 }, backdropFilter: 'blur(8px)' }}>
-            <List>
-              {schedule.map((item, idx) => (
-                <React.Fragment key={idx}>
-                  <ListItem sx={{ px: { xs: 0, md: 1 } }}>
-                    <ListItemIcon sx={{ minWidth: 48 }}><span style={{fontSize:'1.5rem'}}>⏰</span></ListItemIcon>
-                    <ListItemText
-                      primary={<Typography fontWeight={700} color="warning.main">{item.time}</Typography>}
-                      secondary={<Typography color="text.primary" fontWeight={500}>{item.activity}</Typography>}
-                    />
-                  </ListItem>
-                  {idx < schedule.length - 1 && <Divider component="li" />}
-                </React.Fragment>
-              ))}
-            </List>
-          </Card>
-        </Container>
-      </Box>
-
-      {/* Facilities */}
-      <Box id="facilities" py={12} sx={{ position: 'relative', background: (theme) => theme.palette.mode === 'light' ? 'linear-gradient(135deg, #fff, #fef9e7)' : 'linear-gradient(135deg, #1a1f22, #121416)' }}>
-        <Box sx={{ position: 'absolute', inset: 0, background: (theme) => theme.palette.mode === 'light' ? 'radial-gradient(circle at 15% 20%,rgba(245,158,11,0.08),transparent 55%)' : 'radial-gradient(circle at 15% 20%,rgba(245,158,11,0.15),transparent 60%)' }} />
-        <Container maxWidth="lg">
-          <Stack spacing={2} textAlign="center" mb={6}>
-            <Typography variant="overline" fontWeight={700} color="warning.main">FACILITIES</Typography>
-            <Typography variant="h3" fontWeight={800} sx={{ letterSpacing: -1 }}>Your Spiritual Campus</Typography>
-            <Typography variant="subtitle1" color="text.secondary" maxWidth={700} mx="auto">Spaces designed to nurture reflection, community, health and growth.</Typography>
-          </Stack>
-          <Grid container spacing={4}>
-            {facilities.map((f, i) => (
-              <Grid key={i} item xs={12} sm={6} md={3}>
-                <Card elevation={0} sx={{
-                  height: '100%',
-                  borderRadius: 4,
-                  border: '1px solid',
-                  borderColor: 'divider',
-                  background: (theme) => theme.palette.mode === 'light' ? '#ffffff' : '#1e2124',
-                  boxShadow: (theme) => theme.palette.mode === 'light' ? '0 2px 4px rgba(0,0,0,0.06)' : '0 2px 4px rgba(0,0,0,0.5)',
-                  transition: 'all .25s ease',
-                  '&:hover': { boxShadow: (theme) => theme.palette.mode === 'light' ? '0 6px 16px -4px rgba(0,0,0,0.15)' : '0 6px 16px -4px rgba(0,0,0,0.6)', transform: 'translateY(-4px)' }
-                }}>
-                  <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 1.25 }}>
-                    <Box sx={{ width: 40, height: 40, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'warning.light', color: 'warning.main', boxShadow: '0 2px 5px rgba(234,88,12,0.3)' }}>{f.icon}</Box>
-                    <Typography variant="subtitle1" fontWeight={700}>{f.title}</Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.45 }}>{f.description}</Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </Box>
-
-      {/* Contact */}
-      <Box id="contact" py={12} sx={{ position: 'relative', background: (theme) => theme.palette.mode === 'light' ? 'linear-gradient(135deg, #fff, #fffbf0)' : 'linear-gradient(135deg, #181b1e, #121416)' }}>
-        <Box sx={{ position: 'absolute', inset: 0, background: (theme) => theme.palette.mode === 'light' ? 'radial-gradient(circle at 50% 0%,rgba(245,158,11,0.08),transparent 60%)' : 'radial-gradient(circle at 50% 0%,rgba(245,158,11,0.15),transparent 65%)' }} />
-        <Container maxWidth="sm">
-          <Card elevation={8} sx={{ borderRadius: 5, p: { xs: 3, md: 6 }, textAlign: 'center' }}>
-            <Stack spacing={3}>
-              <Typography variant="overline" color="warning.main" fontWeight={700}>CONNECT</Typography>
-              <Typography variant="h4" fontWeight={800} sx={{ letterSpacing: -1 }}>Get In Touch</Typography>
-              <Stack spacing={2}>
-                <Stack direction="row" spacing={2} alignItems="center" justifyContent="center">
-                  <span style={{fontSize:'1.5rem'}}>📱</span>
-                  <Button href="tel:+918318342494" color="warning" sx={{ fontWeight: 600, textTransform: 'none' }}>+91 83183 42494</Button>
-                </Stack>
-                <Stack direction="row" spacing={2} alignItems="flex-start" justifyContent="center">
-                  <span style={{fontSize:'1.5rem'}}>📍</span>
-                  <Typography maxWidth={320}>ADDRESS:- ISKCON STUDENT CENTER, 1ST FLOOR, OPPOSITE HANSRAJ COLLEGE, ABOVE NATURAL'S ICE CREAM, NEAR STARBUCKS, KAMLA NAGAR, DELHI 110007</Typography>
-                </Stack>
-                <Stack direction="row" spacing={2} alignItems="center" justifyContent="center">
-                  <span style={{fontSize:'1.5rem'}}>📸</span>
-                  <Button href="https://instagram.com/iskcondelhiuniversity" target="_blank" rel="noopener" color="warning">@iskcondelhiuniversity</Button>
-                </Stack>
-                <Stack direction="row" spacing={2} alignItems="center" justifyContent="center">
-                  <span style={{fontSize:'1.5rem'}}>📺</span>
-                  <Button href="https://youtube.com/@ISKCONDelhiUniversity" target="_blank" rel="noopener" color="warning">@ISKCONDelhiUniversity</Button>
-                </Stack>
-              </Stack>
-              <Button size="large" variant="contained" color="warning" href="https://instagram.com/iskcondelhiuniversity" target="_blank" sx={{ fontWeight: 700, borderRadius: '999px', mt: 2 }}>
-                Join Our Community
-              </Button>
-            </Stack>
-          </Card>
-        </Container>
-      </Box>
-      {/* Location / Map */}
-  <Box id="location" sx={{ py: 10, background: (theme) => theme.palette.mode === 'light' ? 'radial-gradient(circle at top,#fff7ed 0%,#ffffff 70%)' : 'radial-gradient(circle at top,#1a1f22 0%,#111416 75%)' }}>
-        <Container maxWidth="lg">
-          <Grid container spacing={6} alignItems="stretch">
-            <Grid item xs={12} md={5}>
-              <Stack spacing={3} sx={{ height: '100%', justifyContent: 'center' }}>
-                <Chip label="VISIT US" color="warning" variant="outlined" sx={{ fontWeight: 600, alignSelf: 'flex-start' }} />
-                <Typography variant="h3" fontWeight={800} sx={{ letterSpacing: -1 }}>Find Us</Typography>
-                <Typography variant="body1" color="text.secondary" lineHeight={1.6}>
-                  We are located in the heart of North Delhi, easily reachable from Delhi University colleges. Drop in for a class, kirtan, meditation or just a peaceful study break with prasadam.
-                </Typography>
-                <Stack spacing={2}>
-                  <Stack direction="row" spacing={1.5} alignItems="flex-start">
-                    <span style={{fontSize:'1.5rem'}}>📍</span>
-                    <Typography fontWeight={600}>ADDRESS:- ISKCON STUDENT CENTER, 1ST FLOOR, OPPOSITE HANSRAJ COLLEGE, ABOVE NATURAL'S ICE CREAM, NEAR STARBUCKS, KAMLA NAGAR, DELHI 110007</Typography>
-                  </Stack>
-                  <Stack direction="row" spacing={1.5} alignItems="center">
-                    <span style={{fontSize:'1.5rem'}}>📱</span>
-                    <Button href="tel:+918318342494" color="warning" sx={{ fontWeight: 600, textTransform: 'none', px: 0 }}>+91 83183 42494</Button>
-                  </Stack>
-                  <Stack direction="row" spacing={1.5} alignItems="center">
-                    <span style={{fontSize:'1.5rem'}}>📸</span>
-                    <Button href="https://instagram.com/iskcondelhiuniversity" target="_blank" rel="noopener" color="warning" sx={{ fontWeight: 600, textTransform: 'none' }}>@iskcondelhiuniversity</Button>
-                  </Stack>
-                </Stack>
-              </Stack>
-            </Grid>
-            <Grid item xs={12} md={7}>
-              <Card elevation={10} sx={{ height: '100%', borderRadius: 4, overflow: 'hidden', position: 'relative' }}>
-                <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg,rgba(255,247,237,0.25),rgba(255,255,255,0.25))', pointerEvents: 'none' }} />
-                <Box sx={{ position: 'relative', width: '100%', pt: '65%' }}>
-                  <iframe
-                    title="ISKCON Student Center Location"
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3199.5466743621614!2d77.20813749999999!3d28.678913099999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfdf53b2058b5%3A0x90ba420109930cec!2sISKCON%20student%20centre%20(%20DU%20BACE)!5e1!3m2!1sen!2sin!4v1754795768086!5m2!1sen!2sin"
-                    style={{ border: 0, position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-                    loading="lazy"
-                    allowFullScreen
-                    referrerPolicy="no-referrer-when-downgrade"
-                  />
-                </Box>
-              </Card>
-            </Grid>
-          </Grid>
-        </Container>
-      </Box>
-      {/* Footer */}
-      <Box component="footer" sx={{ position: 'relative', overflow: 'hidden', pt: 10, pb: 4, background: (theme) => theme.palette.mode === 'light' ? 'linear-gradient(135deg,#fff9f2,#ffffff 60%)' : 'linear-gradient(135deg,#161a1d,#111416 65%)' }}>
-        <Box sx={{ position: 'absolute', inset: 0, background: (theme) => theme.palette.mode === 'light' ? 'radial-gradient(circle at 80% 20%,rgba(245,158,11,0.08),transparent 50%), radial-gradient(circle at 15% 85%,rgba(245,158,11,0.06),transparent 55%)' : 'radial-gradient(circle at 80% 20%,rgba(245,158,11,0.12),transparent 55%), radial-gradient(circle at 15% 85%,rgba(245,158,11,0.1),transparent 60%)' }} />
-        <Container maxWidth="lg" sx={{ position: 'relative' }}>
-          <Grid container spacing={6}>
-            <Grid item xs={12} md={5}>
-              <Stack spacing={3}>
-                <Typography variant="h5" fontWeight={800} sx={{ letterSpacing: -0.5, background: 'linear-gradient(90deg,#ea580c,#f59e0b,#ea580c)', backgroundSize: '180% 100%', animation: 'gradient-shift 6s ease infinite', WebkitBackgroundClip: 'text', color: 'transparent' }}>ISKCON STUDENT CENTER</Typography>
-                <Typography variant="body1" color="text.secondary" maxWidth={420}>
-                  A nurturing hub for students to explore devotion, character, wisdom and joyful service through authentic Bhakti Yoga practices.
-                </Typography>
-                <Stack direction="row" spacing={2}>
-                  <IconButton size="small" color="warning" href="https://instagram.com/iskcondelhiuniversity" target="_blank" rel="noopener" sx={{ bgcolor: 'warning.light', '&:hover': { bgcolor: 'warning.light', transform: 'translateY(-3px) scale(1.05)' }, transition: '0.35s', boxShadow: '0 4px 12px -2px rgba(234,88,12,0.35)' }}>
-                    <span style={{fontSize:'1.5rem'}}>📸</span>
-                  </IconButton>
-                  <IconButton size="small" color="warning" href="https://youtube.com/@ISKCONDelhiUniversity" target="_blank" rel="noopener" sx={{ bgcolor: 'warning.light', '&:hover': { bgcolor: 'warning.light', transform: 'translateY(-3px) scale(1.05)' }, transition: '0.35s', boxShadow: '0 4px 12px -2px rgba(234,88,12,0.35)' }}>
-                    <span style={{fontSize:'1.5rem'}}>📺</span>
-                  </IconButton>
-                </Stack>
-              </Stack>
-            </Grid>
-            <Grid item xs={6} md={3}>
-              <Stack spacing={2}>
-                <Typography variant="subtitle2" fontWeight={700} color="warning.main">Explore</Typography>
-                <Stack spacing={1}>
-                  {['Programs','Schedule','Facilities','Contact'].map(link => (
-                    <Button key={link} href={`#${link.toLowerCase()}`} variant="text" color="inherit" sx={{ justifyContent: 'flex-start', textTransform: 'none', fontWeight: 500, px: 0, position: 'relative', '&:after': { content: '""', position: 'absolute', left: 0, bottom: 2, height: 2, width: 0, bgcolor: 'warning.main', transition: '0.4s' }, '&:hover': { color: 'warning.main' }, '&:hover:after': { width: '60%' } }}>{link}</Button>
+                      <div style={{
+                        width: '8px',
+                        height: '8px',
+                        backgroundColor: '#ea580c',
+                        borderRadius: '50%',
+                        marginRight: '1rem'
+                      }}></div>
+                      <div>
+                        <h4 style={{ fontSize: '1rem', fontWeight: '600', margin: 0, color: '#111827' }}>
+                          {item.name}
+                        </h4>
+                        <p style={{ fontSize: '0.875rem', color: '#6b7280', margin: 0 }}>
+                          {item.desc}
+                        </p>
+                      </div>
+                    </div>
                   ))}
-                </Stack>
-              </Stack>
-            </Grid>
-            <Grid item xs={6} md={4}>
-              <Stack spacing={2}>
-                <Typography variant="subtitle2" fontWeight={700} color="warning.main">Connect</Typography>
-                <Stack spacing={1.5}>
-                  <Stack direction="row" spacing={1.2} alignItems="center">
-                    <span style={{fontSize:'1rem'}}>📱</span>
-                    <Button href="tel:+918318342494" variant="text" color="inherit" sx={{ fontWeight: 600, textTransform: 'none', px: 0, minWidth: 0, '&:hover': { color: 'warning.main', background: 'transparent' } }}>+91 83183 42494</Button>
-                  </Stack>
-                  <Stack direction="row" spacing={1.2} alignItems="center">
-                    <span style={{fontSize:'1rem'}}>📸</span>
-                    <Button href="https://instagram.com/iskcondelhiuniversity" target="_blank" rel="noopener" variant="text" color="inherit" sx={{ fontWeight: 600, textTransform: 'none', px: 0, minWidth: 0, position: 'relative', '&:after': { content: '""', position: 'absolute', left: 0, bottom: 0, height: 2, width: 0, bgcolor: 'warning.main', transition: '0.4s' }, '&:hover': { color: 'warning.main', background: 'transparent' }, '&:hover:after': { width: '100%' } }}>@iskcondelhiuniversity</Button>
-                  </Stack>
-                  <Stack direction="row" spacing={1.2} alignItems="center">
-                    <span style={{fontSize:'1rem'}}>📺</span>
-                    <Button href="https://youtube.com/@ISKCONDelhiUniversity" target="_blank" rel="noopener" variant="text" color="inherit" sx={{ fontWeight: 600, textTransform: 'none', px: 0, minWidth: 0, position: 'relative', '&:after': { content: '""', position: 'absolute', left: 0, bottom: 0, height: 2, width: 0, bgcolor: 'warning.main', transition: '0.4s' }, '&:hover': { color: 'warning.main', background: 'transparent' }, '&:hover:after': { width: '100%' } }}>@ISKCONDelhiUniversity</Button>
-                  </Stack>
-                  <Stack direction="row" spacing={1.2} alignItems="flex-start">
-                    <span style={{fontSize:'1rem'}}>📍</span>
-                    <Typography variant="body2" fontWeight={600} maxWidth={260}>ADDRESS:- ISKCON STUDENT CENTER, 1ST FLOOR, OPPOSITE HANSRAJ COLLEGE, ABOVE NATURAL'S ICE CREAM, NEAR STARBUCKS, KAMLA NAGAR, DELHI 110007</Typography>
-                  </Stack>
-                </Stack>
-              </Stack>
-            </Grid>
-          </Grid>
-          <Divider sx={{ my: 6 }} />
-          <Typography variant="caption" color="text.secondary" display="block" textAlign="center">© {new Date().getFullYear()} ISKCON Student Center. All rights reserved.</Typography>
-        </Container>
-      </Box>
-    </Box>
+                </div>
+              </div>
+
+              {/* Community & Support Column */}
+              <div style={{
+                backgroundColor: 'white',
+                padding: '2rem',
+                borderRadius: '16px',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                border: '1px solid #e5e7eb'
+              }} className="card-hover animate-fadeInUp">
+                <h3 style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '700',
+                  color: '#ea580c',
+                  marginBottom: '1.5rem',
+                  textAlign: 'center',
+                  borderBottom: '2px solid #fed7aa',
+                  paddingBottom: '0.5rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px'
+                }}>
+                  Community & Support
+                </h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  {[
+                    { name: 'Leadership Development', desc: 'Character & leadership building' },
+                    { name: 'Spiritual Friendship', desc: 'Meaningful spiritual connections' },
+                    { name: 'Personal Mentorship', desc: 'One-on-one spiritual guidance' },
+                    { name: 'Spiritual Counseling', desc: 'Life guidance & support' },
+                    { name: 'Prasadam', desc: 'Sacred vegetarian meals' }
+                  ].map((item, i) => (
+                    <div key={i} style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: '0.75rem',
+                      backgroundColor: '#fef7ed',
+                      borderRadius: '8px',
+                      borderLeft: '3px solid #ea580c'
+                    }}>
+                      <div style={{
+                        width: '8px',
+                        height: '8px',
+                        backgroundColor: '#ea580c',
+                        borderRadius: '50%',
+                        marginRight: '1rem'
+                      }}></div>
+                      <div>
+                        <h4 style={{ fontSize: '1rem', fontWeight: '600', margin: 0, color: '#111827' }}>
+                          {item.name}
+                        </h4>
+                        <p style={{ fontSize: '0.875rem', color: '#6b7280', margin: 0 }}>
+                          {item.desc}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Events & Experiences Column */}
+              <div style={{
+                backgroundColor: 'white',
+                padding: '2rem',
+                borderRadius: '16px',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                border: '1px solid #e5e7eb'
+              }} className="card-hover animate-fadeInUp">
+                <h3 style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '700',
+                  color: '#ea580c',
+                  marginBottom: '1.5rem',
+                  textAlign: 'center',
+                  borderBottom: '2px solid #fed7aa',
+                  paddingBottom: '0.5rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px'
+                }}>
+                  Events & Activities
+                </h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  {[
+                    { name: 'Kirtans / Music / Cultural Events/Festivals', desc: 'Devotional music & celebrations' },
+                    { name: 'Dham Yatra', desc: 'Sacred pilgrimage journeys' },
+                    { name: 'Debate', desc: 'Philosophical discussions' },
+                    { name: 'Drama', desc: 'Spiritual theater & performances' },
+                    { name: 'Competition', desc: 'Spiritual & cultural contests' }
+                  ].map((item, i) => (
+                    <div key={i} style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: '0.75rem',
+                      backgroundColor: '#fef7ed',
+                      borderRadius: '8px',
+                      borderLeft: '3px solid #ea580c'
+                    }}>
+                      <div style={{
+                        width: '8px',
+                        height: '8px',
+                        backgroundColor: '#ea580c',
+                        borderRadius: '50%',
+                        marginRight: '1rem'
+                      }}></div>
+                      <div>
+                        <h4 style={{ fontSize: '1rem', fontWeight: '600', margin: 0, color: '#111827' }}>
+                          {item.name}
+                        </h4>
+                        <p style={{ fontSize: '0.875rem', color: '#6b7280', margin: 0 }}>
+                          {item.desc}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Schedule Section */}
+        <section id="schedule" style={{ 
+          padding: '4rem 2rem', 
+          backgroundColor: '#ffffff'
+        }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            <h2 style={{ 
+              fontSize: '2.5rem', 
+              fontWeight: '800', 
+              textAlign: 'center', 
+              marginBottom: '3rem',
+              background: 'linear-gradient(135deg, #ea580c, #f97316)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }} className="animate-fadeInUp">
+              Program Schedule
+            </h2>
+            
+            {/* Daily Schedule */}
+            <div style={{ marginBottom: '3rem' }}>
+              <h3 style={{
+                fontSize: '1.5rem',
+                fontWeight: '700',
+                color: '#ea580c',
+                textAlign: 'center',
+                marginBottom: '2rem',
+                textTransform: 'uppercase',
+                letterSpacing: '1px'
+              }}>
+                Daily Schedule
+              </h3>
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1rem',
+                maxWidth: '800px',
+                margin: '0 auto'
+              }}>
+                {[
+                  { time: '5:30 - 6:30 AM', event: 'Meditation', desc: 'Morning meditation session' },
+                  { time: '6:30 AM', event: 'Aarti', desc: 'Sacred prayer ceremony' },
+                  { time: '7:00 - 7:30 AM', event: 'Spiritual Discourses', desc: 'Inspiring spiritual teachings' }
+                ].map((schedule, i) => (
+                  <div 
+                    key={i}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      backgroundColor: i % 2 === 0 ? '#f8fafc' : 'white',
+                      padding: '1.5rem',
+                      borderRadius: '8px',
+                      borderLeft: '4px solid #ea580c',
+                      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
+                    }}
+                    className="card-hover animate-fadeInUp"
+                  >
+                    <div style={{
+                      minWidth: '120px',
+                      fontSize: '1rem',
+                      fontWeight: '700',
+                      color: '#ea580c',
+                      marginRight: '2rem'
+                    }}>
+                      {schedule.time}
+                    </div>
+                    <div style={{ flexGrow: 1 }}>
+                      <h3 style={{ 
+                        fontSize: '1.125rem', 
+                        fontWeight: '600',
+                        color: '#111827',
+                        marginBottom: '0.25rem'
+                      }}>
+                        {schedule.event}
+                      </h3>
+                      <p style={{ 
+                        fontSize: '0.875rem', 
+                        color: '#6b7280',
+                        margin: 0
+                      }}>
+                        {schedule.desc}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Weekly Schedule */}
+            <div>
+              <h3 style={{
+                fontSize: '1.5rem',
+                fontWeight: '700',
+                color: '#ea580c',
+                textAlign: 'center',
+                marginBottom: '2rem',
+                textTransform: 'uppercase',
+                letterSpacing: '1px'
+              }}>
+                Weekly Schedule
+              </h3>
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1rem',
+                maxWidth: '800px',
+                margin: '0 auto'
+              }}>
+                {[
+                  { time: 'Saturday 6-8 PM*', event: 'Weekly Program', desc: 'Special weekend spiritual gathering' },
+                  { time: 'Sunday 6-8 PM*', event: 'Weekly Program', desc: 'Sunday evening spiritual activities' }
+                ].map((schedule, i) => (
+                  <div 
+                    key={i}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      backgroundColor: i % 2 === 0 ? '#f8fafc' : 'white',
+                      padding: '1.5rem',
+                      borderRadius: '8px',
+                      borderLeft: '4px solid #ea580c',
+                      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
+                    }}
+                    className="card-hover animate-fadeInUp"
+                  >
+                    <div style={{
+                      minWidth: '140px',
+                      fontSize: '1rem',
+                      fontWeight: '700',
+                      color: '#ea580c',
+                      marginRight: '2rem'
+                    }}>
+                      {schedule.time}
+                    </div>
+                    <div style={{ flexGrow: 1 }}>
+                      <h3 style={{ 
+                        fontSize: '1.125rem', 
+                        fontWeight: '600',
+                        color: '#111827',
+                        marginBottom: '0.25rem'
+                      }}>
+                        {schedule.event}
+                      </h3>
+                      <p style={{ 
+                        fontSize: '0.875rem', 
+                        color: '#6b7280',
+                        margin: 0
+                      }}>
+                        {schedule.desc}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              {/* Note */}
+              <p style={{
+                textAlign: 'center',
+                fontSize: '0.875rem',
+                color: '#6b7280',
+                fontStyle: 'italic',
+                marginTop: '1.5rem'
+              }}>
+                * Subject to change
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Facilities Section */}
+        <section id="facilities" style={{ 
+          padding: '4rem 2rem', 
+          backgroundColor: '#f9fafb'
+        }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            <h2 style={{ 
+              fontSize: '2.5rem', 
+              fontWeight: '800', 
+              textAlign: 'center', 
+              marginBottom: '3rem',
+              background: 'linear-gradient(135deg, #111827, #374151)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }} className="animate-fadeInUp">
+              Our Facilities
+            </h2>
+            
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+              gap: '1.5rem'
+            }} className="grid-responsive">
+              {[
+                { name: 'Prayer Hall', desc: 'Peaceful meditation space' },
+                { name: 'Library', desc: 'Spiritual books & resources' },
+                { name: 'Kitchen', desc: 'Prasadam preparation' },
+                { name: 'Accommodation', desc: 'Student housing facilities' }
+              ].map((facility, i) => (
+                <div 
+                  key={i}
+                  style={{
+                    backgroundColor: 'white',
+                    padding: '1.5rem',
+                    borderRadius: '12px',
+                    textAlign: 'center',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                  }}
+                  className="card-hover animate-fadeInUp"
+                >
+                  <h3 style={{ 
+                    fontSize: '1.125rem', 
+                    fontWeight: '700', 
+                    marginBottom: '0.5rem',
+                    color: '#ea580c'
+                  }}>
+                    {facility.name}
+                  </h3>
+                  <p style={{ 
+                    fontSize: '0.875rem', 
+                    color: '#6b7280',
+                    margin: 0
+                  }}>
+                    {facility.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Map Section */}
+        <section id="location" style={{ 
+          padding: '4rem 2rem', 
+          backgroundColor: '#ffffff'
+        }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            <h2 style={{ 
+              fontSize: '2.5rem', 
+              fontWeight: '800', 
+              textAlign: 'center', 
+              marginBottom: '3rem',
+              background: 'linear-gradient(135deg, #ea580c, #f97316)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }} className="animate-fadeInUp">
+              Find Us
+            </h2>
+            
+            <div style={{
+              width: '100%',
+              height: '400px',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)'
+            }} className="animate-fadeInUp">
+              <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3199.5466743621614!2d77.20813749999999!3d28.678913099999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfdf53b2058b5%3A0x90ba420109930cec!2sISKCON%20student%20centre%20(%20DU%20BACE)!5e1!3m2!1sen!2sin!4v1754807751377!5m2!1sen!2sin" 
+                width="100%" 
+                height="100%" 
+                style={{ border: 0 }} 
+                allowFullScreen 
+                loading="lazy" 
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
+          </div>
+        </section>
+
+        {/* Contact Section */}
+        <section id="contact" style={{ 
+          padding: '4rem 2rem', 
+          backgroundColor: '#111827',
+          color: 'white'
+        }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
+            <h2 style={{ 
+              fontSize: '2.5rem', 
+              fontWeight: '800', 
+              marginBottom: '2rem',
+              background: 'linear-gradient(135deg, #ff6b35, #f7931e)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }} className="animate-fadeInUp">
+              Ready to Begin Your Journey?
+            </h2>
+            
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+              gap: '2rem',
+              marginTop: '3rem'
+            }}>
+              <div className="animate-fadeInUp">
+                <h3 style={{ 
+                  fontSize: '1.25rem', 
+                  fontWeight: '700', 
+                  marginBottom: '1rem', 
+                  color: '#ff6b35',
+                  textAlign: 'center',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px'
+                }}>
+                  Visit Us
+                </h3>
+                <p style={{ textAlign: 'center', lineHeight: '1.6', color: '#e5e7eb' }}>
+                  26 Prem Niwas First Floor, Above Natural's Ice Cream,<br />
+                  Malka Ganj, New Delhi, Delhi 110007
+                </p>
+              </div>
+              
+              <div className="animate-fadeInUp">
+                <h3 style={{ 
+                  fontSize: '1.25rem', 
+                  fontWeight: '700', 
+                  marginBottom: '1rem', 
+                  color: '#ff6b35',
+                  textAlign: 'center',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px'
+                }}>
+                  Connect
+                </h3>
+                <div style={{ textAlign: 'center' }}>
+                  <a href="tel:+919876543210" style={{ 
+                    color: '#ff6b35', 
+                    textDecoration: 'none', 
+                    display: 'block', 
+                    marginBottom: '0.5rem',
+                    fontWeight: '500',
+                    fontSize: '1rem'
+                  }}>
+                    Phone: +91 98765 43210
+                  </a>
+                  <a href="https://instagram.com/iskcondelhiuniversity" style={{ 
+                    color: '#ff6b35', 
+                    textDecoration: 'none', 
+                    display: 'block', 
+                    marginBottom: '0.5rem',
+                    fontWeight: '500',
+                    fontSize: '1rem'
+                  }}>
+                    Instagram
+                  </a>
+                  <a href="https://youtube.com/@iskcondelhiuniversity" style={{ 
+                    color: '#ff6b35', 
+                    textDecoration: 'none', 
+                    display: 'block',
+                    fontWeight: '500',
+                    fontSize: '1rem'
+                  }}>
+                    YouTube
+                  </a>
+                </div>
+              </div>
+              
+              <div className="animate-fadeInUp">
+                <h3 style={{ 
+                  fontSize: '1.25rem', 
+                  fontWeight: '700', 
+                  marginBottom: '1rem', 
+                  color: '#ff6b35',
+                  textAlign: 'center',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px'
+                }}>
+                  Join Now
+                </h3>
+                <a 
+                  href="https://forms.google.com/your-form-id"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    backgroundColor: '#ff6b35',
+                    color: 'white',
+                    padding: '1rem 2rem',
+                    borderRadius: '999px',
+                    textDecoration: 'none',
+                    fontWeight: '700',
+                    display: 'inline-block'
+                  }}
+                  className="button-primary"
+                >
+                  Start Your Journey
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer style={{ 
+          padding: '2rem', 
+          backgroundColor: '#000000',
+          color: 'white',
+          textAlign: 'center'
+        }}>
+          <p style={{ margin: 0, opacity: 0.7 }}>
+            © 2025 ISKCON Student Center. All rights reserved.
+          </p>
+        </footer>
+      </div>
+    </div>
   );
 }
-// End of page component
