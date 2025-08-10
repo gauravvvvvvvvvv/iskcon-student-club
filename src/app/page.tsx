@@ -118,13 +118,32 @@ export default function Home() {
           {/* Left Image - Prabhupada */}
           <div style={{ 
             marginRight: '1rem',
-            width: '60px',
-            height: '60px',
-            backgroundImage: "url('/prabhupada.png')",
-            backgroundSize: 'contain',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat'
-          }} className="floating" />
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '0.5rem'
+          }}>
+            <div style={{ 
+              width: '80px',
+              height: '80px',
+              backgroundImage: "url('/prabhupada.png')",
+              backgroundSize: 'contain',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
+            }} />
+            <div style={{
+              fontSize: '0.7rem',
+              fontWeight: '600',
+              color: '#ea580c',
+              textAlign: 'center',
+              lineHeight: '1.2',
+              maxWidth: '100px'
+            }}>
+              FOUNDER ACHARYA:<br />
+              HDG AC BHAKTIVEDANTA<br />
+              SWAMI SRILA PRABHUPADA
+            </div>
+          </div>
           
           <h1 style={{ 
             fontSize: '1.25rem', 
@@ -184,22 +203,24 @@ export default function Home() {
       <div style={{
         backgroundColor: '#1e40af',
         color: 'white',
-        padding: '1rem 0',
+        padding: '1.5rem 0',
         overflow: 'hidden',
         position: 'relative',
         whiteSpace: 'nowrap',
         marginTop: '80px',
         zIndex: 999,
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+        borderBottom: '3px solid #3b82f6'
       }}>
         <div style={{
           display: 'inline-block',
           animation: 'scroll-announcement 25s linear infinite',
-          fontSize: '1.1rem',
-          fontWeight: '600',
-          letterSpacing: '0.5px'
+          fontSize: '1.2rem',
+          fontWeight: '700',
+          letterSpacing: '0.5px',
+          textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)'
         }}>
-          🎉 Welcome to ISKCON Student Center! • 🌅 Join us for daily morning programs at 6:30 AM • 📖 Bhagavad Gita classes every Sunday at 5 PM • 🍽️ Free prasadam for all students • 🏕️ Register for upcoming spiritual retreats • 📱 Follow us on social media for updates • ✨ Transform your life through spiritual wisdom •
+          🎉 Welcome to ISKCON Student Center! • 🌅 Join us for daily morning programs at 5:30 AM • 📖 Bhagavad Gita classes every Saturday & Sunday at 6 PM • 🍽️ Free prasadam for all students • 🏕️ Register for upcoming spiritual retreats • 📱 Follow us on social media for updates • ✨ Transform your life through spiritual wisdom •
         </div>
       </div>
 
@@ -690,80 +711,81 @@ export default function Home() {
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent'
           }} className="animate-fadeInUp">
-            Weekly Schedule
+            Schedule
           </h2>
           
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-            gap: '1.5rem'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '2rem',
+            maxWidth: '800px',
+            margin: '0 auto'
           }}>
             {/* Daily Programs */}
             <div style={{
               backgroundColor: '#f8fafc',
-              padding: '1.5rem',
-              borderRadius: '12px',
+              padding: '2rem',
+              borderRadius: '16px',
               border: '2px solid #e2e8f0'
             }} className="animate-fadeInUp">
               <h3 style={{ 
-                fontSize: '1.25rem', 
+                fontSize: '1.5rem', 
                 fontWeight: '700', 
                 color: '#1e40af', 
-                marginBottom: '1rem',
+                marginBottom: '1.5rem',
                 textAlign: 'center'
               }}>
-                Daily Programs
+                📅 Daily Programs
               </h3>
-              <div style={{ color: '#4b5563', lineHeight: '1.6' }}>
-                <p><strong>6:30 AM - 8:00 AM</strong><br />Morning Program & Prasadam</p>
-                <p><strong>12:30 PM - 1:30 PM</strong><br />Lunch Prasadam</p>
-                <p><strong>7:00 PM - 8:30 PM</strong><br />Evening Program & Dinner</p>
+              <div style={{ color: '#4b5563', lineHeight: '1.8', fontSize: '1.1rem' }}>
+                <p style={{ marginBottom: '1rem' }}>
+                  <strong>5:30 - 6:30 AM</strong><br />
+                  Meditation
+                </p>
+                <p style={{ marginBottom: '1rem' }}>
+                  <strong>6:30 AM</strong><br />
+                  Aarti
+                </p>
+                <p>
+                  <strong>7:00 - 7:30 AM</strong><br />
+                  Spiritual Discourses
+                </p>
               </div>
             </div>
 
             {/* Weekly Classes */}
             <div style={{
               backgroundColor: '#f8fafc',
-              padding: '1.5rem',
-              borderRadius: '12px',
+              padding: '2rem',
+              borderRadius: '16px',
               border: '2px solid #e2e8f0'
             }} className="animate-fadeInUp">
               <h3 style={{ 
-                fontSize: '1.25rem', 
+                fontSize: '1.5rem', 
                 fontWeight: '700', 
                 color: '#ea580c', 
-                marginBottom: '1rem',
+                marginBottom: '1.5rem',
                 textAlign: 'center'
               }}>
-                Weekly Classes
+                📖 Weekly Classes
               </h3>
-              <div style={{ color: '#4b5563', lineHeight: '1.6' }}>
-                <p><strong>Sunday 5:00 PM</strong><br />Bhagavad Gita Class</p>
-                <p><strong>Wednesday 7:00 PM</strong><br />Srimad Bhagavatam</p>
-                <p><strong>Friday 6:00 PM</strong><br />Philosophy Discussion</p>
-              </div>
-            </div>
-
-            {/* Special Events */}
-            <div style={{
-              backgroundColor: '#f8fafc',
-              padding: '1.5rem',
-              borderRadius: '12px',
-              border: '2px solid #e2e8f0'
-            }} className="animate-fadeInUp">
-              <h3 style={{ 
-                fontSize: '1.25rem', 
-                fontWeight: '700', 
-                color: '#059669', 
-                marginBottom: '1rem',
-                textAlign: 'center'
-              }}>
-                Special Events
-              </h3>
-              <div style={{ color: '#4b5563', lineHeight: '1.6' }}>
-                <p><strong>Monthly</strong><br />Spiritual Retreats</p>
-                <p><strong>Festivals</strong><br />Janmashtami, Radhastami</p>
-                <p><strong>Workshops</strong><br />Cooking, Art, Music</p>
+              <div style={{ color: '#4b5563', lineHeight: '1.8', fontSize: '1.1rem' }}>
+                <p style={{ marginBottom: '1rem' }}>
+                  <strong>Saturday</strong><br />
+                  6:00 - 8:00 PM*
+                </p>
+                <p style={{ marginBottom: '1rem' }}>
+                  <strong>Sunday</strong><br />
+                  6:00 - 8:00 PM*
+                </p>
+                <p style={{ 
+                  fontSize: '0.9rem', 
+                  fontStyle: 'italic', 
+                  color: '#9ca3af',
+                  marginTop: '1rem'
+                }}>
+                  * Subject to change
+                </p>
               </div>
             </div>
           </div>
@@ -927,17 +949,14 @@ export default function Home() {
               </h3>
               <div style={{ color: '#4b5563', lineHeight: '1.8', fontSize: '1.1rem' }}>
                 <p style={{ marginBottom: '1rem' }}>
-                  <strong>26 Prem Niwas First Floor</strong><br />
-                  Above Natural's Ice Cream<br />
-                  Malka Ganj, New Delhi<br />
-                  Delhi 110007, India
+                  <strong>Veer Savarkar Marg</strong><br />
+                  Dhaka Colony, Sector 7<br />
+                  Rohini, Delhi<br />
+                  110085, India
                 </p>
                 
-                <h4 style={{ color: '#ea580c', marginTop: '2rem', marginBottom: '1rem' }}>🚇 Nearest Metro Station:</h4>
-                <p>Malka Ganj Metro Station (Pink Line)</p>
-                
-                <h4 style={{ color: '#ea580c', marginTop: '2rem', marginBottom: '1rem' }}>🚌 Bus Routes:</h4>
-                <p>Routes: 54, 181, 309, 506, 766</p>
+                <h4 style={{ color: '#ea580c', marginTop: '2rem', marginBottom: '1rem' }}>🚇 Nearest Metro Stations:</h4>
+                <p>Vishwavidyalay • Pulbangash</p>
               </div>
             </div>
             
@@ -946,38 +965,58 @@ export default function Home() {
                 backgroundColor: '#f8fafc',
                 padding: '2rem',
                 borderRadius: '16px',
-                border: '2px solid #e2e8f0',
-                textAlign: 'center'
+                border: '2px solid #e2e8f0'
               }}>
-                <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🗺️</div>
                 <h3 style={{
                   fontSize: '1.5rem',
                   fontWeight: '700',
                   color: '#ea580c',
-                  marginBottom: '1rem'
+                  marginBottom: '1.5rem',
+                  textAlign: 'center'
                 }}>
-                  Interactive Map
+                  🗺️ Location Map
                 </h3>
-                <p style={{ color: '#6b7280', marginBottom: '1.5rem' }}>
-                  Click below to open in Google Maps for directions
-                </p>
-                <a
-                  href="https://goo.gl/maps/yourLocationLink"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    backgroundColor: '#ea580c',
-                    color: 'white',
-                    padding: '1rem 2rem',
-                    borderRadius: '999px',
-                    textDecoration: 'none',
-                    fontWeight: '700',
-                    display: 'inline-block'
-                  }}
-                  className="button-primary"
-                >
-                  Get Directions
-                </a>
+                
+                {/* Google Map Embed */}
+                <div style={{
+                  width: '100%',
+                  height: '300px',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  border: '2px solid #e2e8f0',
+                  marginBottom: '1.5rem'
+                }}>
+                  <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3498.1503906493656!2d77.10746367539754!3d28.73024117562916!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d0b89c4bd8b87%3A0xfb2c31ad4ac1c1b9!2sISKCON%20Delhi%20%7C%20Sri%20Sri%20Radha%20Parthasarathi%20Mandir!5e0!3m2!1sen!2sin!4v1733998062397!5m2!1sen!2sin"
+                    width="100%" 
+                    height="100%" 
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy" 
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="ISKCON Delhi Location"
+                  />
+                </div>
+                
+                <div style={{ textAlign: 'center' }}>
+                  <a
+                    href="https://www.google.com/maps/place/ISKCON+Delhi+%7C+Sri+Sri+Radha+Parthasarathi+Mandir/@28.7302412,77.1074637,17z/data=!3m1!4b1!4m6!3m5!1s0x390d0b89c4bd8b87:0xfb2c31ad4ac1c1b9!8m2!3d28.7302412!4d77.1100386!16s%2Fg%2F1tlkr13m?entry=ttu&g_ep=EgoyMDI0MTIxMS4wIKXMDSoASAFQAw%3D%3D"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      backgroundColor: '#ea580c',
+                      color: 'white',
+                      padding: '1rem 2rem',
+                      borderRadius: '999px',
+                      textDecoration: 'none',
+                      fontWeight: '700',
+                      display: 'inline-block'
+                    }}
+                    className="button-primary"
+                  >
+                    Get Directions
+                  </a>
+                </div>
               </div>
             </div>
           </div>
