@@ -212,7 +212,7 @@ export default function Home() {
         backdropFilter: 'blur(16px)',
         borderBottom: '1px solid #e5e7eb',
         zIndex: 1000,
-        padding: '1rem 0'
+        padding: '0.5rem 0'
       }} className="animate-slideInLeft">
         <div style={{ 
           maxWidth: '1280px', 
@@ -221,29 +221,27 @@ export default function Home() {
           alignItems: 'center',
           padding: '0 2rem',
           flexWrap: 'nowrap',
-          minHeight: '60px'
+          minHeight: '80px'
         }}>
-          {/* Left Image - Prabhupada */}
+          {/* Left side - Prabhupada image and text */}
           <div style={{ 
-            marginRight: '1rem',
             display: 'flex',
-            flexDirection: 'column',
             alignItems: 'center',
-            textAlign: 'center'
+            gap: '1rem',
+            marginRight: '2rem'
           }}>
             <div style={{ 
-              width: '80px',
-              height: '80px',
+              width: '120px',
+              height: '120px',
               backgroundImage: "url('/prabhupada.png')",
               backgroundSize: 'contain',
               backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              marginBottom: '0.25rem'
+              backgroundRepeat: 'no-repeat'
             }} />
             <div style={{
-              fontSize: '0.5rem',
+              fontSize: '0.7rem',
               fontWeight: '600',
-              color: '#ea580c',
+              color: 'black',
               lineHeight: '1',
               whiteSpace: 'nowrap',
               textTransform: 'uppercase',
