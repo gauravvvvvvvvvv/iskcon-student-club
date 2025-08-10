@@ -7,7 +7,7 @@ export default function Home() {
   // Auto-advance carousel
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide(prev => (prev + 1) % 5);
+      setCurrentSlide(prev => (prev + 1) % 7);
     }, 4000);
     return () => clearInterval(timer);
   }, []);
@@ -336,9 +336,17 @@ export default function Home() {
             height: '100%',
             zIndex: 1
           }}>
-            {[1, 2, 3, 4, 5].map((num, index) => (
+            {[
+              'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&h=600&fit=crop',
+              'https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=1200&h=600&fit=crop',
+              'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1200&h=600&fit=crop',
+              'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=600&fit=crop',
+              'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?w=1200&h=600&fit=crop',
+              'https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=1200&h=600&fit=crop',
+              'https://images.unsplash.com/photo-1516738901171-8eb4fc13bd20?w=1200&h=600&fit=crop'
+            ].map((imageUrl, index) => (
               <div
-                key={num}
+                key={index}
                 style={{
                   position: 'absolute',
                   top: 0,
@@ -347,7 +355,7 @@ export default function Home() {
                   height: '100%',
                   opacity: currentSlide === index ? 1 : 0,
                   transition: 'opacity 0.8s ease-in-out',
-                  backgroundImage: `url(https://picsum.photos/1200/600?random=${num})`,
+                  backgroundImage: `url(${imageUrl})`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center'
                 }}
@@ -361,7 +369,7 @@ export default function Home() {
               left: 0,
               width: '100%',
               height: '100%',
-              backgroundColor: 'rgba(30, 64, 175, 0.6)',
+              backgroundColor: 'rgba(30, 64, 175, 0.3)',
               zIndex: 2
             }} />
           </div>
@@ -373,50 +381,34 @@ export default function Home() {
             height: '100%',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'space-between',
+            justifyContent: 'center',
+            alignItems: 'center',
             padding: 'clamp(1rem, 4vw, 2rem)',
             maxWidth: '1200px',
-            margin: '0 auto'
+            margin: '0 auto',
+            textAlign: 'center'
           }} className="carousel-content">
-            {/* Top Row with Images */}
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'flex-start'
-            }} className="carousel-images carousel-images-container">
-              <div style={{
-                width: 'clamp(80px, 15vw, 120px)',
-                height: 'clamp(80px, 15vw, 120px)',
-                borderRadius: '16px 0 0 0',
-                backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)'
+            {/* Center Title */}
+            <div style={{ textAlign: 'center', marginBottom: '2rem' }} className="carousel-title">
+              <h1 style={{
+                fontSize: 'clamp(2rem, 6vw, 4rem)',
+                fontWeight: '900',
+                color: 'white',
+                textShadow: '0 4px 8px rgba(0, 0, 0, 0.5)',
+                margin: 0,
+                letterSpacing: '0.05em',
+                lineHeight: '1.1'
               }}>
-                <img
-                  src="/prabhupada.svg"
-                  alt="Prabhupada"
-                  style={{ width: '80%', height: '80%', objectFit: 'contain' }}
-                />
-              </div>
-
-              <div style={{
-                width: 'clamp(80px, 15vw, 120px)',
-                height: 'clamp(80px, 15vw, 120px)',
-                borderRadius: '0 16px 0 0',
-                backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)'
+                ISKCON Student Center
+              </h1>
+              <p style={{
+                fontSize: 'clamp(1rem, 3vw, 1.5rem)',
+                color: 'rgba(255, 255, 255, 0.9)',
+                margin: '1rem 0 0 0',
+                fontWeight: '500'
               }}>
-                <img
-                  src="/iskcon-logo.svg"
-                  alt="ISKCON Logo"
-                  style={{ width: '80%', height: '80%', objectFit: 'contain' }}
-                />
-              </div>
+                International Society for Krishna Consciousness
+              </p>
             </div>
 
             {/* Call to Action Buttons */}
@@ -508,92 +500,155 @@ export default function Home() {
                 Explore Programs
               </a>
             </div>
+          </div>
 
-            {/* Center Title */}
-            <div style={{ textAlign: 'center', marginTop: '2rem' }} className="carousel-title">
-              <h1 style={{
-                fontSize: 'clamp(1.8rem, 6vw, 3rem)',
-                fontWeight: '900',
+          {/* Carousel Navigation - Positioned outside content container */}
+          <div style={{
+            position: 'absolute',
+            bottom: '20px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 4,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: 'clamp(0.5rem, 2vw, 1rem)',
+            width: '100%',
+            maxWidth: '400px'
+          }} className="carousel-nav">
+            {/* Previous Button */}
+            <button
+              onClick={() => setCurrentSlide(currentSlide === 0 ? 6 : currentSlide - 1)}
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                border: '2px solid rgba(255, 255, 255, 0.3)',
                 color: 'white',
-                textShadow: '0 4px 8px rgba(0, 0, 0, 0.5)',
-                margin: 0,
-                letterSpacing: '0.05em',
-                lineHeight: '1.1'
-              }}>
-                ISKCON Student Center
-              </h1>
+                width: 'clamp(40px, 8vw, 50px)',
+                height: 'clamp(40px, 8vw, 50px)',
+                borderRadius: '50%',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 'clamp(1rem, 3vw, 1.5rem)',
+                transition: 'all 0.3s ease',
+                backdropFilter: 'blur(10px)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+              }}
+            >
+              ‹
+            </button>
+
+            {/* Indicators */}
+            <div style={{ display: 'flex', gap: 'clamp(0.3rem, 1vw, 0.5rem)' }}>
+              {[0, 1, 2, 3, 4, 5, 6].map((index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  style={{
+                    width: 'clamp(10px, 2vw, 12px)',
+                    height: 'clamp(10px, 2vw, 12px)',
+                    borderRadius: '50%',
+                    border: 'none',
+                    backgroundColor: currentSlide === index ? 'white' : 'rgba(255, 255, 255, 0.5)',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease'
+                  }}
+                />
+              ))}
             </div>
 
-            {/* Carousel Navigation */}
-            <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: 'clamp(0.5rem, 2vw, 1rem)',
-              marginTop: '2rem',
-              flexWrap: 'wrap'
-            }} className="carousel-nav">
-              {/* Previous Button */}
-              <button
-                onClick={() => setCurrentSlide(currentSlide === 0 ? 4 : currentSlide - 1)}
-                style={{
-                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                  border: '2px solid rgba(255, 255, 255, 0.3)',
-                  color: 'white',
-                  width: 'clamp(40px, 8vw, 50px)',
-                  height: 'clamp(40px, 8vw, 50px)',
-                  borderRadius: '50%',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: 'clamp(1rem, 3vw, 1.5rem)',
-                  transition: 'all 0.3s ease'
-                }}
-              >
-                ‹
-              </button>
+            {/* Next Button */}
+            <button
+              onClick={() => setCurrentSlide(currentSlide === 6 ? 0 : currentSlide + 1)}
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                border: '2px solid rgba(255, 255, 255, 0.3)',
+                color: 'white',
+                width: 'clamp(40px, 8vw, 50px)',
+                height: 'clamp(40px, 8vw, 50px)',
+                borderRadius: '50%',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 'clamp(1rem, 3vw, 1.5rem)',
+                transition: 'all 0.3s ease',
+                backdropFilter: 'blur(10px)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+              }}
+            >
+              ›
+            </button>
+          </div>
+        </section>
 
-              {/* Indicators */}
-              <div style={{ display: 'flex', gap: 'clamp(0.3rem, 1vw, 0.5rem)' }}>
-                {[0, 1, 2, 3, 4].map((index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentSlide(index)}
-                    style={{
-                      width: 'clamp(10px, 2vw, 12px)',
-                      height: 'clamp(10px, 2vw, 12px)',
-                      borderRadius: '50%',
-                      border: 'none',
-                      backgroundColor: currentSlide === index ? 'white' : 'rgba(255, 255, 255, 0.5)',
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease'
-                    }}
-                  />
-                ))}
-              </div>
-
-              {/* Next Button */}
-              <button
-                onClick={() => setCurrentSlide(currentSlide === 4 ? 0 : currentSlide + 1)}
-                style={{
-                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                  border: '2px solid rgba(255, 255, 255, 0.3)',
-                  color: 'white',
-                  width: 'clamp(40px, 8vw, 50px)',
-                  height: 'clamp(40px, 8vw, 50px)',
-                  borderRadius: '50%',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: 'clamp(1rem, 3vw, 1.5rem)',
-                  transition: 'all 0.3s ease'
-                }}
-              >
-                ›
-              </button>
-            </div>
+        {/* Action Buttons Section - Below Carousel */}
+        <section style={{
+          padding: '2rem 1rem',
+          textAlign: 'center',
+          backgroundColor: '#f8fafc'
+        }}>
+          <div style={{ 
+            display: 'flex', 
+            gap: '1rem', 
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+            maxWidth: '600px',
+            margin: '0 auto'
+          }}>
+            <a 
+              href="https://forms.google.com/your-form-id"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                backgroundColor: '#ea580c',
+                color: 'white',
+                padding: '1rem 2rem',
+                borderRadius: '999px',
+                textDecoration: 'none',
+                fontWeight: '700',
+                fontSize: '1.1rem',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                transition: 'all 0.3s ease',
+                border: 'none'
+              }}
+              className="card-hover"
+            >
+              Join Now
+            </a>
+            <a 
+              href="#programs"
+              style={{
+                border: '2px solid #ea580c',
+                color: '#ea580c',
+                backgroundColor: 'transparent',
+                padding: '1rem 2rem',
+                borderRadius: '999px',
+                textDecoration: 'none',
+                fontWeight: '700',
+                fontSize: '1.1rem',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                transition: 'all 0.3s ease'
+              }}
+              className="card-hover"
+            >
+              Explore Programs
+            </a>
           </div>
         </section>
 
