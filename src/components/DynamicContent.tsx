@@ -370,12 +370,8 @@ export function DynamicCarousel() {
   );
 }
 
-// Dynamic Announcements Component - Ultra Fast Loading
+// Dynamic Announcements Component - Clean and Fast
 export function DynamicAnnouncements() {
-  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
-  const [currentAnnouncementIndex, setCurrentAnnouncementIndex] = useState(0);
-  const [loading, setLoading] = useState(true);
-
   // Default fallback announcement
   const fallbackAnnouncement = {
     id: 'iskcon-fallback',
@@ -385,31 +381,32 @@ export function DynamicAnnouncements() {
     updatedAt: '2024-01-01'
   };
 
+  const [announcements, setAnnouncements] = useState<Announcement[]>([fallbackAnnouncement]);
+  const [currentAnnouncementIndex, setCurrentAnnouncementIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    // Start loading immediately with no delay
     loadAnnouncements();
   }, []);
 
   useEffect(() => {
-    if (announcements.length > 0) {
-      // Rotate through announcements every 8 seconds
+    if (announcements.length > 0 && !loading) {
       const rotationTimer = setInterval(() => {
         setCurrentAnnouncementIndex(prev => {
           const nextIndex = (prev + 1) % announcements.length;
-          // Safety check to ensure valid index
           return nextIndex < announcements.length ? nextIndex : 0;
         });
       }, 8000);
 
       return () => clearInterval(rotationTimer);
     }
-  }, [announcements.length]);
+  }, [announcements.length, loading]);
 
   const loadAnnouncements = async () => {
     try {
-      // Load with Promise.race to timeout after 1 second
+      // Quick timeout for fast loading
       const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Timeout')), 1000)
+        setTimeout(() => reject(new Error('Timeout')), 800)
       );
       
       const announcementsData = await Promise.race([
@@ -421,23 +418,20 @@ export function DynamicAnnouncements() {
       
       if (activeAnnouncements.length > 0) {
         setAnnouncements(activeAnnouncements);
-      } else {
-        // No active announcements, use fallback
-        setAnnouncements([fallbackAnnouncement]);
       }
+      // If no announcements, keep the fallback that's already set
     } catch (error) {
-      console.error('Error loading announcements (using fallback):', error);
-      // Use fallback on error or timeout
-      setAnnouncements([fallbackAnnouncement]);
+      console.error('Error loading announcements:', error);
+      // Keep the fallback announcement that's already set
     } finally {
       setLoading(false);
     }
   };
 
-  // Get current announcement to display with safety check
+  // Get current announcement with safety checks
   const currentAnnouncement = announcements[currentAnnouncementIndex] || fallbackAnnouncement;
   
-  // Create announcement content with clickable links
+  // Create announcement content with safety checks
   const createAnnouncementContent = (announcement: Announcement) => {
     if (!announcement || !announcement.text) {
       return 'Welcome to ISKCON Student Center • Join us for daily programs';
@@ -465,6 +459,34 @@ export function DynamicAnnouncements() {
     return baseText;
   };
 
+  // Show loading state briefly
+  if (loading) {
+    return (
+      <div style={{
+        backgroundColor: '#f8f9fa',
+        color: '#1f2937',
+        padding: '0.75rem 0',
+        overflow: 'hidden',
+        position: 'relative',
+        whiteSpace: 'nowrap',
+        marginTop: '70px',
+        borderTop: '3px solid #ea580c',
+        borderBottom: '3px solid #ea580c',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <div style={{
+          fontSize: '1rem',
+          fontWeight: '500',
+          color: '#6b7280'
+        }}>
+          Loading...
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{
       backgroundColor: '#f8f9fa',
@@ -485,21 +507,6 @@ export function DynamicAnnouncements() {
       }}>
         {createAnnouncementContent(currentAnnouncement)}
       </div>
-      
-      {/* Optional: Show loading indicator for dynamic content */}
-      {!hasLoadedDynamic && (
-        <div style={{
-          position: 'absolute',
-          right: '10px',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          fontSize: '0.8rem',
-          color: '#6b7280',
-          opacity: 0.7
-        }}>
-          ↻
-        </div>
-      )}
       
       <style dangerouslySetInnerHTML={{
         __html: `
