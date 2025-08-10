@@ -232,15 +232,15 @@ export default function Home() {
             paddingLeft: '0.5rem'
           }}>
             <div style={{ 
-              width: '80px',
-              height: '80px',
+              width: '120px',
+              height: '120px',
               backgroundImage: "url('/prabhupada.png')",
               backgroundSize: 'contain',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat'
             }} />
             <div style={{
-              fontSize: '0.6rem',
+              fontSize: '0.7rem',
               fontWeight: '600',
               color: 'black',
               lineHeight: '1',
