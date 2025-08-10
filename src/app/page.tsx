@@ -3,7 +3,6 @@ import React from 'react';
 import {
   AppBar, Box, Toolbar, Typography, Container, Button, IconButton, Stack, Grid, Card, CardContent, Chip, Divider, List, ListItem, ListItemIcon, ListItemText, useScrollTrigger, Slide, Tooltip
 } from '@mui/material';
-import Image from 'next/image';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import { useContext } from 'react';
@@ -111,7 +110,7 @@ export default function Home() {
 
       {/* Hero with Prabhupada (left), ISKCON logo (right) and full form centered */}
         <Box id="home" sx={{ pt: { xs: 18, md: 20 }, pb: { xs: 10, md: 14 }, position: 'relative', overflow: 'hidden' }}>
-        <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(115deg,#ffffff,#fff9f1 55%,#fff3e0)', zIndex: -3 }} />
+          <Box sx={{ position: 'absolute', inset: 0, zIndex: -3, background: (theme) => theme.palette.mode === 'light' ? 'linear-gradient(115deg,#ffffff,#fff9f1 55%,#fff3e0)' : 'linear-gradient(120deg,#0f1113,#181b1e 60%,#1f2326)' }} />
         {/* Subtle decorative orbs */}
         <Box sx={{ position: 'absolute', width: 380, height: 380, top: -120, left: -120, borderRadius: '50%', background: 'radial-gradient(circle,#ffd9b0,transparent 60%)', filter: 'blur(40px)', opacity: 0.55 }} />
         <Box sx={{ position: 'absolute', width: 420, height: 420, bottom: -160, right: -140, borderRadius: '50%', background: 'radial-gradient(circle,#ffe4c4,transparent 70%)', filter: 'blur(50px)', opacity: 0.55 }} />
@@ -126,8 +125,14 @@ export default function Home() {
             mb: { xs: 6, md: 8 },
             flexWrap: 'nowrap'
           }}>
-            <Box sx={{ position: 'relative', width: { xs: 80, sm: 130, md: 170 }, height: { xs: 80, sm: 130, md: 170 }, borderRadius: '50%', overflow: 'hidden', boxShadow: '0 6px 18px -6px rgba(0,0,0,0.25)', flexShrink: 0 }}>
-              <Image src="/prabhupada.jpg" alt="Srila Prabhupada" fill style={{ objectFit: 'cover' }} />
+            <Box sx={{ position: 'relative', width: { xs: 80, sm: 130, md: 170 }, height: { xs: 80, sm: 130, md: 170 }, borderRadius: '50%', overflow: 'hidden', boxShadow: '0 6px 18px -6px rgba(0,0,0,0.25)', flexShrink: 0, bgcolor: 'warning.light' }}>
+              <Box
+                component="img"
+                src="/prabhupada.jpg"
+                alt="Srila Prabhupada"
+                onError={(e: any) => { e.currentTarget.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"><rect width="300" height="300" rx="150" fill="%23ffe8d0"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="34" font-family="Arial" fill="%23ea580c">IMAGE</text></svg>'; }}
+                style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+              />
             </Box>
             <Typography component="h1" sx={{
               flexGrow: 1,
@@ -143,8 +148,14 @@ export default function Home() {
             }}>
               INTERNATIONAL SOCIETY FOR KRISHNA CONSCIOUSNESS
             </Typography>
-            <Box sx={{ position: 'relative', width: { xs: 80, sm: 130, md: 180 }, height: { xs: 80, sm: 150, md: 200 }, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Image src="/iskcon-logo.png" alt="ISKCON Logo" fill style={{ objectFit: 'contain', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.25))' }} />
+            <Box sx={{ position: 'relative', width: { xs: 80, sm: 130, md: 180 }, height: { xs: 80, sm: 150, md: 200 }, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', p: 1 }}>
+              <Box
+                component="img"
+                src="/iskcon-logo.png"
+                alt="ISKCON Logo"
+                onError={(e: any) => { e.currentTarget.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><rect width="400" height="400" fill="%23fff3e0"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="46" font-family="Arial" fill="%23ea580c">LOGO</text></svg>'; }}
+                style={{ objectFit: 'contain', width: '100%', height: '100%', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.25))' }}
+              />
             </Box>
           </Box>
           <Container maxWidth="lg">
@@ -181,7 +192,7 @@ export default function Home() {
       </Box>
 
   {/* Programs / Features */}
-      <Box id="programs" py={12} sx={{ bgcolor: 'background.paper' }}>
+  <Box id="programs" py={12} sx={{ bgcolor: 'background.paper', transition: 'background-color .4s' }}>
         <Container maxWidth="lg">
           <Stack spacing={2} textAlign="center" mb={6}>
     <Typography variant="overline" fontWeight={700} color="warning.main">FEATURES</Typography>
@@ -233,8 +244,8 @@ export default function Home() {
       </Box>
 
       {/* Schedule */}
-      <Box id="schedule" py={12} sx={{ background: 'linear-gradient(135deg,#fff7ed,#fff)', position: 'relative' }}>
-        <Box sx={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 85% 15%,rgba(245,158,11,0.08),transparent 55%)' }} />
+      <Box id="schedule" py={12} sx={{ position: 'relative', background: (theme) => theme.palette.mode === 'light' ? 'linear-gradient(135deg,#fff7ed,#fff)' : 'linear-gradient(135deg,#161a1d,#0f1113)' }}>
+        <Box sx={{ position: 'absolute', inset: 0, background: (theme) => theme.palette.mode === 'light' ? 'radial-gradient(circle at 85% 15%,rgba(245,158,11,0.08),transparent 55%)' : 'radial-gradient(circle at 85% 15%,rgba(245,158,11,0.15),transparent 60%)' }} />
         <Container maxWidth="md">
           <Stack spacing={2} textAlign="center" mb={6}>
             <Typography variant="overline" fontWeight={700} color="warning.main">DAILY FLOW</Typography>
@@ -262,7 +273,7 @@ export default function Home() {
 
       {/* Facilities */}
       <Box id="facilities" py={12} sx={{ position: 'relative' }}>
-        <Box sx={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 15% 20%,rgba(245,158,11,0.08),transparent 55%)' }} />
+        <Box sx={{ position: 'absolute', inset: 0, background: (theme) => theme.palette.mode === 'light' ? 'radial-gradient(circle at 15% 20%,rgba(245,158,11,0.08),transparent 55%)' : 'radial-gradient(circle at 15% 20%,rgba(245,158,11,0.15),transparent 60%)' }} />
         <Container maxWidth="lg">
           <Stack spacing={2} textAlign="center" mb={6}>
             <Typography variant="overline" fontWeight={700} color="warning.main">FACILITIES</Typography>
@@ -295,8 +306,8 @@ export default function Home() {
       </Box>
 
       {/* Contact */}
-      <Box id="contact" py={12} sx={{ background: 'linear-gradient(135deg,#fff,#fff7ed)', position: 'relative' }}>
-        <Box sx={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 50% 0%,rgba(245,158,11,0.08),transparent 60%)' }} />
+      <Box id="contact" py={12} sx={{ position: 'relative', background: (theme) => theme.palette.mode === 'light' ? 'linear-gradient(135deg,#fff,#fff7ed)' : 'linear-gradient(135deg,#181b1e,#121416)' }}>
+        <Box sx={{ position: 'absolute', inset: 0, background: (theme) => theme.palette.mode === 'light' ? 'radial-gradient(circle at 50% 0%,rgba(245,158,11,0.08),transparent 60%)' : 'radial-gradient(circle at 50% 0%,rgba(245,158,11,0.15),transparent 65%)' }} />
         <Container maxWidth="sm">
           <Card elevation={8} sx={{ borderRadius: 5, p: { xs: 3, md: 6 }, textAlign: 'center' }}>
             <Stack spacing={3}>
@@ -328,7 +339,7 @@ export default function Home() {
         </Container>
       </Box>
       {/* Location / Map */}
-      <Box id="location" sx={{ py: 10, background: 'radial-gradient(circle at top,#fff7ed 0%,#ffffff 70%)' }}>
+  <Box id="location" sx={{ py: 10, background: (theme) => theme.palette.mode === 'light' ? 'radial-gradient(circle at top,#fff7ed 0%,#ffffff 70%)' : 'radial-gradient(circle at top,#1a1f22 0%,#111416 75%)' }}>
         <Container maxWidth="lg">
           <Grid container spacing={6} alignItems="stretch">
             <Grid item xs={12} md={5}>
@@ -373,8 +384,8 @@ export default function Home() {
         </Container>
       </Box>
       {/* Footer */}
-      <Box component="footer" sx={{ position: 'relative', overflow: 'hidden', pt: 10, pb: 4, background: 'linear-gradient(135deg,#fff9f2,#ffffff 60%)' }}>
-        <Box sx={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 80% 20%,rgba(245,158,11,0.08),transparent 50%), radial-gradient(circle at 15% 85%,rgba(245,158,11,0.06),transparent 55%)' }} />
+      <Box component="footer" sx={{ position: 'relative', overflow: 'hidden', pt: 10, pb: 4, background: (theme) => theme.palette.mode === 'light' ? 'linear-gradient(135deg,#fff9f2,#ffffff 60%)' : 'linear-gradient(135deg,#161a1d,#111416 65%)' }}>
+        <Box sx={{ position: 'absolute', inset: 0, background: (theme) => theme.palette.mode === 'light' ? 'radial-gradient(circle at 80% 20%,rgba(245,158,11,0.08),transparent 50%), radial-gradient(circle at 15% 85%,rgba(245,158,11,0.06),transparent 55%)' : 'radial-gradient(circle at 80% 20%,rgba(245,158,11,0.12),transparent 55%), radial-gradient(circle at 15% 85%,rgba(245,158,11,0.1),transparent 60%)' }} />
         <Container maxWidth="lg" sx={{ position: 'relative' }}>
           <Grid container spacing={6}>
             <Grid item xs={12} md={5}>
