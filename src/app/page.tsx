@@ -1,6 +1,16 @@
 "use client";
+import { useState, useEffect } from 'react';
 
 export default function Home() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // Auto-advance carousel
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide(prev => (prev + 1) % 5);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#ffffff', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
       <style dangerouslySetInnerHTML={{
@@ -243,71 +253,97 @@ export default function Home() {
         {/* Image Carousel Section */}
         <section style={{
           position: 'relative',
-          height: '500px',
+          height: '600px',
           overflow: 'hidden',
-          backgroundColor: '#f8fafc'
+          backgroundColor: '#1e40af'
         }}>
-          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-            {/* Image placeholders row */}
-            <div style={{ 
-              display: 'flex', 
-              justifyContent: 'space-between', 
-              alignItems: 'center', 
-              marginBottom: '3rem' 
+          {/* Background Image Carousel */}
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            zIndex: 1
+          }}>
+            {[1, 2, 3, 4, 5].map((num, index) => (
+              <div
+                key={num}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  opacity: currentSlide === index ? 1 : 0,
+                  transition: 'opacity 0.8s ease-in-out',
+                  backgroundImage: `url(https://picsum.photos/1200/600?random=${num})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                }}
+              />
+            ))}
+            
+            {/* Overlay */}
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'rgba(30, 64, 175, 0.6)',
+              zIndex: 2
+            }} />
+          </div>
+
+          {/* Content Container */}
+          <div style={{
+            position: 'relative',
+            zIndex: 3,
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            padding: '2rem',
+            maxWidth: '1200px',
+            margin: '0 auto'
+          }}>
+            {/* Top Row with Images */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start'
             }}>
-              <div style={{ 
-                width: '120px', 
-                height: '120px', 
-                borderRadius: '16px 0 0 0', 
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                display: 'flex', 
-                alignItems: 'center', 
+              <div style={{
+                width: '120px',
+                height: '120px',
+                borderRadius: '16px 0 0 0',
+                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                display: 'flex',
+                alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
-                backdropFilter: 'blur(10px)'
-              }} className="animate-slideInLeft card-hover floating">
-                <img 
-                  src="/prabhupada.svg" 
-                  alt="Prabhupada" 
+                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)'
+              }}>
+                <img
+                  src="/prabhupada.svg"
+                  alt="Prabhupada"
                   style={{ width: '80%', height: '80%', objectFit: 'contain' }}
                 />
               </div>
-              
-              <div style={{ textAlign: 'center', flexGrow: 1, padding: '0 2rem' }} className="animate-fadeInUp">
-                <h2 style={{ 
-                  fontSize: '2.5rem', 
-                  fontWeight: '900', 
-                  marginBottom: '1rem',
-                  color: 'white',
-                  textShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
-                  margin: 0
-                }} className="text-responsive">
-                  ISKCON Student Center
-                </h2>
-                <p style={{
-                  fontSize: '1.25rem',
-                  color: 'rgba(255, 255, 255, 0.9)',
-                  textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
-                  marginBottom: '2rem'
-                }}>
-                  Spiritual growth, community service, and Krishna consciousness for students
-                </p>
-              </div>
-              
-              <div style={{ 
-                width: '120px', 
-                height: '120px', 
-                borderRadius: '0 16px 0 0', 
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                display: 'flex', 
-                alignItems: 'center', 
+
+              <div style={{
+                width: '120px',
+                height: '120px',
+                borderRadius: '0 16px 0 0',
+                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                display: 'flex',
+                alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
-                backdropFilter: 'blur(10px)'
-              }} className="animate-slideInRight card-hover floating">
-                <img 
-                  src="/iskcon-logo.svg" 
-                  alt="ISKCON Logo" 
+                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)'
+              }}>
+                <img
+                  src="/iskcon-logo.svg"
+                  alt="ISKCON Logo"
                   style={{ width: '80%', height: '80%', objectFit: 'contain' }}
                 />
               </div>
@@ -399,6 +435,166 @@ export default function Home() {
                     fontWeight: 'bold'
                   }}>�</span>
                 </span>
+                Explore Programs
+              </a>
+            </div>
+
+            {/* Center Title */}
+            <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+              <h1 style={{
+                fontSize: '3rem',
+                fontWeight: '900',
+                color: 'white',
+                textShadow: '0 4px 8px rgba(0, 0, 0, 0.5)',
+                margin: 0,
+                letterSpacing: '0.05em'
+              }}>
+                ISKCON Student Center
+              </h1>
+            </div>
+
+            {/* Carousel Navigation */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '1rem',
+              marginTop: '2rem'
+            }}>
+              {/* Previous Button */}
+              <button
+                onClick={() => setCurrentSlide(currentSlide === 0 ? 4 : currentSlide - 1)}
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                  border: '2px solid rgba(255, 255, 255, 0.3)',
+                  color: 'white',
+                  width: '50px',
+                  height: '50px',
+                  borderRadius: '50%',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '1.5rem',
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                ‹
+              </button>
+
+              {/* Indicators */}
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                {[0, 1, 2, 3, 4].map((index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentSlide(index)}
+                    style={{
+                      width: '12px',
+                      height: '12px',
+                      borderRadius: '50%',
+                      border: 'none',
+                      backgroundColor: currentSlide === index ? 'white' : 'rgba(255, 255, 255, 0.5)',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease'
+                    }}
+                  />
+                ))}
+              </div>
+
+              {/* Next Button */}
+              <button
+                onClick={() => setCurrentSlide(currentSlide === 4 ? 0 : currentSlide + 1)}
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                  border: '2px solid rgba(255, 255, 255, 0.3)',
+                  color: 'white',
+                  width: '50px',
+                  height: '50px',
+                  borderRadius: '50%',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '1.5rem',
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                ›
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* Action Buttons Section */}
+        <section style={{
+          padding: '3rem 2rem',
+          backgroundColor: '#f8fafc',
+          textAlign: 'center'
+        }}>
+          <div style={{
+            maxWidth: '1200px',
+            margin: '0 auto'
+          }}>
+            <p style={{
+              fontSize: '1.25rem',
+              color: '#64748b',
+              marginBottom: '2rem',
+              fontWeight: '500'
+            }}>
+              Spiritual growth, community service, and Krishna consciousness for students
+            </p>
+            
+            <div style={{
+              display: 'flex',
+              gap: '1rem',
+              justifyContent: 'center',
+              flexWrap: 'wrap'
+            }}>
+              <a
+                href="https://forms.google.com/your-form-id"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  backgroundColor: '#ea580c',
+                  color: 'white',
+                  padding: '1rem 2rem',
+                  borderRadius: '8px',
+                  textDecoration: 'none',
+                  fontWeight: '700',
+                  fontSize: '1.1rem',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  border: 'none',
+                  boxShadow: '0 4px 6px rgba(234, 88, 12, 0.3)',
+                  transition: 'all 0.3s ease',
+                  minWidth: '160px',
+                  justifyContent: 'center'
+                }}
+              >
+                Join Now
+              </a>
+              
+              <a
+                href="#programs"
+                style={{
+                  backgroundColor: '#3b82f6',
+                  color: 'white',
+                  padding: '1rem 2rem',
+                  borderRadius: '8px',
+                  textDecoration: 'none',
+                  fontWeight: '700',
+                  fontSize: '1.1rem',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  border: 'none',
+                  boxShadow: '0 4px 6px rgba(59, 130, 246, 0.3)',
+                  transition: 'all 0.3s ease',
+                  minWidth: '160px',
+                  justifyContent: 'center'
+                }}
+              >
                 Explore Programs
               </a>
             </div>
