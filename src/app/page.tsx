@@ -146,7 +146,9 @@ export default function Home() {
           margin: '0 auto', 
           display: 'flex', 
           alignItems: 'center',
-          padding: '0 2rem'
+          padding: '0 2rem',
+          flexWrap: 'nowrap',
+          minHeight: '80px'
         }}>
           {/* Left Image - Prabhupada */}
           <div style={{ marginRight: '1rem' }} className="floating">
@@ -180,12 +182,12 @@ export default function Home() {
             />
           </div>
           
-          <nav style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginLeft: '2rem' }} className="nav-desktop">
-            <a href="#programs" style={{ color: '#ea580c', textDecoration: 'none', fontWeight: '600' }}>Programs</a>
-            <a href="#schedule" style={{ color: '#ea580c', textDecoration: 'none', fontWeight: '600' }}>Schedule</a>
-            <a href="#facilities" style={{ color: '#ea580c', textDecoration: 'none', fontWeight: '600' }}>Facilities</a>
-            <a href="#location" style={{ color: '#ea580c', textDecoration: 'none', fontWeight: '600' }}>Location</a>
-            <a href="#contact" style={{ color: '#ea580c', textDecoration: 'none', fontWeight: '600' }}>Contact</a>
+          <nav style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginLeft: '2rem', flexShrink: 0 }} className="nav-desktop">
+            <a href="#programs" style={{ color: '#ea580c', textDecoration: 'none', fontWeight: '600', whiteSpace: 'nowrap' }}>Programs</a>
+            <a href="#schedule" style={{ color: '#ea580c', textDecoration: 'none', fontWeight: '600', whiteSpace: 'nowrap' }}>Schedule</a>
+            <a href="#facilities" style={{ color: '#ea580c', textDecoration: 'none', fontWeight: '600', whiteSpace: 'nowrap' }}>Facilities</a>
+            <a href="#location" style={{ color: '#ea580c', textDecoration: 'none', fontWeight: '600', whiteSpace: 'nowrap' }}>Location</a>
+            <a href="#contact" style={{ color: '#ea580c', textDecoration: 'none', fontWeight: '600', whiteSpace: 'nowrap' }}>Contact</a>
             <a 
               href="https://forms.google.com/your-form-id" 
               target="_blank"
@@ -197,7 +199,9 @@ export default function Home() {
                 borderRadius: '999px',
                 textDecoration: 'none',
                 fontWeight: '700',
-                marginLeft: '1rem'
+                marginLeft: '1rem',
+                whiteSpace: 'nowrap',
+                flexShrink: 0
               }}
               className="button-primary"
             >
@@ -822,104 +826,70 @@ export default function Home() {
               marginTop: '3rem'
             }}>
               <div className="animate-fadeInUp">
-                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                  <span style={{
-                    width: '24px',
-                    height: '24px',
-                    backgroundColor: '#ff6b35',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: 'white',
-                    fontSize: '14px',
-                    fontWeight: 'bold'
-                  }}>📍</span>
-                  Visit Us
+                <h3 style={{ 
+                  fontSize: '1.25rem', 
+                  fontWeight: '700', 
+                  marginBottom: '1rem', 
+                  color: '#ff6b35',
+                  textAlign: 'center'
+                }}>
+                  📍 Visit Us
                 </h3>
-                <p>26 Prem Niwas First Floor, Above Natural's Ice Cream,<br />Malka Ganj, New Delhi, Delhi 110007</p>
-              </div>
-              
-              <div className="animate-fadeInUp">
-                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                  <span style={{
-                    width: '24px',
-                    height: '24px',
-                    backgroundColor: '#ff6b35',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: 'white',
-                    fontSize: '14px',
-                    fontWeight: 'bold'
-                  }}>@</span>
-                  Connect
-                </h3>
-                <p>
-                  <a href="tel:+919876543210" style={{ color: '#ff6b35', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                    <span style={{
-                      width: '16px',
-                      height: '16px',
-                      backgroundColor: '#ff6b35',
-                      borderRadius: '50%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: 'white',
-                      fontSize: '10px',
-                      fontWeight: 'bold'
-                    }}>☎</span>
-                    +91 98765 43210
-                  </a>
-                  <a href="https://instagram.com/iskcondelhiuniversity" style={{ color: '#ff6b35', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                    <span style={{
-                      width: '16px',
-                      height: '16px',
-                      backgroundColor: '#ff6b35',
-                      borderRadius: '50%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: 'white',
-                      fontSize: '10px',
-                      fontWeight: 'bold'
-                    }}>IG</span>
-                    Instagram
-                  </a>
-                  <a href="https://youtube.com/@iskcondelhiuniversity" style={{ color: '#ff6b35', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                    <span style={{
-                      width: '16px',
-                      height: '16px',
-                      backgroundColor: '#ff6b35',
-                      borderRadius: '50%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: 'white',
-                      fontSize: '10px',
-                      fontWeight: 'bold'
-                    }}>YT</span>
-                    YouTube
-                  </a>
+                <p style={{ textAlign: 'center', lineHeight: '1.6' }}>
+                  26 Prem Niwas First Floor, Above Natural's Ice Cream,<br />
+                  Malka Ganj, New Delhi, Delhi 110007
                 </p>
               </div>
               
               <div className="animate-fadeInUp">
-                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                  <span style={{
-                    width: '24px',
-                    height: '24px',
-                    backgroundColor: '#ff6b35',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: 'white',
-                    fontSize: '14px',
-                    fontWeight: 'bold'
-                  }}>+</span>
-                  Join Now
+                <h3 style={{ 
+                  fontSize: '1.25rem', 
+                  fontWeight: '700', 
+                  marginBottom: '1rem', 
+                  color: '#ff6b35',
+                  textAlign: 'center'
+                }}>
+                  📱 Connect
+                </h3>
+                <div style={{ textAlign: 'center' }}>
+                  <a href="tel:+919876543210" style={{ 
+                    color: '#ff6b35', 
+                    textDecoration: 'none', 
+                    display: 'block', 
+                    marginBottom: '0.5rem',
+                    fontWeight: '500'
+                  }}>
+                    📞 +91 98765 43210
+                  </a>
+                  <a href="https://instagram.com/iskcondelhiuniversity" style={{ 
+                    color: '#ff6b35', 
+                    textDecoration: 'none', 
+                    display: 'block', 
+                    marginBottom: '0.5rem',
+                    fontWeight: '500'
+                  }}>
+                    📷 Instagram
+                  </a>
+                  <a href="https://youtube.com/@iskcondelhiuniversity" style={{ 
+                    color: '#ff6b35', 
+                    textDecoration: 'none', 
+                    display: 'block',
+                    fontWeight: '500'
+                  }}>
+                    📺 YouTube
+                  </a>
+                </div>
+              </div>
+              
+              <div className="animate-fadeInUp">
+                <h3 style={{ 
+                  fontSize: '1.25rem', 
+                  fontWeight: '700', 
+                  marginBottom: '1rem', 
+                  color: '#ff6b35',
+                  textAlign: 'center'
+                }}>
+                  🚀 Join Now
                 </h3>
                 <a 
                   href="https://forms.google.com/your-form-id"
