@@ -212,7 +212,7 @@ export default function Home() {
         backdropFilter: 'blur(16px)',
         borderBottom: '1px solid #e5e7eb',
         zIndex: 1000,
-        padding: '0'
+        padding: '0.5rem 0'
       }} className="animate-slideInLeft">
         <div style={{ 
           width: '100%',
@@ -316,7 +316,8 @@ export default function Home() {
         padding: '0.75rem 0',
         overflow: 'hidden',
         position: 'relative',
-        whiteSpace: 'nowrap'
+        whiteSpace: 'nowrap',
+        marginTop: '70px'
       }}>
         <div style={{
           display: 'inline-block',
@@ -336,17 +337,15 @@ export default function Home() {
         }} />
       </div>
 
-      {/* Add top margin for fixed header */}
-      <div style={{ marginTop: '80px' }}>
-        {/* Announcement Banner */}
-        <div style={{
-          backgroundColor: '#1e40af',
-          color: 'white',
-          padding: '12px 0',
-          overflow: 'hidden',
-          position: 'relative',
-          borderBottom: '2px solid rgba(255, 255, 255, 0.2)'
-        }} className="announcement-banner">
+      {/* Announcement Banner */}
+      <div style={{
+        backgroundColor: '#1e40af',
+        color: 'white',
+        padding: '12px 0',
+        overflow: 'hidden',
+        position: 'relative',
+        borderBottom: '2px solid rgba(255, 255, 255, 0.2)'
+      }} className="announcement-banner">
           <div style={{
             whiteSpace: 'nowrap',
             animation: 'scrollText 20s linear infinite',
@@ -357,6 +356,8 @@ export default function Home() {
           </div>
         </div>
 
+      {/* Main Content Container */}
+      <div>
         {/* Image Carousel Section */}
         <section style={{
           position: 'relative',
