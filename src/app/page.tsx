@@ -215,21 +215,21 @@ export default function Home() {
         padding: '0.5rem 0'
       }} className="animate-slideInLeft">
         <div style={{ 
-          maxWidth: '1280px', 
-          margin: '0 auto', 
+          width: '100%',
           display: 'flex', 
           alignItems: 'center',
-          padding: '0 1rem',
+          padding: '0',
           flexWrap: 'nowrap',
           minHeight: '80px',
-          justifyContent: 'space-between'
+          justifyContent: 'flex-start'
         }}>
-          {/* Left side - Prabhupada image and text */}
+          {/* Left corner - Prabhupada image and text */}
           <div style={{ 
             display: 'flex',
             alignItems: 'center',
-            gap: '1rem',
-            flexShrink: 0
+            gap: '0.5rem',
+            flexShrink: 0,
+            paddingLeft: '0.5rem'
           }}>
             <div style={{ 
               width: '120px',
