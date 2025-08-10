@@ -1,36 +1,11 @@
 "use client";
 import React from 'react';
-import Image from 'next/image';
 import {
   AppBar, Box, Toolbar, Typography, Container, Button, IconButton, Stack, Grid, Card, CardContent, Chip, Divider, List, ListItem, ListItemIcon, ListItemText, useScrollTrigger, Slide, Tooltip
 } from '@mui/material';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
-import LightModeIcon from '@mui/icons-material/LightMode';
+import { DarkModeIcon, LightModeIcon, MenuBookIcon, SelfImprovementIcon, MusicNoteIcon, RestaurantIcon, LibraryBooksIcon, TheaterComedyIcon, HomeIcon, LocalLibraryIcon, LocalDiningIcon, SpaIcon, AccessTimeIcon, InstagramIcon, YouTubeIcon, PhoneIcon, PlaceIcon, GroupIcon, VolunteerActivismIcon, GavelIcon, MilitaryTechIcon, HikingIcon, FavoriteBorderIcon } from '../icons/FallbackIcons';
 import { useContext } from 'react';
 import { ColorModeContext } from './theme/AppThemeProvider';
-import MenuBookIcon from '@mui/icons-material/MenuBook';
-import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
-import MusicNoteIcon from '@mui/icons-material/MusicNote';
-import RestaurantIcon from '@mui/icons-material/Restaurant';
-import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
-import TheaterComedyIcon from '@mui/icons-material/TheaterComedy';
-import HomeIcon from '@mui/icons-material/Home';
-import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
-import LocalDiningIcon from '@mui/icons-material/LocalDining';
-import SpaIcon from '@mui/icons-material/Spa';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import YouTubeIcon from '@mui/icons-material/YouTube';
-import PhoneIcon from '@mui/icons-material/Phone';
-import PlaceIcon from '@mui/icons-material/Place';
-import GroupIcon from '@mui/icons-material/Group';
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
-import SupportAgentIcon from '@mui/icons-material/SupportAgent';
-import GavelIcon from '@mui/icons-material/Gavel';
-import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
-import HikingIcon from '@mui/icons-material/Hiking';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 function HideOnScroll({ children }: { children: React.ReactElement }) {
   const trigger = useScrollTrigger();
@@ -84,7 +59,7 @@ export default function Home() {
   return (
     <Box sx={{ bgcolor: 'background.default', color: 'text.primary', minHeight: '100vh' }}>
       <HideOnScroll>
-        <AppBar elevation={0} color="default" sx={{ backdropFilter: 'blur(16px)', borderBottom: 1, borderColor: 'divider' }}>
+        <AppBar elevation={0} color="default" sx={{ backdropFilter: 'blur(16px)', bgcolor: (theme) => theme.palette.background.paper, borderBottom: 1, borderColor: 'divider' }}>
           <Toolbar sx={{ maxWidth: 1280, mx: 'auto', width: '100%' }}>
             <Typography variant="h6" sx={{ fontWeight: 700, flexGrow: 1, letterSpacing: 0.5, color: 'warning.main' }}>
               ISKCON Student Center
@@ -111,7 +86,7 @@ export default function Home() {
 
       {/* Hero with Prabhupada (left), ISKCON logo (right) and full form centered */}
         <Box id="home" sx={{ pt: { xs: 18, md: 20 }, pb: { xs: 10, md: 14 }, position: 'relative', overflow: 'hidden' }}>
-          <Box sx={{ position: 'absolute', inset: 0, zIndex: -3, background: (theme) => theme.palette.mode === 'light' ? 'linear-gradient(115deg,#ffffff,#fff9f1 55%,#fff3e0)' : 'linear-gradient(120deg,#0f1113,#181b1e 60%,#1f2326)' }} />
+          <Box sx={{ position: 'absolute', inset: 0, zIndex: -3, background: (theme) => theme.palette.mode === 'light' ? 'linear-gradient(135deg, #fffcf2, #fff3e0)' : 'linear-gradient(135deg, #111416, #181b1e)' }} />
         {/* Subtle decorative orbs */}
         <Box sx={{ position: 'absolute', width: 380, height: 380, top: -120, left: -120, borderRadius: '50%', background: 'radial-gradient(circle,#ffd9b0,transparent 60%)', filter: 'blur(40px)', opacity: 0.55 }} />
         <Box sx={{ position: 'absolute', width: 420, height: 420, bottom: -160, right: -140, borderRadius: '50%', background: 'radial-gradient(circle,#ffe4c4,transparent 70%)', filter: 'blur(50px)', opacity: 0.55 }} />
@@ -136,12 +111,7 @@ export default function Home() {
               boxShadow: '0 6px 18px -6px rgba(0,0,0,0.25)',
               flexShrink: 0
             }}>
-              <Image
-                src="/prabhupada.jpg"
-                alt="Srila Prabhupada"
-                fill
-                style={{ objectFit: 'cover' }}
-              />
+              <img src="/prabhupada.jpg" alt="Srila Prabhupada" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </Box>
             <Typography component="h1" sx={{
               flexGrow: 1,
@@ -166,12 +136,7 @@ export default function Home() {
               overflow: 'hidden',
               borderRadius: '50%'
             }}>
-              <Image
-                src="/iskcon-logo.png"
-                alt="ISKCON Logo"
-                fill
-                style={{ objectFit: 'contain' }}
-              />
+              <img src="/iskcon-logo.png" alt="ISKCON Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             </Box>
           </Box>
           <Container maxWidth="lg">
@@ -208,7 +173,7 @@ export default function Home() {
       </Box>
 
   {/* Programs / Features */}
-  <Box id="programs" py={12} sx={{ bgcolor: 'background.paper', transition: 'background-color .4s' }}>
+  <Box id="programs" py={12} sx={{ background: (theme) => theme.palette.mode === 'light' ? 'linear-gradient(135deg, #ffffff, #fff9f2)' : 'linear-gradient(135deg, #1e2124, #181b1e)', transition: 'background 0.4s' }}>
         <Container maxWidth="lg">
           <Stack spacing={2} textAlign="center" mb={6}>
     <Typography variant="overline" fontWeight={700} color="warning.main">FEATURES</Typography>
@@ -218,20 +183,19 @@ export default function Home() {
           <Grid container spacing={4}>
             {programs.map((p, i) => (
               <Grid item xs={12} sm={6} md={4} key={i}>
-                <Card elevation={0} sx={{
+                <Card elevation={2} sx={{
                   height: '100%',
-                  borderRadius: 4,
+                  borderRadius: 6,
                   position: 'relative',
                   display: 'flex',
                   flexDirection: 'column',
-                  border: '1px solid',
-                  borderColor: 'divider',
-                  background: (theme) => theme.palette.mode === 'light' ? 'linear-gradient(180deg,#ffffff,#fffdf9)' : 'linear-gradient(180deg,#1e2124,#1b1d20)',
-                  boxShadow: (theme) => theme.palette.mode === 'light' ? '0 2px 4px rgba(0,0,0,0.06)' : '0 2px 4px rgba(0,0,0,0.5)',
-                  transition: 'all .25s ease',
+                  border: 'none',
+                  background: (theme) => theme.palette.mode === 'light' ? 'linear-gradient(180deg, #ffffff, #fffaf0)' : 'linear-gradient(180deg, #1e2124, #1a1f20)',
+                  boxShadow: (theme) => theme.palette.mode === 'light' ? '0 4px 8px rgba(0,0,0,0.1)' : '0 4px 8px rgba(0,0,0,0.6)',
+                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                   '&:hover': {
-                    boxShadow: (theme) => theme.palette.mode === 'light' ? '0 8px 18px -4px rgba(0,0,0,0.15)' : '0 8px 18px -4px rgba(0,0,0,0.7)',
-                    transform: 'translateY(-4px)'
+                    boxShadow: (theme) => theme.palette.mode === 'light' ? '0 10px 20px rgba(0,0,0,0.15)' : '0 10px 20px rgba(0,0,0,0.7)',
+                    transform: 'translateY(-5px)'
                   }
                 }}>
                   <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', gap: 1.25, pb: 3 }}>
@@ -260,7 +224,7 @@ export default function Home() {
       </Box>
 
       {/* Schedule */}
-      <Box id="schedule" py={12} sx={{ position: 'relative', background: (theme) => theme.palette.mode === 'light' ? 'linear-gradient(135deg,#fff7ed,#fff)' : 'linear-gradient(135deg,#161a1d,#0f1113)' }}>
+      <Box id="schedule" py={12} sx={{ position: 'relative', background: (theme) => theme.palette.mode === 'light' ? 'linear-gradient(135deg, #fef3c7, #fff)' : 'linear-gradient(135deg, #181b1e, #111416)' }}>
         <Box sx={{ position: 'absolute', inset: 0, background: (theme) => theme.palette.mode === 'light' ? 'radial-gradient(circle at 85% 15%,rgba(245,158,11,0.08),transparent 55%)' : 'radial-gradient(circle at 85% 15%,rgba(245,158,11,0.15),transparent 60%)' }} />
         <Container maxWidth="md">
           <Stack spacing={2} textAlign="center" mb={6}>
@@ -288,7 +252,7 @@ export default function Home() {
       </Box>
 
       {/* Facilities */}
-      <Box id="facilities" py={12} sx={{ position: 'relative' }}>
+      <Box id="facilities" py={12} sx={{ position: 'relative', background: (theme) => theme.palette.mode === 'light' ? 'linear-gradient(135deg, #fff, #fef9e7)' : 'linear-gradient(135deg, #1a1f22, #121416)' }}>
         <Box sx={{ position: 'absolute', inset: 0, background: (theme) => theme.palette.mode === 'light' ? 'radial-gradient(circle at 15% 20%,rgba(245,158,11,0.08),transparent 55%)' : 'radial-gradient(circle at 15% 20%,rgba(245,158,11,0.15),transparent 60%)' }} />
         <Container maxWidth="lg">
           <Stack spacing={2} textAlign="center" mb={6}>
@@ -322,7 +286,7 @@ export default function Home() {
       </Box>
 
       {/* Contact */}
-      <Box id="contact" py={12} sx={{ position: 'relative', background: (theme) => theme.palette.mode === 'light' ? 'linear-gradient(135deg,#fff,#fff7ed)' : 'linear-gradient(135deg,#181b1e,#121416)' }}>
+      <Box id="contact" py={12} sx={{ position: 'relative', background: (theme) => theme.palette.mode === 'light' ? 'linear-gradient(135deg, #fff, #fffbf0)' : 'linear-gradient(135deg, #181b1e, #121416)' }}>
         <Box sx={{ position: 'absolute', inset: 0, background: (theme) => theme.palette.mode === 'light' ? 'radial-gradient(circle at 50% 0%,rgba(245,158,11,0.08),transparent 60%)' : 'radial-gradient(circle at 50% 0%,rgba(245,158,11,0.15),transparent 65%)' }} />
         <Container maxWidth="sm">
           <Card elevation={8} sx={{ borderRadius: 5, p: { xs: 3, md: 6 }, textAlign: 'center' }}>
