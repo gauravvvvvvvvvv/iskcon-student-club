@@ -24,152 +24,97 @@ export default function Home() {
           from { opacity: 0; transform: translateX(-50px); }
           to { opacity: 1; transform: translateX(0); }
         }
-        
-        @keyframes slideInRight {
-          from { opacity: 0; transform: translateX(50px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-        
-        @keyframes floating {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
-        }
-        
-        @keyframes gradientShift {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        
-        @keyframes scrollText {
-          0% { transform: translateX(100%); }
-          100% { transform: translateX(-100%); }
-        }
-        
-        .animate-fadeInUp {
-          animation: fadeInUp 0.8s ease-out forwards;
-          opacity: 0;
-        }
-        
-        .animate-slideInLeft {
-          animation: slideInLeft 0.8s ease-out forwards;
-          opacity: 0;
-        }
-        
-        .animate-slideInRight {
-          animation: slideInRight 0.8s ease-out forwards;
-          opacity: 0;
-        }
-        
-        .floating {
-          animation: floating 3s ease-in-out infinite;
-        }
-        
-        .card-hover {
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          cursor: pointer;
-        }
-        
-        .card-hover:hover {
-          transform: translateY(-8px);
-          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        
-        .button-primary {
-          background: linear-gradient(135deg, #ff6b35, #f7931e);
-          transition: all 0.3s ease;
-          border: none;
-        }
-        
-        .button-primary:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 15px 30px rgba(255, 107, 53, 0.4);
-        }
-        
-        .hero-gradient {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #ff6b35 100%);
-          background-size: 400% 400%;
-          animation: gradientShift 8s ease infinite;
-        }
-        
-        .material-icon {
-          width: 60px;
-          height: 60px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 24px;
-          font-weight: bold;
-          margin: 0 auto 1rem auto;
-          transition: all 0.3s ease;
-          color: white;
-        }
-        
-        .icon-prayer { background: linear-gradient(135deg, #ff9a9e, #fecfef); }
-        .icon-book { background: linear-gradient(135deg, #a8edea, #fed6e3); }
-        .icon-music { background: linear-gradient(135deg, #d299c2, #fef9d7); }
-        .icon-community { background: linear-gradient(135deg, #89f7fe, #66a6ff); }
-        .icon-event { background: linear-gradient(135deg, #fdbb2d, #22c1c3); }
-        .icon-food { background: linear-gradient(135deg, #ff9a9e, #fad0c4); }
-        
-        .material-btn {
-          position: relative;
-          overflow: hidden;
-        }
-        
-        .material-btn::before {
-          content: '';
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          width: 0;
-          height: 0;
-          background: rgba(255, 255, 255, 0.2);
-          border-radius: 50%;
-          transition: width 0.4s, height 0.4s, top 0.4s, left 0.4s;
-          transform: translate(-50%, -50%);
-        }
-        
-        .material-btn:hover::before {
-          width: 300px;
-          height: 300px;
-        }
-        
-        @media (max-width: 768px) {
-          .grid-responsive { grid-template-columns: 1fr !important; }
-          .text-responsive { font-size: 1.5rem !important; }
-          .nav-desktop { display: none !important; }
-        }
-        
-        /* Additional responsive styles */
-        @media (max-width: 768px) {
-          .announcement-banner {
-            font-size: 0.9rem !important;
-            padding: 8px 0 !important;
-          }
-          
-          .carousel-container {
-            height: clamp(300px, 40vh, 450px) !important;
-          }
-          
-          .carousel-content {
-            padding: 1rem !important;
-          }
-          
-          .carousel-nav {
-            bottom: 10px !important;
-            gap: 0.5rem !important;
-          }
-          
-          .carousel-nav button {
-            width: 35px !important;
-            height: 35px !important;
-            font-size: 1rem !important;
-          }
-          
-          .carousel-nav .indicators button {
-            width: 8px !important;
+            {/* Previous Button */}
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setCurrentSlide(prev => prev === 0 ? 6 : prev - 1);
+              }}
+              style={{
+                backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                border: '2px solid rgba(255, 255, 255, 0.6)',
+                color: 'white',
+                width: 'clamp(35px, 8vw, 45px)',
+                height: 'clamp(35px, 8vw, 45px)',
+                borderRadius: '50%',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 'clamp(0.9rem, 3vw, 1.2rem)',
+                transition: 'all 0.3s ease',
+                backdropFilter: 'blur(10px)',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.4)';
+              }}
+            >
+              ‹
+            </button>
+
+            {/* Indicators */}
+            <div style={{ display: 'flex', gap: 'clamp(0.2rem, 1vw, 0.4rem)' }} className="indicators">
+              {[0, 1, 2, 3, 4, 5, 6].map((index) => (
+                <button
+                  key={index}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setCurrentSlide(index);
+                  }}
+                  style={{
+                    width: 'clamp(8px, 2vw, 10px)',
+                    height: 'clamp(8px, 2vw, 10px)',
+                    borderRadius: '50%',
+                    border: '1px solid rgba(0, 0, 0, 0.3)',
+                    backgroundColor: currentSlide === index ? '#ea580c' : 'rgba(255, 255, 255, 0.8)',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.2)'
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* Next Button */}
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setCurrentSlide(prev => prev === 6 ? 0 : prev + 1);
+              }}
+              style={{
+                backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                border: '2px solid rgba(255, 255, 255, 0.6)',
+                color: 'white',
+                width: 'clamp(35px, 8vw, 45px)',
+                height: 'clamp(35px, 8vw, 45px)',
+                borderRadius: '50%',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 'clamp(0.9rem, 3vw, 1.2rem)',
+                transition: 'all 0.3s ease',
+                backdropFilter: 'blur(10px)',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.4)';
+              }}
+            >
+              ›
+            </button>
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                backgroundColor: 'white'
+              }}
+            />
             height: 8px !important;
           }
           
@@ -363,133 +308,98 @@ export default function Home() {
             width: '100%',
             height: '100%',
             zIndex: 1
-          }}>
-            {/* Slide 1: Krishna */}
-            <div
+            {/* Previous Button */}
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setCurrentSlide(prev => prev === 0 ? 6 : prev - 1);
+              }}
               style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                opacity: currentSlide === 0 ? 1 : 0,
-                transition: 'opacity 0.8s ease-in-out',
-                backgroundImage: "url('/krishna.jpg')",
-                backgroundSize: 'contain',
+                backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                border: '2px solid rgba(255, 255, 255, 0.6)',
+                color: 'white',
+                width: 'clamp(35px, 8vw, 45px)',
+                height: 'clamp(35px, 8vw, 45px)',
+                borderRadius: '50%',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 'clamp(0.9rem, 3vw, 1.2rem)',
+                transition: 'all 0.3s ease',
+                backdropFilter: 'blur(10px)',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.4)';
+              }}
+            >
+              ‹
+            </button>
+
+            {/* Indicators */}
+            <div style={{ display: 'flex', gap: 'clamp(0.2rem, 1vw, 0.4rem)' }} className="indicators">
+              {[0, 1, 2, 3, 4, 5, 6].map((index) => (
+                <button
+                  key={index}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setCurrentSlide(index);
+                  }}
+                  style={{
+                    width: 'clamp(8px, 2vw, 10px)',
+                    height: 'clamp(8px, 2vw, 10px)',
+                    borderRadius: '50%',
+                    border: '1px solid rgba(0, 0, 0, 0.3)',
+                    backgroundColor: currentSlide === index ? '#ea580c' : 'rgba(255, 255, 255, 0.8)',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.2)'
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* Next Button */}
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setCurrentSlide(prev => prev === 6 ? 0 : prev + 1);
+              }}
+              style={{
+                backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                border: '2px solid rgba(255, 255, 255, 0.6)',
+                color: 'white',
+                width: 'clamp(35px, 8vw, 45px)',
+                height: 'clamp(35px, 8vw, 45px)',
+                borderRadius: '50%',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 'clamp(0.9rem, 3vw, 1.2rem)',
+                transition: 'all 0.3s ease',
+                backdropFilter: 'blur(10px)',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.4)';
+              }}
+            >
+              ›
+            </button>
                 backgroundPosition: 'center',
                 backgroundRepeat: 'no-repeat',
                 backgroundColor: 'white'
               }}
             />
 
-            {/* Slide 2: Mahaprabhu */}
-            <div
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                opacity: currentSlide === 1 ? 1 : 0,
-                transition: 'opacity 0.8s ease-in-out',
-                backgroundImage: "url('/mahaprabhu.jpg')",
-                backgroundSize: 'contain',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                backgroundColor: 'white'
-              }}
-            />
-
-            {/* Slide 3: Radha Krishna */}
-            <div
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                opacity: currentSlide === 2 ? 1 : 0,
-                transition: 'opacity 0.8s ease-in-out',
-                backgroundImage: "url('/radhakrishna.jpg')",
-                backgroundSize: 'contain',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                backgroundColor: 'white'
-              }}
-            />
-
-            {/* Slide 4: Siyaram */}
-            <div
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                opacity: currentSlide === 3 ? 1 : 0,
-                transition: 'opacity 0.8s ease-in-out',
-                backgroundImage: "url('/siyaram.jpg')",
-                backgroundSize: 'contain',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                backgroundColor: 'white'
-              }}
-            />
-
-            {/* Slide 5: Charan */}
-            <div
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                opacity: currentSlide === 4 ? 1 : 0,
-                transition: 'opacity 0.8s ease-in-out',
-                backgroundImage: "url('/charan.jpeg')",
-                backgroundSize: 'contain',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                backgroundColor: 'white'
-              }}
-            />
-
-            {/* Slide 6: Hogwarts */}
-            <div
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                opacity: currentSlide === 5 ? 1 : 0,
-                transition: 'opacity 0.8s ease-in-out',
-                backgroundImage: "url('/hogwarts.jpg')",
-                backgroundSize: 'contain',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                backgroundColor: 'white'
-              }}
-            />
-
-            {/* Slide 7: Mahaprabhu 2 */}
-            <div
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                opacity: currentSlide === 6 ? 1 : 0,
-                transition: 'opacity 0.8s ease-in-out',
-                backgroundImage: "url('/mahaprabhu 2.jpg')",
-                backgroundSize: 'contain',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                backgroundColor: 'white'
-              }}
-            />
-            
             {/* Overlay */}
             <div style={{
               position: 'absolute',
@@ -649,7 +559,62 @@ export default function Home() {
             <button
               onClick={(e) => {
                 e.preventDefault();
-                setCurrentSlide(currentSlide === 0 ? 6 : currentSlide - 1);
+                setCurrentSlide(prev => prev === 0 ? 6 : prev - 1);
+              }}
+              style={{
+                backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                border: '2px solid rgba(255, 255, 255, 0.6)',
+                color: 'white',
+                width: 'clamp(35px, 8vw, 45px)',
+                height: 'clamp(35px, 8vw, 45px)',
+                borderRadius: '50%',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 'clamp(0.9rem, 3vw, 1.2rem)',
+                transition: 'all 0.3s ease',
+                backdropFilter: 'blur(10px)',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.4)';
+              }}
+            >
+              ‹
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setCurrentSlide(prev => prev === 6 ? 0 : prev + 1);
+              }}
+              style={{{
+                  key={index}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setCurrentSlide(index);
+                  }}
+                  style={{
+                    width: 'clamp(8px, 2vw, 10px)',
+                    height: 'clamp(8px, 2vw, 10px)',
+                    borderRadius: '50%',
+                    border: '1px solid rgba(0, 0, 0, 0.3)',
+                    backgroundColor: currentSlide === index ? '#ea580c' : 'rgba(255, 255, 255, 0.8)',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.2)'
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* Next Button */}
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setCurrentSlide(prev => prev === 0 ? 6 : prev - 1);
               }}
               style={{
                 backgroundColor: 'rgba(0, 0, 0, 0.4)',
@@ -704,7 +669,7 @@ export default function Home() {
             <button
               onClick={(e) => {
                 e.preventDefault();
-                setCurrentSlide(currentSlide === 6 ? 0 : currentSlide + 1);
+                setCurrentSlide(prev => prev === 6 ? 0 : prev + 1);
               }}
               style={{
                 backgroundColor: 'rgba(0, 0, 0, 0.4)',
@@ -731,61 +696,6 @@ export default function Home() {
             >
               ›
             </button>
-          </div>
-        </section>
-
-        {/* Programs Section */}
-        <section id="programs" style={{ 
-          padding: '4rem 2rem', 
-          backgroundColor: '#f9fafb'
-        }}>
-          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-            <h2 style={{ 
-              fontSize: '2.5rem', 
-              fontWeight: '800', 
-              textAlign: 'center', 
-              marginBottom: '0.5rem',
-              background: 'linear-gradient(135deg, #111827, #374151)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent'
-            }} className="animate-fadeInUp">
-              What We Offer
-            </h2>
-            <p style={{
-              fontSize: '1.1rem',
-              color: '#6b7280',
-              textAlign: 'center',
-              marginBottom: '3rem',
-              maxWidth: '600px',
-              margin: '0 auto 3rem auto'
-            }} className="animate-fadeInUp">
-              Comprehensive spiritual development through study, practice, and community
-            </p>
-            
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
-              gap: '2rem',
-              alignItems: 'start'
-            }} className="grid-responsive">
-              
-              {/* Spiritual Practices Column */}
-              <div style={{
-                backgroundColor: 'white',
-                padding: '2rem',
-                borderRadius: '16px',
-                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-                border: '1px solid #e5e7eb'
-              }} className="card-hover animate-fadeInUp">
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '700',
-                  color: '#ea580c',
-                  marginBottom: '1.5rem',
-                  textAlign: 'center',
-                  borderBottom: '2px solid #fed7aa',
-                  paddingBottom: '0.5rem',
-                  textTransform: 'uppercase',
                   letterSpacing: '1px'
                 }}>
                   Spiritual Practices
