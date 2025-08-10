@@ -170,7 +170,7 @@ export default function Home() {
             margin: 0,
             textAlign: 'center'
           }} className="animate-fadeInUp">
-            INTERNATIONAL SOCIETY FOR KRISHNA CONSCIOUSNESS
+            ISKCON STUDENT CENTER
           </h1>
           
           {/* Right Image - ISKCON Logo */}
@@ -211,14 +211,42 @@ export default function Home() {
         </div>
       </header>
 
+      {/* Announcement Section */}
+      <div style={{
+        backgroundColor: '#ea580c',
+        color: 'white',
+        padding: '0.75rem 0',
+        overflow: 'hidden',
+        position: 'relative',
+        whiteSpace: 'nowrap'
+      }}>
+        <div style={{
+          display: 'inline-block',
+          animation: 'scroll-announcement 20s linear infinite',
+          fontSize: '1rem',
+          fontWeight: '500'
+        }}>
+          Welcome to ISKCON Student Center • Join us for daily morning programs at 6:30 AM • Bhagavad Gita classes every Sunday at 5 PM • Free prasadam for all students • Register for upcoming spiritual retreats • Follow us on social media for updates •
+        </div>
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            @keyframes scroll-announcement {
+              0% { transform: translateX(100%); }
+              100% { transform: translateX(-100%); }
+            }
+          `
+        }} />
+      </div>
+
       {/* Add top margin for fixed header */}
       <div style={{ marginTop: '80px' }}>
-        {/* Hero Section */}
+        {/* Image Carousel Section */}
         <section style={{
-          padding: '6rem 2rem',
           position: 'relative',
-          overflow: 'hidden'
-        }} className="hero-gradient">
+          height: '500px',
+          overflow: 'hidden',
+          backgroundColor: '#f8fafc'
+        }}>
           <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
             {/* Image placeholders row */}
             <div style={{ 
