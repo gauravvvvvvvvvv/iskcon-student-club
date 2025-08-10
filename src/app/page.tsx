@@ -212,7 +212,7 @@ export default function Home() {
         backdropFilter: 'blur(16px)',
         borderBottom: '1px solid #e5e7eb',
         zIndex: 1000,
-        padding: '0.25rem 0'
+        padding: '0'
       }} className="animate-slideInLeft">
         <div style={{ 
           width: '100%',
@@ -220,7 +220,7 @@ export default function Home() {
           alignItems: 'center',
           padding: '0',
           flexWrap: 'nowrap',
-          minHeight: '50px',
+          height: '60px',
           justifyContent: 'flex-start'
         }}>
           {/* Left corner - Prabhupada image and text */}
