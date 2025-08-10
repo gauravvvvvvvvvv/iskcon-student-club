@@ -518,4 +518,5 @@ export function DynamicAnnouncements() {
       }} />
     </div>
   );
+  
 }
