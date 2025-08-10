@@ -795,7 +795,8 @@ export default function Home() {
                     { name: 'Learning Gitä & Vedic Wisdom', desc: 'Structured study of sacred texts' },
                     { name: 'Chanting / Mantra Meditation', desc: 'Daily meditation practice' },
                     { name: 'Sattvik Lifestyle', desc: 'Balanced spiritual living' },
-                    { name: 'Spreading Vedic Wisdom', desc: 'Sharing spiritual knowledge' }
+                    { name: 'Spreading Vedic Wisdom', desc: 'Sharing spiritual knowledge' },
+                    { name: 'Mental Physical Detox', desc: 'Holistic wellness programs' }
                   ].map((item, i) => (
                     <div key={i} style={{
                       display: 'flex',
@@ -851,7 +852,9 @@ export default function Home() {
                     { name: 'Leadership Development', desc: 'Character & leadership building' },
                     { name: 'Spiritual Friendship', desc: 'Meaningful spiritual connections' },
                     { name: 'Personal Mentorship', desc: 'One-on-one spiritual guidance' },
-                    { name: 'Spiritual Counseling', desc: 'Life-related problem solving' }
+                    { name: 'Spiritual Counseling for Life Related Problems', desc: 'Life guidance & support' },
+                    { name: 'Accommodation', desc: 'Student housing facilities' },
+                    { name: 'Prasadam', desc: 'Sacred vegetarian meals' }
                   ].map((item, i) => (
                     <div key={i} style={{
                       display: 'flex',
@@ -900,13 +903,15 @@ export default function Home() {
                   textTransform: 'uppercase',
                   letterSpacing: '1px'
                 }}>
-                  Events & Experiences
+                  Events & Activities
                 </h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   {[
-                    { name: 'Kirtans / Music / Cultural Events', desc: 'Devotional music & celebrations' },
-                    { name: 'Festivals', desc: 'Traditional spiritual festivals' },
-                    { name: 'Dham Yatra', desc: 'Sacred pilgrimage journeys' }
+                    { name: 'Kirtans / Music / Cultural Events/Festivals', desc: 'Devotional music & celebrations' },
+                    { name: 'Dham Yatra', desc: 'Sacred pilgrimage journeys' },
+                    { name: 'Debate', desc: 'Philosophical discussions' },
+                    { name: 'Drama', desc: 'Spiritual theater & performances' },
+                    { name: 'Competition', desc: 'Spiritual & cultural contests' }
                   ].map((item, i) => (
                     <div key={i} style={{
                       display: 'flex',
@@ -1133,8 +1138,7 @@ export default function Home() {
               {[
                 { name: 'Prayer Hall', desc: 'Peaceful meditation space' },
                 { name: 'Library', desc: 'Spiritual books & resources' },
-                { name: 'Kitchen', desc: 'Prasadam preparation' },
-                { name: 'Study Rooms', desc: 'Group discussions' }
+                { name: 'Kitchen', desc: 'Prasadam preparation' }
               ].map((facility, i) => (
                 <div 
                   key={i}
