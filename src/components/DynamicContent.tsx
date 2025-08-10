@@ -476,6 +476,7 @@ export function DynamicAnnouncements() {
       );
     });
   };
+  
 
   return (
     <div style={{
