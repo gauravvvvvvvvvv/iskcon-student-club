@@ -110,70 +110,71 @@ export default function Home() {
       <Toolbar />
 
       {/* Hero with Prabhupada (left), ISKCON logo (right) and full form centered */}
-      <Box id="home" sx={{ pt: { xs: 18, md: 22 }, pb: { xs: 10, md: 14 }, position: 'relative', overflow: 'hidden' }}>
+        <Box id="home" sx={{ pt: { xs: 18, md: 20 }, pb: { xs: 10, md: 14 }, position: 'relative', overflow: 'hidden' }}>
         <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(115deg,#ffffff,#fff9f1 55%,#fff3e0)', zIndex: -3 }} />
         {/* Subtle decorative orbs */}
         <Box sx={{ position: 'absolute', width: 380, height: 380, top: -120, left: -120, borderRadius: '50%', background: 'radial-gradient(circle,#ffd9b0,transparent 60%)', filter: 'blur(40px)', opacity: 0.55 }} />
         <Box sx={{ position: 'absolute', width: 420, height: 420, bottom: -160, right: -140, borderRadius: '50%', background: 'radial-gradient(circle,#ffe4c4,transparent 70%)', filter: 'blur(50px)', opacity: 0.55 }} />
-        <Container maxWidth="lg">
-          <Stack spacing={5} alignItems="center" textAlign="center">
-            {/* Row with images & full form */}
-            <Box sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: { xs: 2, md: 6 },
-              flexWrap: 'nowrap',
-              width: '100%',
-              px: 2,
-              mb: { xs: 4, md: 6 }
-            }}>
-              <Box sx={{ position: 'relative', width: { xs: 90, sm: 140, md: 180 }, height: { xs: 90, sm: 140, md: 180 }, borderRadius: '50%', overflow: 'hidden', flexShrink: 0, boxShadow: '0 6px 18px -6px rgba(0,0,0,0.25)' }}>
-                <Image src="/prabhupada.jpg" alt="Srila Prabhupada" fill style={{ objectFit: 'cover' }} />
-              </Box>
-              <Typography component="h1" sx={{
-                fontWeight: 800,
-                textAlign: 'center',
-                fontSize: { xs: '1.15rem', sm: '1.6rem', md: '2.1rem' },
-                letterSpacing: { xs: 1, sm: 2 },
-                lineHeight: 1.15,
-                background: 'linear-gradient(90deg,#ea580c,#f59e0b)',
-                WebkitBackgroundClip: 'text',
-                color: 'transparent',
-                maxWidth: { xs: 260, sm: 520, md: 680 }
-              }}>
-                INTERNATIONAL SOCIETY FOR KRISHNA CONSCIOUSNESS
-              </Typography>
-              <Box sx={{ position: 'relative', width: { xs: 90, sm: 140, md: 180 }, height: { xs: 90, sm: 180, md: 210 }, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Image src="/iskcon-logo.png" alt="ISKCON Logo" fill style={{ objectFit: 'contain', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.25))' }} />
-              </Box>
+          {/* Full-width banner row (outside container to span edge-to-edge) */}
+          <Box sx={{
+            width: '100%',
+            px: { xs: 2, sm: 4, md: 8 },
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: { xs: 2, md: 4 },
+            mb: { xs: 6, md: 8 },
+            flexWrap: 'nowrap'
+          }}>
+            <Box sx={{ position: 'relative', width: { xs: 80, sm: 130, md: 170 }, height: { xs: 80, sm: 130, md: 170 }, borderRadius: '50%', overflow: 'hidden', boxShadow: '0 6px 18px -6px rgba(0,0,0,0.25)', flexShrink: 0 }}>
+              <Image src="/prabhupada.jpg" alt="Srila Prabhupada" fill style={{ objectFit: 'cover' }} />
             </Box>
-            <Typography variant="h3" sx={{ fontSize: { xs: '1.9rem', md: '2.7rem' }, fontWeight: 800, lineHeight: 1.1, letterSpacing: -0.75, color: 'warning.main' }}>
-              ISKCON STUDENT CENTER
+            <Typography component="h1" sx={{
+              flexGrow: 1,
+              fontWeight: 800,
+              textAlign: 'center',
+              fontSize: { xs: '1rem', sm: '1.3rem', md: '2.1rem' },
+              letterSpacing: { xs: 1, sm: 3, md: 6 },
+              lineHeight: 1.15,
+              background: 'linear-gradient(90deg,#ea580c,#f59e0b)',
+              WebkitBackgroundClip: 'text',
+              color: 'transparent',
+              whiteSpace: 'normal'
+            }}>
+              INTERNATIONAL SOCIETY FOR KRISHNA CONSCIOUSNESS
             </Typography>
-            <Typography variant="h6" sx={{ fontWeight: 400, color: 'text.secondary', lineHeight: 1.6, maxWidth: 860, fontSize: { xs: '1.05rem', md: '1.15rem' } }}>
-              Meditation • Wisdom • Leadership • Friendship • Festivals • Mentorship • Lifestyle • Pilgrimage • Counseling • Service.
-            </Typography>
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-              <Button href="#programs" size="large" variant="contained" color="warning" sx={{ fontWeight: 700, px: 5, borderRadius: '999px', boxShadow: '0 0 0 0 rgba(245,158,11,0.5)', animation: 'pulseJoin 2.5s infinite' }}>Explore Programs</Button>
-              <Button href="#contact" size="large" variant="outlined" color="warning" sx={{ fontWeight: 700, px: 5, borderRadius: '999px' }}>Visit Center</Button>
+            <Box sx={{ position: 'relative', width: { xs: 80, sm: 130, md: 180 }, height: { xs: 80, sm: 150, md: 200 }, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Image src="/iskcon-logo.png" alt="ISKCON Logo" fill style={{ objectFit: 'contain', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.25))' }} />
+            </Box>
+          </Box>
+          <Container maxWidth="lg">
+            <Stack spacing={5} alignItems="center" textAlign="center">
+              <Typography variant="h3" sx={{ fontSize: { xs: '1.9rem', md: '2.7rem' }, fontWeight: 800, lineHeight: 1.1, letterSpacing: -0.75, color: 'warning.main' }}>
+                ISKCON STUDENT CENTER
+              </Typography>
+              <Typography variant="h6" sx={{ fontWeight: 400, color: 'text.secondary', lineHeight: 1.6, maxWidth: 860, fontSize: { xs: '1.05rem', md: '1.15rem' } }}>
+                Meditation • Wisdom • Leadership • Friendship • Festivals • Mentorship • Lifestyle • Pilgrimage • Counseling • Service.
+              </Typography>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                <Button href="#programs" size="large" variant="contained" color="warning" sx={{ fontWeight: 700, px: 5, borderRadius: '999px', boxShadow: '0 0 0 0 rgba(245,158,11,0.5)', animation: 'pulseJoin 2.5s infinite' }}>Explore Programs</Button>
+                <Button href="#contact" size="large" variant="outlined" color="warning" sx={{ fontWeight: 700, px: 5, borderRadius: '999px' }}>Visit Center</Button>
+              </Stack>
+              <Stack direction="row" spacing={6} pt={2} flexWrap="wrap" justifyContent="center">
+                <Stack alignItems="center" minWidth={120}>
+                  <Typography variant="h5" fontWeight={800}>250+</Typography>
+                  <Typography variant="caption" color="text.secondary" fontWeight={600}>Active Students</Typography>
+                </Stack>
+                <Stack alignItems="center" minWidth={120}>
+                  <Typography variant="h5" fontWeight={800}>365</Typography>
+                  <Typography variant="caption" color="text.secondary" fontWeight={600}>Days / Year</Typography>
+                </Stack>
+                <Stack alignItems="center" minWidth={120}>
+                  <Typography variant="h5" fontWeight={800}>100%</Typography>
+                  <Typography variant="caption" color="text.secondary" fontWeight={600}>Authentic Tradition</Typography>
+                </Stack>
+              </Stack>
             </Stack>
-            <Stack direction="row" spacing={6} pt={2} flexWrap="wrap" justifyContent="center">
-              <Stack alignItems="center" minWidth={120}>
-                <Typography variant="h5" fontWeight={800}>250+</Typography>
-                <Typography variant="caption" color="text.secondary" fontWeight={600}>Active Students</Typography>
-              </Stack>
-              <Stack alignItems="center" minWidth={120}>
-                <Typography variant="h5" fontWeight={800}>365</Typography>
-                <Typography variant="caption" color="text.secondary" fontWeight={600}>Days / Year</Typography>
-              </Stack>
-              <Stack alignItems="center" minWidth={120}>
-                <Typography variant="h5" fontWeight={800}>100%</Typography>
-                <Typography variant="caption" color="text.secondary" fontWeight={600}>Authentic Tradition</Typography>
-              </Stack>
-            </Stack>
-          </Stack>
-        </Container>
+          </Container>
         <style>{`
           @keyframes pulseJoin { 0% { box-shadow: 0 0 0 0 rgba(245,158,11,0.5);} 70% { box-shadow: 0 0 0 28px rgba(245,158,11,0); } 100% { box-shadow: 0 0 0 0 rgba(245,158,11,0);} }
         `}</style>
