@@ -223,7 +223,7 @@ export default function Home() {
           height: '60px',
           justifyContent: 'flex-start'
         }}>
-          {/* Left corner - Prabhupada image and text */}
+          {/* Left corner - Prabhupada and ISKCON images with text */}
           <div style={{ 
             display: 'flex',
             alignItems: 'center',
@@ -232,15 +232,23 @@ export default function Home() {
             paddingLeft: '0.5rem'
           }}>
             <div style={{ 
-              width: '120px',
-              height: '120px',
+              width: '50px',
+              height: '50px',
               backgroundImage: "url('/prabhupada.png')",
               backgroundSize: 'contain',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat'
             }} />
+            <div style={{ 
+              width: '50px',
+              height: '50px',
+              backgroundImage: "url('/iskcon.png')",
+              backgroundSize: 'contain',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
+            }} />
             <div style={{
-              fontSize: '0.7rem',
+              fontSize: '0.6rem',
               fontWeight: '600',
               color: 'black',
               lineHeight: '1',
@@ -252,22 +260,34 @@ export default function Home() {
             </div>
           </div>
           
-          <h1 style={{ 
-            fontSize: '1.25rem', 
-            fontWeight: '700',
-            letterSpacing: '0.5px', 
-            background: 'linear-gradient(135deg, #ea580c, #f97316)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            margin: 0,
-            textAlign: 'center',
-            whiteSpace: 'nowrap',
+          <div style={{ 
             flex: 1,
+            textAlign: 'center',
             paddingLeft: '2rem',
             paddingRight: '2rem'
-          }} className="animate-fadeInUp">
-            ISKCON STUDENT CENTER
-          </h1>
+          }}>
+            <h1 style={{ 
+              fontSize: '1.25rem', 
+              fontWeight: '700',
+              letterSpacing: '0.5px', 
+              background: 'linear-gradient(135deg, #ea580c, #f97316)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              margin: 0,
+              whiteSpace: 'nowrap'
+            }} className="animate-fadeInUp">
+              ISKCON STUDENT CENTER
+            </h1>
+            <div style={{
+              fontSize: '0.8rem',
+              fontWeight: '500',
+              color: '#6b7280',
+              marginTop: '0.2rem',
+              letterSpacing: '1px'
+            }}>
+              DELHI UNIVERSITY
+            </div>
+          </div>
           
           {/* Right Image - ISKCON Logo */}
           <div style={{ 
