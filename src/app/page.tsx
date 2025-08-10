@@ -1,29 +1,33 @@
 "use client";
 import { useState, useEffect } from 'react';
 
-export default function Home() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-
-  // Auto-advance carousel
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide(prev => (prev + 1) % 7);
-    }, 4000);
-    return () => clearInterval(timer);
-  }, []);
-  return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#ffffff', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
       <style dangerouslySetInnerHTML={{
         __html: `
         @keyframes fadeInUp {
           from { opacity: 0; transform: translateY(30px); }
           to { opacity: 1; transform: translateY(0); }
         }
-        
         @keyframes slideInLeft {
           from { opacity: 0; transform: translateX(-50px); }
           to { opacity: 1; transform: translateX(0); }
         }
+        @keyframes slideInRight {
+          from { opacity: 0; transform: translateX(50px); }
+          to { opacity: 1; transform: translateX(0); }
+          <div style={{
+            position: 'absolute',
+            bottom: '15px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 4,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: 'clamp(0.5rem, 2vw, 1rem)',
+            width: '100%',
+            maxWidth: '400px',
+            padding: '0 1rem'
+          }} className="carousel-nav">
             {/* Previous Button */}
             <button
               onClick={(e) => {
@@ -110,65 +114,7 @@ export default function Home() {
             >
               ›
             </button>
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                backgroundColor: 'white'
-              }}
-            />
-            height: 8px !important;
-          }
-          
-          .carousel-container img {
-            border-radius: 4px !important;
-          }
-        }
-        
-        @media (max-width: 480px) {
-          .announcement-banner {
-            font-size: 0.8rem !important;
-          }
-          
-          .carousel-container {
-            height: clamp(250px, 35vh, 350px) !important;
-          }
-          
-          .carousel-nav {
-            bottom: 5px !important;
-            gap: 0.3rem !important;
-            padding: 0 1rem !important;
-          }
-          
-          .carousel-nav button {
-            width: 30px !important;
-            height: 30px !important;
-            font-size: 0.9rem !important;
-          }
-          
-          .carousel-content h1 {
-            font-size: clamp(1.5rem, 5vw, 2.5rem) !important;
-          }
-          
-          .carousel-content p {
-            font-size: clamp(0.9rem, 2.5vw, 1.2rem) !important;
-          }
-        }
-        `
-      }} />
-      
-      {/* Header */}
-      <header style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: 'rgba(255, 255, 255, 0.95)',
-        backdropFilter: 'blur(16px)',
-        borderBottom: '1px solid #e5e7eb',
-        zIndex: 1000,
-        padding: '1rem 0'
-      }} className="animate-slideInLeft">
-        <div style={{ 
-          maxWidth: '1280px', 
+          </div>
           margin: '0 auto', 
           display: 'flex', 
           alignItems: 'center',
