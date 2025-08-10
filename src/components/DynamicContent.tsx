@@ -380,9 +380,7 @@ export function DynamicAnnouncements() {
 
   const loadAnnouncements = async () => {
     try {
-      const announcementsData = await fetchAnnouncements();
-      
-      // Default ISKCON announcement (always present)
+      // Default ISKCON announcement (always present) - show immediately
       const defaultAnnouncement = {
         id: 'iskcon-default',
         text: 'Welcome to ISKCON Student Center • Join us for daily morning programs at 6:30 AM • Bhagavad Gita classes every Sunday at 5 PM • Free prasadam for all students',
@@ -391,12 +389,16 @@ export function DynamicAnnouncements() {
         updatedAt: '2024-01-01'
       };
       
+      // Set default first for immediate display
+      setAnnouncements([defaultAnnouncement]);
+      setLoading(false);
+      
+      // Then load dynamic announcements in background
+      const announcementsData = await fetchAnnouncements();
+      
       if (announcementsData.length > 0) {
         // If there are uploaded announcements, put them first and default at the end
         setAnnouncements([...announcementsData, defaultAnnouncement]);
-      } else {
-        // If no uploaded announcements, show only default
-        setAnnouncements([defaultAnnouncement]);
       }
     } catch (error) {
       console.error('Error loading announcements:', error);
@@ -408,7 +410,6 @@ export function DynamicAnnouncements() {
         createdAt: '2024-01-01',
         updatedAt: '2024-01-01'
       }]);
-    } finally {
       setLoading(false);
     }
   };
@@ -428,7 +429,7 @@ export function DynamicAnnouncements() {
       }}>
         <div style={{
           display: 'inline-block',
-          animation: 'scroll-announcement 15s linear infinite',
+          animation: 'scroll-announcement 25s linear infinite',
           fontSize: '1rem',
           fontWeight: '500'
         }}>
@@ -490,7 +491,7 @@ export function DynamicAnnouncements() {
     }}>
       <div style={{
         display: 'inline-block',
-        animation: 'scroll-announcement 15s linear infinite',
+        animation: 'scroll-announcement 25s linear infinite',
         fontSize: '1rem',
         fontWeight: '500'
       }}>
