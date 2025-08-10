@@ -124,24 +124,23 @@ export default function Home() {
             gap: '0.5rem'
           }}>
             <div style={{ 
-              width: '80px',
-              height: '80px',
+              width: '100px',
+              height: '100px',
               backgroundImage: "url('/prabhupada.png')",
               backgroundSize: 'contain',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat'
             }} />
             <div style={{
-              fontSize: '0.7rem',
+              fontSize: '0.6rem',
               fontWeight: '600',
               color: '#ea580c',
               textAlign: 'center',
-              lineHeight: '1.2',
-              maxWidth: '100px'
+              lineHeight: '1.1',
+              maxWidth: '120px',
+              whiteSpace: 'nowrap'
             }}>
-              FOUNDER ACHARYA:<br />
-              HDG AC BHAKTIVEDANTA<br />
-              SWAMI SRILA PRABHUPADA
+              FOUNDER ACHARYA: HDG AC BHAKTIVEDANTA SWAMI SRILA PRABHUPADA
             </div>
           </div>
           
@@ -575,7 +574,7 @@ export default function Home() {
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent'
           }} className="animate-fadeInUp">
-            What We Offer
+            Holistic Offerings
           </h2>
           <p style={{
             fontSize: '1.1rem',
@@ -585,7 +584,7 @@ export default function Home() {
             maxWidth: '600px',
             margin: '0 auto 3rem auto'
           }} className="animate-fadeInUp">
-            Comprehensive spiritual development through study, practice, and community
+            Integrated spiritual ecosystem: learning, meditation, leadership, friendship, lifestyle transformation and joyful seva.
           </p>
           
           <div style={{
@@ -594,6 +593,7 @@ export default function Home() {
             gap: '2rem',
             marginTop: '3rem'
           }}>
+            {/* Learning Gita & Vedic Wisdom */}
             <div style={{
               backgroundColor: 'white',
               padding: '2rem',
@@ -601,32 +601,37 @@ export default function Home() {
               boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
               border: '1px solid #e5e7eb'
             }} className="card-hover animate-fadeInUp">
-              <h3 style={{
+              <div style={{
+                width: '42px',
+                height: '42px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#fef3c7',
+                color: '#ea580c',
                 fontSize: '1.5rem',
+                marginBottom: '1rem'
+              }}>
+                📖
+              </div>
+              <h3 style={{
+                fontSize: '1.25rem',
                 fontWeight: '700',
                 color: '#ea580c',
-                marginBottom: '1.5rem',
-                textAlign: 'center',
-                textTransform: 'uppercase',
-                letterSpacing: '1px'
+                marginBottom: '1rem'
               }}>
-                📖 Spiritual Study
+                Learning Gita & Vedic Wisdom
               </h3>
-              <ul style={{
-                listStyle: 'none',
-                padding: 0,
-                margin: 0,
+              <p style={{
                 color: '#4b5563',
-                lineHeight: '1.8'
+                lineHeight: '1.6'
               }}>
-                <li style={{ marginBottom: '0.75rem' }}>• Weekly Bhagavad Gita classes</li>
-                <li style={{ marginBottom: '0.75rem' }}>• Srimad Bhagavatam discussions</li>
-                <li style={{ marginBottom: '0.75rem' }}>• Philosophy workshops</li>
-                <li style={{ marginBottom: '0.75rem' }}>• Question & Answer sessions</li>
-                <li style={{ marginBottom: '0.75rem' }}>• Personal study guidance</li>
-              </ul>
+                Structured deep dive into Bhagavad Gita & Vedic philosophy.
+              </p>
             </div>
 
+            {/* Chanting / Mantra Meditation */}
             <div style={{
               backgroundColor: 'white',
               padding: '2rem',
@@ -634,32 +639,37 @@ export default function Home() {
               boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
               border: '1px solid #e5e7eb'
             }} className="card-hover animate-fadeInUp">
-              <h3 style={{
+              <div style={{
+                width: '42px',
+                height: '42px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#fef3c7',
+                color: '#ea580c',
                 fontSize: '1.5rem',
+                marginBottom: '1rem'
+              }}>
+                🧘
+              </div>
+              <h3 style={{
+                fontSize: '1.25rem',
                 fontWeight: '700',
                 color: '#ea580c',
-                marginBottom: '1.5rem',
-                textAlign: 'center',
-                textTransform: 'uppercase',
-                letterSpacing: '1px'
+                marginBottom: '1rem'
               }}>
-                🧘 Spiritual Practices
+                Chanting / Mantra Meditation
               </h3>
-              <ul style={{
-                listStyle: 'none',
-                padding: 0,
-                margin: 0,
+              <p style={{
                 color: '#4b5563',
-                lineHeight: '1.8'
+                lineHeight: '1.6'
               }}>
-                <li style={{ marginBottom: '0.75rem' }}>• Daily morning programs (6:30 AM)</li>
-                <li style={{ marginBottom: '0.75rem' }}>• Kirtan (devotional singing)</li>
-                <li style={{ marginBottom: '0.75rem' }}>• Japa meditation guidance</li>
-                <li style={{ marginBottom: '0.75rem' }}>• Deity worship participation</li>
-                <li style={{ marginBottom: '0.75rem' }}>• Yoga and wellness sessions</li>
-              </ul>
+                Daily japa & kirtan to sharpen focus and purify mind.
+              </p>
             </div>
 
+            {/* Leadership Development */}
             <div style={{
               backgroundColor: 'white',
               padding: '2rem',
@@ -667,30 +677,148 @@ export default function Home() {
               boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
               border: '1px solid #e5e7eb'
             }} className="card-hover animate-fadeInUp">
-              <h3 style={{
+              <div style={{
+                width: '42px',
+                height: '42px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#fef3c7',
+                color: '#ea580c',
                 fontSize: '1.5rem',
+                marginBottom: '1rem'
+              }}>
+                🎖️
+              </div>
+              <h3 style={{
+                fontSize: '1.25rem',
                 fontWeight: '700',
                 color: '#ea580c',
-                marginBottom: '1.5rem',
-                textAlign: 'center',
-                textTransform: 'uppercase',
-                letterSpacing: '1px'
+                marginBottom: '1rem'
               }}>
-                🤝 Community Life
+                Leadership Development
               </h3>
-              <ul style={{
-                listStyle: 'none',
-                padding: 0,
-                margin: 0,
+              <p style={{
                 color: '#4b5563',
-                lineHeight: '1.8'
+                lineHeight: '1.6'
               }}>
-                <li style={{ marginBottom: '0.75rem' }}>• Free prasadam (sanctified food)</li>
-                <li style={{ marginBottom: '0.75rem' }}>• Festival celebrations</li>
-                <li style={{ marginBottom: '0.75rem' }}>• Spiritual retreats</li>
-                <li style={{ marginBottom: '0.75rem' }}>• Service opportunities</li>
-                <li style={{ marginBottom: '0.75rem' }}>• Mentorship programs</li>
-              </ul>
+                Cultivating responsibility, clarity & servant-leadership.
+              </p>
+            </div>
+
+            {/* Spiritual Friendship */}
+            <div style={{
+              backgroundColor: 'white',
+              padding: '2rem',
+              borderRadius: '16px',
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+              border: '1px solid #e5e7eb'
+            }} className="card-hover animate-fadeInUp">
+              <div style={{
+                width: '42px',
+                height: '42px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#fef3c7',
+                color: '#ea580c',
+                fontSize: '1.5rem',
+                marginBottom: '1rem'
+              }}>
+                👥
+              </div>
+              <h3 style={{
+                fontSize: '1.25rem',
+                fontWeight: '700',
+                color: '#ea580c',
+                marginBottom: '1rem'
+              }}>
+                Spiritual Friendship
+              </h3>
+              <p style={{
+                color: '#4b5563',
+                lineHeight: '1.6'
+              }}>
+                Uplifting association & accountability circles.
+              </p>
+            </div>
+
+            {/* Kirtans / Festivals */}
+            <div style={{
+              backgroundColor: 'white',
+              padding: '2rem',
+              borderRadius: '16px',
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+              border: '1px solid #e5e7eb'
+            }} className="card-hover animate-fadeInUp">
+              <div style={{
+                width: '42px',
+                height: '42px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#fef3c7',
+                color: '#ea580c',
+                fontSize: '1.5rem',
+                marginBottom: '1rem'
+              }}>
+                🎵
+              </div>
+              <h3 style={{
+                fontSize: '1.25rem',
+                fontWeight: '700',
+                color: '#ea580c',
+                marginBottom: '1rem'
+              }}>
+                Kirtans / Festivals
+              </h3>
+              <p style={{
+                color: '#4b5563',
+                lineHeight: '1.6'
+              }}>
+                High-energy devotional music & cultural celebrations.
+              </p>
+            </div>
+
+            {/* Personal Mentorship */}
+            <div style={{
+              backgroundColor: 'white',
+              padding: '2rem',
+              borderRadius: '16px',
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+              border: '1px solid #e5e7eb'
+            }} className="card-hover animate-fadeInUp">
+              <div style={{
+                width: '42px',
+                height: '42px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#fef3c7',
+                color: '#ea580c',
+                fontSize: '1.5rem',
+                marginBottom: '1rem'
+              }}>
+                🤝
+              </div>
+              <h3 style={{
+                fontSize: '1.25rem',
+                fontWeight: '700',
+                color: '#ea580c',
+                marginBottom: '1rem'
+              }}>
+                Personal Mentorship
+              </h3>
+              <p style={{
+                color: '#4b5563',
+                lineHeight: '1.6'
+              }}>
+                One-on-one guidance for growth & sadhana alignment.
+              </p>
             </div>
           </div>
         </div>
@@ -807,107 +935,145 @@ export default function Home() {
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent'
           }} className="animate-fadeInUp">
-            Our Facilities
+            Your Spiritual Campus
           </h2>
+          <p style={{
+            fontSize: '1.1rem',
+            color: '#6b7280',
+            textAlign: 'center',
+            marginBottom: '3rem',
+            maxWidth: '600px',
+            margin: '0 auto 3rem auto'
+          }} className="animate-fadeInUp">
+            Spaces designed to nurture reflection, community, health and growth.
+          </p>
           
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
             gap: '2rem'
           }}>
+            {/* Accommodation */}
             <div style={{
               backgroundColor: 'white',
               padding: '2rem',
               borderRadius: '16px',
               boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-              textAlign: 'center'
+              textAlign: 'center',
+              border: '1px solid #e5e7eb'
             }} className="card-hover animate-fadeInUp">
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🏛️</div>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#ea580c', marginBottom: '1rem' }}>
-                Temple Hall
+              <div style={{
+                width: '42px',
+                height: '42px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#fef3c7',
+                color: '#ea580c',
+                fontSize: '1.5rem',
+                margin: '0 auto 1rem auto'
+              }}>
+                �
+              </div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#ea580c', marginBottom: '1rem' }}>
+                Accommodation
               </h3>
               <p style={{ color: '#6b7280', lineHeight: '1.6' }}>
-                Beautiful worship space for daily programs and festivals with deity altar
+                Comfortable, focused student living.
               </p>
             </div>
 
+            {/* Library */}
             <div style={{
               backgroundColor: 'white',
               padding: '2rem',
               borderRadius: '16px',
               boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-              textAlign: 'center'
+              textAlign: 'center',
+              border: '1px solid #e5e7eb'
             }} className="card-hover animate-fadeInUp">
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🍽️</div>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#ea580c', marginBottom: '1rem' }}>
-                Dining Hall
-              </h3>
-              <p style={{ color: '#6b7280', lineHeight: '1.6' }}>
-                Spacious area for prasadam distribution and community meals
-              </p>
-            </div>
-
-            <div style={{
-              backgroundColor: 'white',
-              padding: '2rem',
-              borderRadius: '16px',
-              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-              textAlign: 'center'
-            }} className="card-hover animate-fadeInUp">
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📚</div>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#ea580c', marginBottom: '1rem' }}>
+              <div style={{
+                width: '42px',
+                height: '42px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#fef3c7',
+                color: '#ea580c',
+                fontSize: '1.5rem',
+                margin: '0 auto 1rem auto'
+              }}>
+                🏛️
+              </div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#ea580c', marginBottom: '1rem' }}>
                 Library
               </h3>
               <p style={{ color: '#6b7280', lineHeight: '1.6' }}>
-                Extensive collection of spiritual books and study materials
+                Spiritual & academic study space.
               </p>
             </div>
 
+            {/* Dining Hall */}
             <div style={{
               backgroundColor: 'white',
               padding: '2rem',
               borderRadius: '16px',
               boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-              textAlign: 'center'
+              textAlign: 'center',
+              border: '1px solid #e5e7eb'
             }} className="card-hover animate-fadeInUp">
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🏠</div>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#ea580c', marginBottom: '1rem' }}>
-                Guest Rooms
+              <div style={{
+                width: '42px',
+                height: '42px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#fef3c7',
+                color: '#ea580c',
+                fontSize: '1.5rem',
+                margin: '0 auto 1rem auto'
+              }}>
+                🍴
+              </div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#ea580c', marginBottom: '1rem' }}>
+                Dining Hall
               </h3>
               <p style={{ color: '#6b7280', lineHeight: '1.6' }}>
-                Comfortable accommodation for visiting students and devotees
+                Nutritious daily prasadam meals.
               </p>
             </div>
 
+            {/* Meditation Hall */}
             <div style={{
               backgroundColor: 'white',
               padding: '2rem',
               borderRadius: '16px',
               boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-              textAlign: 'center'
+              textAlign: 'center',
+              border: '1px solid #e5e7eb'
             }} className="card-hover animate-fadeInUp">
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🎨</div>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#ea580c', marginBottom: '1rem' }}>
-                Activity Rooms
+              <div style={{
+                width: '42px',
+                height: '42px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#fef3c7',
+                color: '#ea580c',
+                fontSize: '1.5rem',
+                margin: '0 auto 1rem auto'
+              }}>
+                💆
+              </div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#ea580c', marginBottom: '1rem' }}>
+                Meditation Hall
               </h3>
               <p style={{ color: '#6b7280', lineHeight: '1.6' }}>
-                Multipurpose spaces for workshops, classes, and group activities
-              </p>
-            </div>
-
-            <div style={{
-              backgroundColor: 'white',
-              padding: '2rem',
-              borderRadius: '16px',
-              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-              textAlign: 'center'
-            }} className="card-hover animate-fadeInUp">
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🌿</div>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#ea580c', marginBottom: '1rem' }}>
-                Garden Area
-              </h3>
-              <p style={{ color: '#6b7280', lineHeight: '1.6' }}>
-                Peaceful outdoor space for meditation and relaxation
+                Quiet space for reflection & prayer.
               </p>
             </div>
           </div>
@@ -1038,7 +1204,7 @@ export default function Home() {
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent'
           }} className="animate-fadeInUp">
-            Ready to Begin Your Journey?
+            Get In Touch
           </h2>
           
           <div style={{
@@ -1048,98 +1214,103 @@ export default function Home() {
             marginTop: '3rem'
           }}>
             <div className="animate-fadeInUp">
-              <h3 style={{ 
-                fontSize: '1.25rem', 
-                fontWeight: '700', 
-                marginBottom: '1rem', 
-                color: '#ff6b35',
-                textAlign: 'center',
-                textTransform: 'uppercase',
-                letterSpacing: '1px'
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.5rem',
+                marginBottom: '1rem'
               }}>
-                Visit Us
-              </h3>
-              <p style={{ textAlign: 'center', lineHeight: '1.6', color: '#e5e7eb' }}>
-                26 Prem Niwas First Floor, Above Natural's Ice Cream,<br />
-                Malka Ganj, New Delhi, Delhi 110007
-              </p>
-            </div>
-            
-            <div className="animate-fadeInUp">
-              <h3 style={{ 
-                fontSize: '1.25rem', 
-                fontWeight: '700', 
-                marginBottom: '1rem', 
-                color: '#ff6b35',
-                textAlign: 'center',
-                textTransform: 'uppercase',
-                letterSpacing: '1px'
-              }}>
-                Connect
-              </h3>
-              <div style={{ textAlign: 'center' }}>
-                <a href="tel:+919876543210" style={{ 
+                <span style={{ fontSize: '1.5rem' }}>📱</span>
+                <a href="tel:+918318342494" style={{ 
                   color: '#ff6b35', 
-                  textDecoration: 'none', 
-                  display: 'block', 
-                  marginBottom: '0.5rem',
-                  fontWeight: '500',
-                  fontSize: '1rem'
+                  textDecoration: 'none',
+                  fontWeight: '600',
+                  fontSize: '1.1rem'
                 }}>
-                  Phone: +91 98765 43210
-                </a>
-                <a href="https://instagram.com/iskcondelhiuniversity" style={{ 
-                  color: '#ff6b35', 
-                  textDecoration: 'none', 
-                  display: 'block', 
-                  marginBottom: '0.5rem',
-                  fontWeight: '500',
-                  fontSize: '1rem'
-                }}>
-                  Instagram
-                </a>
-                <a href="https://youtube.com/@iskcondelhiuniversity" style={{ 
-                  color: '#ff6b35', 
-                  textDecoration: 'none', 
-                  display: 'block',
-                  fontWeight: '500',
-                  fontSize: '1rem'
-                }}>
-                  YouTube
+                  +91 83183 42494
                 </a>
               </div>
             </div>
             
             <div className="animate-fadeInUp">
-              <h3 style={{ 
-                fontSize: '1.25rem', 
-                fontWeight: '700', 
-                marginBottom: '1rem', 
-                color: '#ff6b35',
-                textAlign: 'center',
-                textTransform: 'uppercase',
-                letterSpacing: '1px'
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.5rem',
+                marginBottom: '1rem'
               }}>
-                Join Now
-              </h3>
-              <a 
-                href="https://forms.google.com/your-form-id"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  backgroundColor: '#ff6b35',
-                  color: 'white',
-                  padding: '1rem 2rem',
-                  borderRadius: '999px',
+                <span style={{ fontSize: '1.5rem' }}>📸</span>
+                <a href="https://instagram.com/iskcondelhiuniversity" target="_blank" rel="noopener noreferrer" style={{ 
+                  color: '#ff6b35', 
                   textDecoration: 'none',
-                  fontWeight: '700',
-                  display: 'inline-block'
-                }}
-                className="button-primary"
-              >
-                Start Your Journey
-              </a>
+                  fontWeight: '600',
+                  fontSize: '1.1rem'
+                }}>
+                  @iskcondelhiuniversity
+                </a>
+              </div>
             </div>
+            
+            <div className="animate-fadeInUp">
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.5rem',
+                marginBottom: '1rem'
+              }}>
+                <span style={{ fontSize: '1.5rem' }}>📺</span>
+                <a href="https://youtube.com/@ISKCONDelhiUniversity" target="_blank" rel="noopener noreferrer" style={{ 
+                  color: '#ff6b35', 
+                  textDecoration: 'none',
+                  fontWeight: '600',
+                  fontSize: '1.1rem'
+                }}>
+                  @ISKCONDelhiUniversity
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div style={{
+            marginTop: '3rem',
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'center',
+            gap: '0.5rem'
+          }}>
+            <span style={{ fontSize: '1.5rem' }}>📍</span>
+            <p style={{ 
+              textAlign: 'center', 
+              lineHeight: '1.6', 
+              color: '#e5e7eb',
+              maxWidth: '600px',
+              margin: 0
+            }}>
+              ADDRESS:- ISKCON STUDENT CENTER, 1ST FLOOR, OPPOSITE HANSRAJ COLLEGE, ABOVE NATURAL'S ICE CREAM, NEAR STARBUCKS, KAMLA NAGAR, DELHI 110007
+            </p>
+          </div>
+
+          <div style={{ marginTop: '3rem' }}>
+            <a 
+              href="https://instagram.com/iskcondelhiuniversity"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                backgroundColor: '#ff6b35',
+                color: 'white',
+                padding: '1rem 2rem',
+                borderRadius: '999px',
+                textDecoration: 'none',
+                fontWeight: '700',
+                display: 'inline-block'
+              }}
+              className="button-primary"
+            >
+              Join Our Community
+            </a>
           </div>
         </div>
       </section>
