@@ -31,11 +31,6 @@ export default function Home() {
           to { opacity: 1; transform: translateX(0); }
         }
         
-        @keyframes floating {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
-        }
-        
         @keyframes gradientShift {
           0% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
@@ -60,10 +55,6 @@ export default function Home() {
         .animate-slideInRight {
           animation: slideInRight 0.8s ease-out forwards;
           opacity: 0;
-        }
-        
-        .floating {
-          animation: floating 3s ease-in-out infinite;
         }
         
         .card-hover {
@@ -230,18 +221,37 @@ export default function Home() {
           alignItems: 'center',
           padding: '0 2rem',
           flexWrap: 'nowrap',
-          minHeight: '80px'
+          minHeight: '60px'
         }}>
           {/* Left Image - Prabhupada */}
           <div style={{ 
             marginRight: '1rem',
-            width: '40px',
-            height: '40px',
-            backgroundImage: "url('/prabhupada.png')",
-            backgroundSize: 'contain',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat'
-          }} className="floating" />
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            textAlign: 'center'
+          }}>
+            <div style={{ 
+              width: '60px',
+              height: '60px',
+              backgroundImage: "url('/prabhupada.png')",
+              backgroundSize: 'contain',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              marginBottom: '0.25rem'
+            }} />
+            <div style={{
+              fontSize: '0.6rem',
+              fontWeight: '600',
+              color: '#ea580c',
+              lineHeight: '1.1',
+              maxWidth: '80px',
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px'
+            }}>
+              FOUNDER ACHARYA: HDG AC BHAKTIVEDANTA SWAMI SRILA PRABHUPADA
+            </div>
+          </div>
           
           <h1 style={{ 
             fontSize: '1.25rem', 
