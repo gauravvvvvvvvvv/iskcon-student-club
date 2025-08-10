@@ -223,7 +223,7 @@ export default function Home() {
           height: '60px',
           justifyContent: 'flex-start'
         }}>
-          {/* Left corner - Prabhupada and ISKCON images with text */}
+          {/* Left corner - ISKCON and Prabhupada images with text */}
           <div style={{ 
             display: 'flex',
             alignItems: 'center',
@@ -232,17 +232,18 @@ export default function Home() {
             paddingLeft: '0.5rem'
           }}>
             <div style={{ 
-              width: '140px',
-              height: '140px',
-              backgroundImage: "url('/prabhupada.png')",
+              width: '130px',
+              height: '130px',
+              backgroundImage: "url('/image.png')",
               backgroundSize: 'contain',
               backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat'
+              backgroundRepeat: 'no-repeat',
+              borderRadius: '50%'
             }} />
             <div style={{ 
-              width: '140px',
-              height: '140px',
-              backgroundImage: "url('/image.png')",
+              width: '130px',
+              height: '130px',
+              backgroundImage: "url('/prabhupada.png')",
               backgroundSize: 'contain',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat'
