@@ -232,8 +232,8 @@ export default function Home() {
             paddingLeft: '0.5rem'
           }}>
             <div style={{ 
-              width: '130px',
-              height: '130px',
+              width: '80px',
+              height: '80px',
               backgroundImage: "url('/image.png')",
               backgroundSize: 'contain',
               backgroundPosition: 'center',
