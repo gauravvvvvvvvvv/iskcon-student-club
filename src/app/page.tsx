@@ -1,5 +1,6 @@
 "use client";
 import React from 'react';
+import Image from 'next/image';
 import {
   AppBar, Box, Toolbar, Typography, Container, Button, IconButton, Stack, Grid, Card, CardContent, Chip, Divider, List, ListItem, ListItemIcon, ListItemText, useScrollTrigger, Slide, Tooltip
 } from '@mui/material';
@@ -125,24 +126,21 @@ export default function Home() {
             mb: { xs: 6, md: 8 },
             flexWrap: 'nowrap'
           }}>
-            <Box sx={{ 
-              position: 'relative', 
-              width: { xs: 80, sm: 130, md: 170 }, 
-              height: { xs: 80, sm: 130, md: 170 }, 
-              borderRadius: '50%', 
-              overflow: 'hidden', 
-              boxShadow: '0 6px 18px -6px rgba(0,0,0,0.25)', 
+            {/* Srila Prabhupada image */}
+            <Box sx={{
+              position: 'relative',
+              width: { xs: 80, sm: 130, md: 170 },
+              height: { xs: 80, sm: 130, md: 170 },
+              borderRadius: '50%',
+              overflow: 'hidden',
+              boxShadow: '0 6px 18px -6px rgba(0,0,0,0.25)',
               flexShrink: 0
             }}>
-              <Box 
-                component="img"
+              <Image
                 src="/prabhupada.jpg"
                 alt="Srila Prabhupada"
-                sx={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover'
-                }}
+                fill
+                style={{ objectFit: 'cover' }}
               />
             </Box>
             <Typography component="h1" sx={{
@@ -159,23 +157,20 @@ export default function Home() {
             }}>
               INTERNATIONAL SOCIETY FOR KRISHNA CONSCIOUSNESS
             </Typography>
-            <Box sx={{ 
-              position: 'relative', 
-              width: { xs: 80, sm: 130, md: 180 }, 
-              height: { xs: 80, sm: 150, md: 200 }, 
-              flexShrink: 0, 
+            {/* ISKCON Logo image */}
+            <Box sx={{
+              position: 'relative',
+              width: { xs: 80, sm: 130, md: 180 },
+              height: { xs: 80, sm: 150, md: 200 },
+              flexShrink: 0,
               overflow: 'hidden',
               borderRadius: '50%'
             }}>
-              <Box 
-                component="img"
+              <Image
                 src="/iskcon-logo.png"
                 alt="ISKCON Logo"
-                sx={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'contain'
-                }}
+                fill
+                style={{ objectFit: 'contain' }}
               />
             </Box>
           </Box>

@@ -63,12 +63,6 @@ export function AppThemeProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  useEffect(() => {
-    if (typeof document !== 'undefined') {
-      document.documentElement.dataset.theme = mode;
-      document.documentElement.style.colorScheme = mode;
-    }
-  }, [mode]);
 
   const theme = useMemo(() => buildTheme(mode), [mode]);
 

@@ -87,23 +87,7 @@ body {
   html {
     font-family: system-ui, sans-serif;
   }
-  body {
-    background-color: #fef3c7;
-    transition: background-color .4s ease, color .4s ease;
-  }
-  html[data-theme='dark'] body {
-    background-color: #0f1113 !important;
-    color: #f5f5f5 !important;
-  }
-  html[data-theme='dark'] .MuiAppBar-root {
-    background-color: rgba(24,27,30,0.85) !important;
-  }
-  html[data-theme='dark'] .MuiPaper-root {
-    background-color: #1e2124 !important;
-  }
-  html[data-theme='dark'] .MuiButton-containedWarning {
-    color: #ffffff !important;
-  }
+  /* Let MUI CssBaseline handle background and text colors */
 }
 
 /* Custom components for fallback */
