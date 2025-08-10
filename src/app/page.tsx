@@ -442,8 +442,9 @@ export default function Home() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     color: 'white',
-                    fontSize: '14px'
-                  }}>🕉</span>
+                    fontSize: '12px',
+                    fontWeight: 'bold'
+                  }}>S</span>
                   Spiritual Practices
                 </h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -511,8 +512,9 @@ export default function Home() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     color: 'white',
-                    fontSize: '14px'
-                  }}>👥</span>
+                    fontSize: '12px',
+                    fontWeight: 'bold'
+                  }}>C</span>
                   Community & Learning
                 </h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -831,9 +833,26 @@ export default function Home() {
                   fontWeight: '700', 
                   marginBottom: '1rem', 
                   color: '#ff6b35',
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem'
                 }}>
-                  📍 Visit Us
+                  <span style={{
+                    width: '24px',
+                    height: '24px',
+                    border: '2px solid #ff6b35',
+                    borderRadius: '6px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '12px',
+                    fontWeight: 'bold',
+                    color: '#ff6b35',
+                    backgroundColor: 'rgba(255, 107, 53, 0.1)'
+                  }}>L</span>
+                  Visit Us
                 </h3>
                 <p style={{ textAlign: 'center', lineHeight: '1.6' }}>
                   26 Prem Niwas First Floor, Above Natural's Ice Cream,<br />
@@ -847,36 +866,98 @@ export default function Home() {
                   fontWeight: '700', 
                   marginBottom: '1rem', 
                   color: '#ff6b35',
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem'
                 }}>
-                  📱 Connect
+                  <span style={{
+                    width: '24px',
+                    height: '24px',
+                    border: '2px solid #ff6b35',
+                    borderRadius: '6px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '12px',
+                    fontWeight: 'bold',
+                    color: '#ff6b35',
+                    backgroundColor: 'rgba(255, 107, 53, 0.1)'
+                  }}>C</span>
+                  Connect
                 </h3>
                 <div style={{ textAlign: 'center' }}>
                   <a href="tel:+919876543210" style={{ 
                     color: '#ff6b35', 
                     textDecoration: 'none', 
-                    display: 'block', 
+                    display: 'flex', 
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.5rem',
                     marginBottom: '0.5rem',
                     fontWeight: '500'
                   }}>
-                    📞 +91 98765 43210
+                    <span style={{
+                      width: '16px',
+                      height: '16px',
+                      border: '1px solid #ff6b35',
+                      borderRadius: '4px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '10px',
+                      fontWeight: 'bold',
+                      color: '#ff6b35'
+                    }}>P</span>
+                    +91 98765 43210
                   </a>
                   <a href="https://instagram.com/iskcondelhiuniversity" style={{ 
                     color: '#ff6b35', 
                     textDecoration: 'none', 
-                    display: 'block', 
+                    display: 'flex', 
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.5rem',
                     marginBottom: '0.5rem',
                     fontWeight: '500'
                   }}>
-                    📷 Instagram
+                    <span style={{
+                      width: '16px',
+                      height: '16px',
+                      border: '1px solid #ff6b35',
+                      borderRadius: '4px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '8px',
+                      fontWeight: 'bold',
+                      color: '#ff6b35'
+                    }}>IG</span>
+                    Instagram
                   </a>
                   <a href="https://youtube.com/@iskcondelhiuniversity" style={{ 
                     color: '#ff6b35', 
                     textDecoration: 'none', 
-                    display: 'block',
+                    display: 'flex', 
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.5rem',
                     fontWeight: '500'
                   }}>
-                    📺 YouTube
+                    <span style={{
+                      width: '16px',
+                      height: '16px',
+                      border: '1px solid #ff6b35',
+                      borderRadius: '4px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '8px',
+                      fontWeight: 'bold',
+                      color: '#ff6b35'
+                    }}>YT</span>
+                    YouTube
                   </a>
                 </div>
               </div>
@@ -887,9 +968,26 @@ export default function Home() {
                   fontWeight: '700', 
                   marginBottom: '1rem', 
                   color: '#ff6b35',
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem'
                 }}>
-                  🚀 Join Now
+                  <span style={{
+                    width: '24px',
+                    height: '24px',
+                    border: '2px solid #ff6b35',
+                    borderRadius: '6px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '14px',
+                    fontWeight: 'bold',
+                    color: '#ff6b35',
+                    backgroundColor: 'rgba(255, 107, 53, 0.1)'
+                  }}>J</span>
+                  Join Now
                 </h3>
                 <a 
                   href="https://forms.google.com/your-form-id"
