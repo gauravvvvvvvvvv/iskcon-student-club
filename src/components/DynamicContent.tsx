@@ -35,7 +35,7 @@ export function DynamicCarousel() {
           { id: '4', url: '/siyaram.jpg', filename: 'siyaram.jpg', uploadedAt: '' },
           { id: '5', url: '/charan.jpeg', filename: 'charan.jpeg', uploadedAt: '' },
           { id: '6', url: '/hogwarts.jpg', filename: 'hogwarts.jpg', uploadedAt: '' },
-          { id: '7', url: '/mahaprabhu 2.jpg', filename: 'mahaprabhu 2.jpg', uploadedAt: '' }
+          { id: '7', url: '/mahaprabhu-2.jpg', filename: 'mahaprabhu-2.jpg', uploadedAt: '' }
         ]);
       }
     } catch (error) {
@@ -48,7 +48,7 @@ export function DynamicCarousel() {
         { id: '4', url: '/siyaram.jpg', filename: 'siyaram.jpg', uploadedAt: '' },
         { id: '5', url: '/charan.jpeg', filename: 'charan.jpeg', uploadedAt: '' },
         { id: '6', url: '/hogwarts.jpg', filename: 'hogwarts.jpg', uploadedAt: '' },
-        { id: '7', url: '/mahaprabhu 2.jpg', filename: 'mahaprabhu 2.jpg', uploadedAt: '' }
+        { id: '7', url: '/mahaprabhu-2.jpg', filename: 'mahaprabhu-2.jpg', uploadedAt: '' }
       ]);
     } finally {
       setLoading(false);
