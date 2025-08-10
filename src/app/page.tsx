@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import {
-  AppBar, Box, Toolbar, Typography, Container, Button, IconButton, Stack, Grid, Card, CardContent, Chip, Divider, List, ListItem, ListItemIcon, ListItemText, useScrollTrigger, Slide
+  AppBar, Box, Toolbar, Typography, Container, Button, IconButton, Stack, Grid, Card, CardContent, Chip, Divider, List, ListItem, ListItemIcon, ListItemText, useScrollTrigger, Slide, Tooltip
 } from '@mui/material';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
@@ -100,27 +100,30 @@ export default function Home() {
 
       {/* Hero with top-corner images */}
       <Box id="home" sx={{ pt: { xs: 18, md: 20 }, pb: { xs: 10, md: 14 }, position: 'relative', overflow: 'hidden' }}>
-        <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(125deg,#ffffff,#fff7ed 70%)', zIndex: -3 }} />
+        <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(115deg,#ffffff,#fff9f1 55%,#fff3e0)', zIndex: -3 }} />
+        {/* Subtle decorative orbs */}
+        <Box sx={{ position: 'absolute', width: 380, height: 380, top: -120, left: -120, borderRadius: '50%', background: 'radial-gradient(circle,#ffd9b0,transparent 60%)', filter: 'blur(40px)', opacity: 0.55 }} />
+        <Box sx={{ position: 'absolute', width: 420, height: 420, bottom: -160, right: -140, borderRadius: '50%', background: 'radial-gradient(circle,#ffe4c4,transparent 70%)', filter: 'blur(50px)', opacity: 0.55 }} />
         {/* Top corner image placeholders */}
-        <Box sx={{ position: 'absolute', top: 24, left: 24, width: { xs: 110, md: 190 }, height: { xs: 130, md: 230 }, borderRadius: '46px 46px 18px 18px', background: 'linear-gradient(160deg,#fff3e0,#ffe1bc)', boxShadow: '0 12px 34px -14px rgba(234,88,12,0.28)', overflow: 'hidden', display: { xs: 'none', sm: 'block' } }}>
+  <Box sx={{ position: 'absolute', top: 24, left: 24, width: { xs: 110, md: 190 }, height: { xs: 130, md: 230 }, borderRadius: '46px 46px 18px 18px', background: 'linear-gradient(160deg,#fff3e0 0%,#ffe1bc 60%)', boxShadow: '0 12px 34px -14px rgba(234,88,12,0.28)', overflow: 'hidden', display: { xs: 'none', sm: 'block' }, border: '1px solid rgba(234,88,12,0.25)' }}>
           <Box sx={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 30% 25%,rgba(245,158,11,0.35),transparent 60%)' }} />
           <Typography sx={{ position: 'absolute', bottom: 8, left: 0, right: 0, textAlign: 'center', fontSize: 10, letterSpacing: 2, fontWeight: 700, color: 'warning.main' }}>ADD IMAGE</Typography>
         </Box>
-        <Box sx={{ position: 'absolute', top: 24, right: 24, width: { xs: 110, md: 190 }, height: { xs: 130, md: 230 }, borderRadius: '46px 46px 18px 18px', background: 'linear-gradient(210deg,#fff3e0,#ffe1bc)', boxShadow: '0 12px 34px -14px rgba(234,88,12,0.28)', overflow: 'hidden', display: { xs: 'none', sm: 'block' } }}>
+  <Box sx={{ position: 'absolute', top: 24, right: 24, width: { xs: 110, md: 190 }, height: { xs: 130, md: 230 }, borderRadius: '46px 46px 18px 18px', background: 'linear-gradient(210deg,#fff3e0 0%,#ffe1bc 65%)', boxShadow: '0 12px 34px -14px rgba(234,88,12,0.28)', overflow: 'hidden', display: { xs: 'none', sm: 'block' }, border: '1px solid rgba(234,88,12,0.25)' }}>
           <Box sx={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 70% 25%,rgba(245,158,11,0.35),transparent 60%)' }} />
           <Typography sx={{ position: 'absolute', bottom: 8, left: 0, right: 0, textAlign: 'center', fontSize: 10, letterSpacing: 2, fontWeight: 700, color: 'warning.main' }}>ADD IMAGE</Typography>
         </Box>
         <Container maxWidth="lg">
           <Stack spacing={5} alignItems="center" textAlign="center">
             <Stack spacing={2}>
-              <Typography variant="h3" sx={{ fontSize: { xs: '1.7rem', md: '2.5rem' }, fontWeight: 800, lineHeight: 1.12, letterSpacing: -0.5 }}>
+              <Typography variant="h3" sx={{ fontSize: { xs: '1.9rem', md: '2.7rem' }, fontWeight: 800, lineHeight: 1.1, letterSpacing: -0.75, background: 'linear-gradient(90deg,#ea580c,#f59e0b)', WebkitBackgroundClip: 'text', color: 'transparent' }}>
                 INTERNATIONAL SOCIETY FOR KRISHNA CONSCIOUSNESS
               </Typography>
-              <Typography variant="h4" sx={{ fontWeight: 800, color: 'warning.main', letterSpacing: 2 }}>
+              <Typography variant="h4" sx={{ fontWeight: 800, color: 'warning.main', letterSpacing: 4 }}>
                 ISKCON STUDENT CENTER
               </Typography>
             </Stack>
-            <Typography variant="h6" sx={{ fontWeight: 400, color: 'text.secondary', lineHeight: 1.6, maxWidth: 860 }}>
+            <Typography variant="h6" sx={{ fontWeight: 400, color: 'text.secondary', lineHeight: 1.6, maxWidth: 860, fontSize: { xs: '1.05rem', md: '1.15rem' } }}>
               Meditation • Wisdom • Leadership • Friendship • Festivals • Mentorship • Lifestyle • Pilgrimage • Counseling • Service.
             </Typography>
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
@@ -159,12 +162,12 @@ export default function Home() {
           <Grid container spacing={4}>
             {programs.map((p, i) => (
               <Grid item xs={12} sm={6} md={4} key={i}>
-                <Card elevation={4} sx={{ height: '100%', borderRadius: 4, position: 'relative', overflow: 'hidden', transition: '0.4s', '&:hover': { transform: 'translateY(-6px)', boxShadow: 8 } }}>
-                  <CardContent>
-                    <Stack spacing={1.5} alignItems="flex-start">
-                      <IconButton size="large" color="warning" sx={{ bgcolor: 'warning.light', '&:hover': { bgcolor: 'warning.light' } }}>{p.icon}</IconButton>
-                      <Typography variant="h6" fontWeight={700}>{p.title}</Typography>
-                      <Typography variant="body2" color="text.secondary">{p.description}</Typography>
+                <Card elevation={5} sx={{ height: '100%', borderRadius: 5, position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', background: 'linear-gradient(145deg,#ffffff,#fff5eb)', transition: '0.45s', '&:before': { content: '""', position: 'absolute', inset: 0, background: 'radial-gradient(circle at 20% 15%,rgba(245,158,11,0.15),transparent 60%)' }, '&:hover': { transform: 'translateY(-8px)', boxShadow: '0 18px 40px -10px rgba(234,88,12,0.28)' } }}>
+                  <CardContent sx={{ position: 'relative', flexGrow: 1 }}>
+                    <Stack spacing={1.8} alignItems="flex-start">
+                      <IconButton size="large" color="warning" sx={{ bgcolor: 'warning.light', boxShadow: '0 4px 12px -2px rgba(234,88,12,0.35)', '&:hover': { bgcolor: 'warning.light', transform: 'scale(1.08)' }, transition: '0.35s' }}>{p.icon}</IconButton>
+                      <Tooltip title={p.title} placement="top-start"><Typography variant="h6" fontWeight={700} sx={{ pr: 1 }}>{p.title}</Typography></Tooltip>
+                      <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.5 }}>{p.description}</Typography>
                     </Stack>
                   </CardContent>
                 </Card>
@@ -175,7 +178,8 @@ export default function Home() {
       </Box>
 
       {/* Schedule */}
-      <Box id="schedule" py={12} sx={{ background: 'linear-gradient(135deg,#fff7ed,#fff)' }}>
+      <Box id="schedule" py={12} sx={{ background: 'linear-gradient(135deg,#fff7ed,#fff)', position: 'relative' }}>
+        <Box sx={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 85% 15%,rgba(245,158,11,0.08),transparent 55%)' }} />
         <Container maxWidth="md">
           <Stack spacing={2} textAlign="center" mb={6}>
             <Typography variant="overline" fontWeight={700} color="warning.main">DAILY FLOW</Typography>
@@ -202,7 +206,8 @@ export default function Home() {
       </Box>
 
       {/* Facilities */}
-      <Box id="facilities" py={12}>
+      <Box id="facilities" py={12} sx={{ position: 'relative' }}>
+        <Box sx={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 15% 20%,rgba(245,158,11,0.08),transparent 55%)' }} />
         <Container maxWidth="lg">
           <Stack spacing={2} textAlign="center" mb={6}>
             <Typography variant="overline" fontWeight={700} color="warning.main">FACILITIES</Typography>
@@ -212,12 +217,12 @@ export default function Home() {
           <Grid container spacing={4}>
             {facilities.map((f, i) => (
               <Grid key={i} item xs={12} sm={6} md={3}>
-                <Card elevation={5} sx={{ height: '100%', borderRadius: 4, p: 1.5, display: 'flex', flexDirection: 'column', transition: '0.4s', '&:hover': { boxShadow: 10 } }}>
-                  <CardContent sx={{ flexGrow: 1 }}>
-                    <Stack spacing={1.5}>
-                      <IconButton color="warning" sx={{ alignSelf: 'flex-start', bgcolor: 'warning.light', '&:hover': { bgcolor: 'warning.light' } }}>{f.icon}</IconButton>
+                <Card elevation={6} sx={{ height: '100%', borderRadius: 5, p: 0.5, display: 'flex', flexDirection: 'column', transition: '0.45s', background: 'linear-gradient(140deg,#ffffff,#fff5eb)', '&:hover': { boxShadow: '0 16px 38px -12px rgba(234,88,12,0.25)', transform: 'translateY(-6px)' } }}>
+                  <CardContent sx={{ flexGrow: 1, position: 'relative' }}>
+                    <Stack spacing={1.6}>
+                      <IconButton color="warning" sx={{ alignSelf: 'flex-start', bgcolor: 'warning.light', boxShadow: '0 4px 10px -2px rgba(234,88,12,0.3)', '&:hover': { bgcolor: 'warning.light', transform: 'scale(1.08)' }, transition: '0.35s' }}>{f.icon}</IconButton>
                       <Typography variant="subtitle1" fontWeight={700}>{f.title}</Typography>
-                      <Typography variant="body2" color="text.secondary">{f.description}</Typography>
+                      <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.5 }}>{f.description}</Typography>
                     </Stack>
                   </CardContent>
                 </Card>
@@ -228,7 +233,8 @@ export default function Home() {
       </Box>
 
       {/* Contact */}
-      <Box id="contact" py={12} sx={{ background: 'linear-gradient(135deg,#fff,#fff7ed)' }}>
+      <Box id="contact" py={12} sx={{ background: 'linear-gradient(135deg,#fff,#fff7ed)', position: 'relative' }}>
+        <Box sx={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 50% 0%,rgba(245,158,11,0.08),transparent 60%)' }} />
         <Container maxWidth="sm">
           <Card elevation={8} sx={{ borderRadius: 5, p: { xs: 3, md: 6 }, textAlign: 'center' }}>
             <Stack spacing={3}>
@@ -305,21 +311,21 @@ export default function Home() {
         </Container>
       </Box>
       {/* Footer */}
-      <Box component="footer" sx={{ position: 'relative', overflow: 'hidden', pt: 10, pb: 4, background: 'linear-gradient(135deg,#fff7ed,#ffffff 60%)' }}>
-        <Box sx={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 80% 20%,rgba(245,158,11,0.08),transparent 50%)' }} />
+      <Box component="footer" sx={{ position: 'relative', overflow: 'hidden', pt: 10, pb: 4, background: 'linear-gradient(135deg,#fff9f2,#ffffff 60%)' }}>
+        <Box sx={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 80% 20%,rgba(245,158,11,0.08),transparent 50%), radial-gradient(circle at 15% 85%,rgba(245,158,11,0.06),transparent 55%)' }} />
         <Container maxWidth="lg" sx={{ position: 'relative' }}>
           <Grid container spacing={6}>
             <Grid item xs={12} md={5}>
               <Stack spacing={3}>
-                <Typography variant="h5" fontWeight={800} sx={{ letterSpacing: -0.5, background: 'linear-gradient(90deg,#ea580c,#f59e0b)', WebkitBackgroundClip: 'text', color: 'transparent' }}>ISKCON STUDENT CENTER</Typography>
+                <Typography variant="h5" fontWeight={800} sx={{ letterSpacing: -0.5, background: 'linear-gradient(90deg,#ea580c,#f59e0b,#ea580c)', backgroundSize: '180% 100%', animation: 'gradient-shift 6s ease infinite', WebkitBackgroundClip: 'text', color: 'transparent' }}>ISKCON STUDENT CENTER</Typography>
                 <Typography variant="body1" color="text.secondary" maxWidth={420}>
                   A nurturing hub for students to explore devotion, character, wisdom and joyful service through authentic Bhakti Yoga practices.
                 </Typography>
                 <Stack direction="row" spacing={2}>
-                  <IconButton size="small" color="warning" href="https://instagram.com/iskcondelhiuniversity" target="_blank" rel="noopener" sx={{ bgcolor: 'warning.light', '&:hover': { bgcolor: 'warning.light', transform: 'translateY(-2px)' }, transition: '0.3s' }}>
+                  <IconButton size="small" color="warning" href="https://instagram.com/iskcondelhiuniversity" target="_blank" rel="noopener" sx={{ bgcolor: 'warning.light', '&:hover': { bgcolor: 'warning.light', transform: 'translateY(-3px) scale(1.05)' }, transition: '0.35s', boxShadow: '0 4px 12px -2px rgba(234,88,12,0.35)' }}>
                     <InstagramIcon />
                   </IconButton>
-                  <IconButton size="small" color="warning" href="https://youtube.com/@ISKCONDelhiUniversity" target="_blank" rel="noopener" sx={{ bgcolor: 'warning.light', '&:hover': { bgcolor: 'warning.light', transform: 'translateY(-2px)' }, transition: '0.3s' }}>
+                  <IconButton size="small" color="warning" href="https://youtube.com/@ISKCONDelhiUniversity" target="_blank" rel="noopener" sx={{ bgcolor: 'warning.light', '&:hover': { bgcolor: 'warning.light', transform: 'translateY(-3px) scale(1.05)' }, transition: '0.35s', boxShadow: '0 4px 12px -2px rgba(234,88,12,0.35)' }}>
                     <YouTubeIcon />
                   </IconButton>
                 </Stack>
@@ -330,7 +336,7 @@ export default function Home() {
                 <Typography variant="subtitle2" fontWeight={700} color="warning.main">Explore</Typography>
                 <Stack spacing={1}>
                   {['Programs','Schedule','Facilities','Contact'].map(link => (
-                    <Button key={link} href={`#${link.toLowerCase()}`} variant="text" color="inherit" sx={{ justifyContent: 'flex-start', textTransform: 'none', fontWeight: 500, px: 0, '&:hover': { color: 'warning.main' } }}>{link}</Button>
+                    <Button key={link} href={`#${link.toLowerCase()}`} variant="text" color="inherit" sx={{ justifyContent: 'flex-start', textTransform: 'none', fontWeight: 500, px: 0, position: 'relative', '&:after': { content: '""', position: 'absolute', left: 0, bottom: 2, height: 2, width: 0, bgcolor: 'warning.main', transition: '0.4s' }, '&:hover': { color: 'warning.main' }, '&:hover:after': { width: '60%' } }}>{link}</Button>
                   ))}
                 </Stack>
               </Stack>
@@ -345,11 +351,11 @@ export default function Home() {
                   </Stack>
                   <Stack direction="row" spacing={1.2} alignItems="center">
                     <InstagramIcon fontSize="small" color="warning" />
-                    <Button href="https://instagram.com/iskcondelhiuniversity" target="_blank" rel="noopener" variant="text" color="inherit" sx={{ fontWeight: 600, textTransform: 'none', px: 0, minWidth: 0, '&:hover': { color: 'warning.main', background: 'transparent' } }}>@iskcondelhiuniversity</Button>
+                    <Button href="https://instagram.com/iskcondelhiuniversity" target="_blank" rel="noopener" variant="text" color="inherit" sx={{ fontWeight: 600, textTransform: 'none', px: 0, minWidth: 0, position: 'relative', '&:after': { content: '""', position: 'absolute', left: 0, bottom: 0, height: 2, width: 0, bgcolor: 'warning.main', transition: '0.4s' }, '&:hover': { color: 'warning.main', background: 'transparent' }, '&:hover:after': { width: '100%' } }}>@iskcondelhiuniversity</Button>
                   </Stack>
                   <Stack direction="row" spacing={1.2} alignItems="center">
                     <YouTubeIcon fontSize="small" color="warning" />
-                    <Button href="https://youtube.com/@ISKCONDelhiUniversity" target="_blank" rel="noopener" variant="text" color="inherit" sx={{ fontWeight: 600, textTransform: 'none', px: 0, minWidth: 0, '&:hover': { color: 'warning.main', background: 'transparent' } }}>@ISKCONDelhiUniversity</Button>
+                    <Button href="https://youtube.com/@ISKCONDelhiUniversity" target="_blank" rel="noopener" variant="text" color="inherit" sx={{ fontWeight: 600, textTransform: 'none', px: 0, minWidth: 0, position: 'relative', '&:after': { content: '""', position: 'absolute', left: 0, bottom: 0, height: 2, width: 0, bgcolor: 'warning.main', transition: '0.4s' }, '&:hover': { color: 'warning.main', background: 'transparent' }, '&:hover:after': { width: '100%' } }}>@ISKCONDelhiUniversity</Button>
                   </Stack>
                   <Stack direction="row" spacing={1.2} alignItems="flex-start">
                     <PlaceIcon fontSize="small" color="warning" />
