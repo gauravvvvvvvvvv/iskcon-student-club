@@ -277,35 +277,107 @@ export default function Home() {
           </Card>
         </Container>
       </Box>
-      {/* Footer */}
-      <Box component="footer" sx={{ bgcolor: 'background.paper', borderTop: 1, borderColor: 'divider', py: 6 }}>
+      {/* Location / Map */}
+      <Box id="location" sx={{ py: 10, background: 'radial-gradient(circle at top,#fff7ed 0%,#ffffff 70%)' }}>
         <Container maxWidth="lg">
-          <Grid container spacing={4}>
-            <Grid item xs={12} md={4}>
+          <Grid container spacing={6} alignItems="stretch">
+            <Grid item xs={12} md={5}>
+              <Stack spacing={3} sx={{ height: '100%', justifyContent: 'center' }}>
+                <Chip label="VISIT US" color="warning" variant="outlined" sx={{ fontWeight: 600, alignSelf: 'flex-start' }} />
+                <Typography variant="h3" fontWeight={800} sx={{ letterSpacing: -1 }}>Find Us</Typography>
+                <Typography variant="body1" color="text.secondary" lineHeight={1.6}>
+                  We are located in the heart of North Delhi, easily reachable from Delhi University colleges. Drop in for a class, kirtan, meditation or just a peaceful study break with prasadam.
+                </Typography>
+                <Stack spacing={2}>
+                  <Stack direction="row" spacing={1.5} alignItems="flex-start">
+                    <PlaceIcon color="warning" />
+                    <Typography fontWeight={600}>26 Prem Niwas First Floor, Malka Ganj, New Delhi, Delhi 110007</Typography>
+                  </Stack>
+                  <Stack direction="row" spacing={1.5} alignItems="center">
+                    <PhoneIcon color="warning" />
+                    <Typography fontWeight={600}>+91 83183 42494</Typography>
+                  </Stack>
+                  <Stack direction="row" spacing={1.5} alignItems="center">
+                    <InstagramIcon color="warning" />
+                    <Button href="https://instagram.com/iskcondelhiuniversity" target="_blank" rel="noopener" color="warning" sx={{ fontWeight: 600, textTransform: 'none' }}>@iskcondelhiuniversity</Button>
+                  </Stack>
+                </Stack>
+              </Stack>
+            </Grid>
+            <Grid item xs={12} md={7}>
+              <Card elevation={10} sx={{ height: '100%', borderRadius: 4, overflow: 'hidden', position: 'relative' }}>
+                <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg,rgba(255,247,237,0.25),rgba(255,255,255,0.25))', pointerEvents: 'none' }} />
+                <Box sx={{ position: 'relative', width: '100%', pt: '65%' }}>
+                  <iframe
+                    title="ISKCON Student Center Location"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3199.5466743621614!2d77.20813749999999!3d28.678913099999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfdf53b2058b5%3A0x90ba420109930cec!2sISKCON%20student%20centre%20(%20DU%20BACE)!5e1!3m2!1sen!2sin!4v1754795768086!5m2!1sen!2sin"
+                    style={{ border: 0, position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                    loading="lazy"
+                    allowFullScreen
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+                </Box>
+              </Card>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
+      {/* Footer */}
+      <Box component="footer" sx={{ position: 'relative', overflow: 'hidden', pt: 10, pb: 4, background: 'linear-gradient(135deg,#fff7ed,#ffffff 60%)' }}>
+        <Box sx={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 80% 20%,rgba(245,158,11,0.08),transparent 50%)' }} />
+        <Container maxWidth="lg" sx={{ position: 'relative' }}>
+          <Grid container spacing={6}>
+            <Grid item xs={12} md={5}>
+              <Stack spacing={3}>
+                <Typography variant="h5" fontWeight={800} sx={{ letterSpacing: -0.5, background: 'linear-gradient(90deg,#ea580c,#f59e0b)', WebkitBackgroundClip: 'text', color: 'transparent' }}>ISKCON STUDENT CENTER</Typography>
+                <Typography variant="body1" color="text.secondary" maxWidth={420}>
+                  A nurturing hub for students to explore devotion, character, wisdom and joyful service through authentic Bhakti Yoga practices.
+                </Typography>
+                <Stack direction="row" spacing={2}>
+                  <IconButton size="small" color="warning" href="https://instagram.com/iskcondelhiuniversity" target="_blank" rel="noopener" sx={{ bgcolor: 'warning.light', '&:hover': { bgcolor: 'warning.light', transform: 'translateY(-2px)' }, transition: '0.3s' }}>
+                    <InstagramIcon />
+                  </IconButton>
+                  <IconButton size="small" color="warning" href="https://youtube.com/@ISKCONDelhiUniversity" target="_blank" rel="noopener" sx={{ bgcolor: 'warning.light', '&:hover': { bgcolor: 'warning.light', transform: 'translateY(-2px)' }, transition: '0.3s' }}>
+                    <YouTubeIcon />
+                  </IconButton>
+                </Stack>
+              </Stack>
+            </Grid>
+            <Grid item xs={6} md={3}>
               <Stack spacing={2}>
-                <Typography variant="h6" fontWeight={800} color="warning.main">ISKCON STUDENT CENTER</Typography>
-                <Typography variant="body2" color="text.secondary">A nurturing hub for students to explore devotion, character, wisdom and joyful service.</Typography>
-              </Stack>
-            </Grid>
-            <Grid item xs={6} md={4}>
-              <Stack spacing={1}>
                 <Typography variant="subtitle2" fontWeight={700} color="warning.main">Explore</Typography>
-                {['Programs','Schedule','Facilities','Contact'].map(link => (
-                  <Button key={link} href={`#${link.toLowerCase()}`} variant="text" color="inherit" sx={{ justifyContent: 'flex-start', textTransform: 'none', fontWeight: 500 }}>{link}</Button>
-                ))}
+                <Stack spacing={1}>
+                  {['Programs','Schedule','Facilities','Contact'].map(link => (
+                    <Button key={link} href={`#${link.toLowerCase()}`} variant="text" color="inherit" sx={{ justifyContent: 'flex-start', textTransform: 'none', fontWeight: 500, px: 0, '&:hover': { color: 'warning.main' } }}>{link}</Button>
+                  ))}
+                </Stack>
               </Stack>
             </Grid>
             <Grid item xs={6} md={4}>
-              <Stack spacing={1}>
+              <Stack spacing={2}>
                 <Typography variant="subtitle2" fontWeight={700} color="warning.main">Connect</Typography>
-                <Typography variant="body2">Phone: +91 83183 42494</Typography>
-                <Typography variant="body2">Instagram: @iskcondelhiuniversity</Typography>
-                <Typography variant="body2">YouTube: @ISKCONDelhiUniversity</Typography>
-                <Typography variant="body2">Address: 26 Prem Niwas First Floor, Malka Ganj, New Delhi</Typography>
+                <Stack spacing={1.5}>
+                  <Stack direction="row" spacing={1.2} alignItems="center">
+                    <PhoneIcon fontSize="small" color="warning" />
+                    <Typography variant="body2" fontWeight={600}>+91 83183 42494</Typography>
+                  </Stack>
+                  <Stack direction="row" spacing={1.2} alignItems="center">
+                    <InstagramIcon fontSize="small" color="warning" />
+                    <Typography variant="body2" fontWeight={600}>@iskcondelhiuniversity</Typography>
+                  </Stack>
+                  <Stack direction="row" spacing={1.2} alignItems="center">
+                    <YouTubeIcon fontSize="small" color="warning" />
+                    <Typography variant="body2" fontWeight={600}>@ISKCONDelhiUniversity</Typography>
+                  </Stack>
+                  <Stack direction="row" spacing={1.2} alignItems="flex-start">
+                    <PlaceIcon fontSize="small" color="warning" />
+                    <Typography variant="body2" fontWeight={600} maxWidth={220}>26 Prem Niwas First Floor, Malka Ganj, New Delhi</Typography>
+                  </Stack>
+                </Stack>
               </Stack>
             </Grid>
           </Grid>
-          <Divider sx={{ my: 4 }} />
+          <Divider sx={{ my: 6 }} />
           <Typography variant="caption" color="text.secondary" display="block" textAlign="center">© {new Date().getFullYear()} ISKCON Student Center. All rights reserved.</Typography>
         </Container>
       </Box>
