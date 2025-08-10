@@ -120,14 +120,39 @@ export function DynamicCarousel() {
               width: '100%',
               height: '100%',
               opacity: currentSlide === index ? 1 : 0,
-              transition: 'opacity 0.8s ease-in-out',
+              transition: 'opacity 0.8s ease-in-out'
+            }}
+          >
+            {/* Blurred background version of the same image */}
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              backgroundImage: `url('${image.url}')`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              filter: 'blur(20px) brightness(0.3)',
+              transform: 'scale(1.1)', // Slightly larger to avoid blur edges
+              zIndex: 1
+            }} />
+            
+            {/* Main image on top */}
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
               backgroundImage: `url('${image.url}')`,
               backgroundSize: 'contain',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
-              backgroundColor: 'white'
-            }}
-          />
+              zIndex: 2
+            }} />
+          </div>
         ))}
         
         {/* Overlay */}
@@ -138,7 +163,7 @@ export function DynamicCarousel() {
           width: '100%',
           height: '100%',
           backgroundColor: 'rgba(0, 0, 0, 0.15)',
-          zIndex: 2
+          zIndex: 3
         }} />
       </div>
 
@@ -391,17 +416,19 @@ export function DynamicAnnouncements() {
   if (loading) {
     return (
       <div style={{
-        backgroundColor: '#ea580c',
-        color: 'white',
+        backgroundColor: '#f8f9fa',
+        color: '#1f2937',
         padding: '0.75rem 0',
         overflow: 'hidden',
         position: 'relative',
         whiteSpace: 'nowrap',
-        marginTop: '70px'
+        marginTop: '70px',
+        borderTop: '3px solid #ea580c',
+        borderBottom: '3px solid #ea580c'
       }}>
         <div style={{
           display: 'inline-block',
-          animation: 'scroll-announcement 20s linear infinite',
+          animation: 'scroll-announcement 30s linear infinite',
           fontSize: '1rem',
           fontWeight: '500'
         }}>
@@ -429,7 +456,7 @@ export function DynamicAnnouncements() {
               target="_blank" 
               rel="noopener noreferrer"
               style={{
-                color: 'white',
+                color: '#ea580c',
                 textDecoration: 'underline',
                 fontWeight: 'bold'
               }}
@@ -451,21 +478,23 @@ export function DynamicAnnouncements() {
 
   return (
     <div style={{
-      backgroundColor: '#ea580c',
-      color: 'white',
+      backgroundColor: '#f8f9fa',
+      color: '#1f2937',
       padding: '0.75rem 0',
       overflow: 'hidden',
       position: 'relative',
       whiteSpace: 'nowrap',
-      marginTop: '70px'
+      marginTop: '70px',
+      borderTop: '3px solid #ea580c',
+      borderBottom: '3px solid #ea580c'
     }}>
       <div style={{
         display: 'inline-block',
-        animation: 'scroll-announcement 20s linear infinite',
+        animation: 'scroll-announcement 30s linear infinite',
         fontSize: '1rem',
         fontWeight: '500'
       }}>
-        {createAnnouncementContent()}
+        {createAnnouncementContent()} • {createAnnouncementContent()} • {createAnnouncementContent()}
       </div>
       <style dangerouslySetInnerHTML={{
         __html: `
