@@ -98,6 +98,29 @@ export default function Home() {
         .icon-event { background: linear-gradient(135deg, #fdbb2d, #22c1c3); }
         .icon-food { background: linear-gradient(135deg, #ff9a9e, #fad0c4); }
         
+        .material-btn {
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .material-btn::before {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 0;
+          height: 0;
+          background: rgba(255, 255, 255, 0.2);
+          border-radius: 50%;
+          transition: width 0.4s, height 0.4s, top 0.4s, left 0.4s;
+          transform: translate(-50%, -50%);
+        }
+        
+        .material-btn:hover::before {
+          width: 300px;
+          height: 300px;
+        }
+        
         @media (max-width: 768px) {
           .grid-responsive { grid-template-columns: 1fr !important; }
           .text-responsive { font-size: 1.5rem !important; }
@@ -284,9 +307,28 @@ export default function Home() {
                   backdropFilter: 'blur(10px)',
                   border: '2px solid rgba(255, 255, 255, 0.3)'
                 }}
-                className="card-hover animate-fadeInUp"
+                className="card-hover animate-fadeInUp material-btn"
               >
-                ✨ Join Now
+                <span style={{ 
+                  width: '20px', 
+                  height: '20px', 
+                  backgroundColor: '#ea580c', 
+                  borderRadius: '50%', 
+                  display: 'inline-block', 
+                  marginRight: '0.5rem',
+                  position: 'relative'
+                }}>
+                  <span style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    color: 'white',
+                    fontSize: '12px',
+                    fontWeight: 'bold'
+                  }}>★</span>
+                </span>
+                Join Now
               </a>
               <a 
                 href="#programs"
@@ -304,9 +346,28 @@ export default function Home() {
                   gap: '0.5rem',
                   backdropFilter: 'blur(10px)'
                 }}
-                className="card-hover animate-fadeInUp"
+                className="card-hover animate-fadeInUp material-btn"
               >
-                📚 Explore Programs
+                <span style={{ 
+                  width: '20px', 
+                  height: '20px', 
+                  backgroundColor: 'rgba(255, 255, 255, 0.3)', 
+                  borderRadius: '50%', 
+                  display: 'inline-block', 
+                  marginRight: '0.5rem',
+                  position: 'relative'
+                }}>
+                  <span style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    color: 'white',
+                    fontSize: '12px',
+                    fontWeight: 'bold'
+                  }}>�</span>
+                </span>
+                Explore Programs
               </a>
             </div>
           </div>
@@ -342,63 +403,217 @@ export default function Home() {
             
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-              gap: '1.5rem'
+              gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
+              gap: '2rem',
+              alignItems: 'start'
             }} className="grid-responsive">
-              {[
-                { icon: 'icon-book', title: 'Gita Study', desc: 'Vedic wisdom & philosophy' },
-                { icon: 'icon-prayer', title: 'Meditation', desc: 'Daily japa & mindfulness' },
-                { icon: 'icon-community', title: 'Leadership', desc: 'Character development' },
-                { icon: 'icon-community', title: 'Community', desc: 'Spiritual friendship' },
-                { icon: 'icon-music', title: 'Kirtans', desc: 'Music & festivals' },
-                { icon: 'icon-book', title: 'Mentorship', desc: 'Personal guidance' },
-                { icon: 'icon-event', title: 'Pilgrimage', desc: 'Sacred journeys' },
-                { icon: 'icon-food', title: 'Lifestyle', desc: 'Balanced living' },
-                { icon: 'icon-community', title: 'Outreach', desc: 'Share wisdom' }
-              ].map((program, i) => (
-                <div 
-                  key={i}
-                  style={{
-                    backgroundColor: 'white',
-                    padding: '2rem',
-                    borderRadius: '12px',
-                    textAlign: 'center',
-                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-                    border: '1px solid rgba(255, 107, 53, 0.1)',
-                    position: 'relative',
-                    overflow: 'hidden'
-                  }}
-                  className="card-hover animate-fadeInUp"
-                >
-                  <div style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: '4px',
-                    background: 'linear-gradient(90deg, #ff6b35, #f7931e)'
-                  }}></div>
-                  
-                  <div className={`material-icon ${program.icon}`}>
-                    ✦
-                  </div>
-                  <h3 style={{ 
-                    fontSize: '1.125rem', 
-                    fontWeight: '700', 
-                    marginBottom: '0.5rem',
-                    color: '#111827'
-                  }}>
-                    {program.title}
-                  </h3>
-                  <p style={{ 
-                    fontSize: '0.875rem', 
-                    color: '#6b7280',
-                    margin: 0
-                  }}>
-                    {program.desc}
-                  </p>
+              
+              {/* Spiritual Practices Column */}
+              <div style={{
+                backgroundColor: 'white',
+                padding: '2rem',
+                borderRadius: '16px',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                border: '1px solid #e5e7eb'
+              }} className="card-hover animate-fadeInUp">
+                <h3 style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '700',
+                  color: '#ea580c',
+                  marginBottom: '1.5rem',
+                  textAlign: 'center',
+                  borderBottom: '2px solid #fed7aa',
+                  paddingBottom: '0.5rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem'
+                }}>
+                  <span style={{
+                    width: '24px',
+                    height: '24px',
+                    backgroundColor: '#ea580c',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'white',
+                    fontSize: '14px'
+                  }}>🕉</span>
+                  Spiritual Practices
+                </h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  {[
+                    { name: 'Bhagavad Gita Study', desc: 'Weekly scripture discussions' },
+                    { name: 'Japa Meditation', desc: 'Daily chanting practice' },
+                    { name: 'Kirtan Sessions', desc: 'Devotional music & singing' },
+                    { name: 'Temple Worship', desc: 'Deity darshan & prayers' }
+                  ].map((item, i) => (
+                    <div key={i} style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: '0.75rem',
+                      backgroundColor: '#fef7ed',
+                      borderRadius: '8px',
+                      borderLeft: '3px solid #ea580c'
+                    }}>
+                      <div style={{
+                        width: '8px',
+                        height: '8px',
+                        backgroundColor: '#ea580c',
+                        borderRadius: '50%',
+                        marginRight: '1rem'
+                      }}></div>
+                      <div>
+                        <h4 style={{ fontSize: '1rem', fontWeight: '600', margin: 0, color: '#111827' }}>
+                          {item.name}
+                        </h4>
+                        <p style={{ fontSize: '0.875rem', color: '#6b7280', margin: 0 }}>
+                          {item.desc}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+
+              {/* Community & Learning Column */}
+              <div style={{
+                backgroundColor: 'white',
+                padding: '2rem',
+                borderRadius: '16px',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                border: '1px solid #e5e7eb'
+              }} className="card-hover animate-fadeInUp">
+                <h3 style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '700',
+                  color: '#ea580c',
+                  marginBottom: '1.5rem',
+                  textAlign: 'center',
+                  borderBottom: '2px solid #fed7aa',
+                  paddingBottom: '0.5rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem'
+                }}>
+                  <span style={{
+                    width: '24px',
+                    height: '24px',
+                    backgroundColor: '#ea580c',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'white',
+                    fontSize: '14px'
+                  }}>👥</span>
+                  Community & Learning
+                </h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  {[
+                    { name: 'Leadership Training', desc: 'Character development programs' },
+                    { name: 'Spiritual Mentorship', desc: 'Personal guidance & counseling' },
+                    { name: 'Youth Programs', desc: 'Age-appropriate activities' },
+                    { name: 'Community Service', desc: 'Social outreach projects' }
+                  ].map((item, i) => (
+                    <div key={i} style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: '0.75rem',
+                      backgroundColor: '#fef7ed',
+                      borderRadius: '8px',
+                      borderLeft: '3px solid #ea580c'
+                    }}>
+                      <div style={{
+                        width: '8px',
+                        height: '8px',
+                        backgroundColor: '#ea580c',
+                        borderRadius: '50%',
+                        marginRight: '1rem'
+                      }}></div>
+                      <div>
+                        <h4 style={{ fontSize: '1rem', fontWeight: '600', margin: 0, color: '#111827' }}>
+                          {item.name}
+                        </h4>
+                        <p style={{ fontSize: '0.875rem', color: '#6b7280', margin: 0 }}>
+                          {item.desc}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Events & Lifestyle Column */}
+              <div style={{
+                backgroundColor: 'white',
+                padding: '2rem',
+                borderRadius: '16px',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                border: '1px solid #e5e7eb'
+              }} className="card-hover animate-fadeInUp">
+                <h3 style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '700',
+                  color: '#ea580c',
+                  marginBottom: '1.5rem',
+                  textAlign: 'center',
+                  borderBottom: '2px solid #fed7aa',
+                  paddingBottom: '0.5rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem'
+                }}>
+                  <span style={{
+                    width: '24px',
+                    height: '24px',
+                    backgroundColor: '#ea580c',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'white',
+                    fontSize: '14px'
+                  }}>🎉</span>
+                  Events & Lifestyle
+                </h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  {[
+                    { name: 'Festival Celebrations', desc: 'Traditional spiritual festivals' },
+                    { name: 'Pilgrimage Tours', desc: 'Sacred place visits' },
+                    { name: 'Healthy Lifestyle', desc: 'Yoga, meditation & wellness' },
+                    { name: 'Prasadam Cooking', desc: 'Sacred food preparation' }
+                  ].map((item, i) => (
+                    <div key={i} style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: '0.75rem',
+                      backgroundColor: '#fef7ed',
+                      borderRadius: '8px',
+                      borderLeft: '3px solid #ea580c'
+                    }}>
+                      <div style={{
+                        width: '8px',
+                        height: '8px',
+                        backgroundColor: '#ea580c',
+                        borderRadius: '50%',
+                        marginRight: '1rem'
+                      }}></div>
+                      <div>
+                        <h4 style={{ fontSize: '1rem', fontWeight: '600', margin: 0, color: '#111827' }}>
+                          {item.name}
+                        </h4>
+                        <p style={{ fontSize: '0.875rem', color: '#6b7280', margin: 0 }}>
+                          {item.desc}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -418,55 +633,65 @@ export default function Home() {
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent'
             }} className="animate-fadeInUp">
-              Weekly Schedule
+              Daily Schedule
             </h2>
             
             <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: '2rem'
-            }} className="grid-responsive">
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1rem',
+              maxWidth: '800px',
+              margin: '0 auto'
+            }}>
               {[
-                { day: 'Monday', event: 'Gita Study Circle', time: '6:00 PM - 7:30 PM' },
-                { day: 'Wednesday', event: 'Meditation & Japa', time: '7:00 AM - 8:00 AM' },
-                { day: 'Friday', event: 'Kirtan Evening', time: '7:00 PM - 8:30 PM' },
-                { day: 'Saturday', event: 'Community Service', time: '9:00 AM - 12:00 PM' },
-                { day: 'Sunday', event: 'Feast & Fellowship', time: '12:00 PM - 3:00 PM' }
+                { time: '4:30 AM', event: 'Mangala Arati & Tulasi Puja', desc: 'Morning prayer and worship' },
+                { time: '5:00 AM', event: 'Japa Meditation', desc: 'Chanting of the Holy Name' },
+                { time: '7:00 AM', event: 'Guru Puja & Kirtan', desc: 'Devotional songs and prayers' },
+                { time: '8:00 AM', event: 'Srimad Bhagavatam Class', desc: 'Scripture study and discussion' },
+                { time: '12:30 PM', event: 'Raj Bhoga Arati', desc: 'Midday offering to the deities' },
+                { time: '1:00 PM', event: 'Prasadam', desc: 'Sacred vegetarian meal' },
+                { time: '6:30 PM', event: 'Sandhya Arati', desc: 'Evening prayer ceremony' },
+                { time: '7:00 PM', event: 'Evening Programs', desc: 'Special classes and discussions' }
               ].map((schedule, i) => (
                 <div 
                   key={i}
                   style={{
-                    backgroundColor: '#f8fafc',
-                    padding: '2rem',
-                    borderRadius: '12px',
-                    border: '2px solid #e2e8f0',
-                    textAlign: 'center'
+                    display: 'flex',
+                    alignItems: 'center',
+                    backgroundColor: i % 2 === 0 ? '#f8fafc' : 'white',
+                    padding: '1.5rem',
+                    borderRadius: '8px',
+                    borderLeft: '4px solid #ea580c',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
                   }}
                   className="card-hover animate-fadeInUp"
                 >
-                  <h3 style={{ 
-                    fontSize: '1.5rem', 
-                    fontWeight: '700', 
+                  <div style={{
+                    minWidth: '80px',
+                    fontSize: '1rem',
+                    fontWeight: '700',
                     color: '#ea580c',
-                    marginBottom: '0.5rem'
-                  }}>
-                    {schedule.day}
-                  </h3>
-                  <h4 style={{ 
-                    fontSize: '1.125rem', 
-                    fontWeight: '600',
-                    color: '#111827',
-                    marginBottom: '0.5rem'
-                  }}>
-                    {schedule.event}
-                  </h4>
-                  <p style={{ 
-                    fontSize: '1rem', 
-                    color: '#6b7280',
-                    margin: 0
+                    marginRight: '2rem'
                   }}>
                     {schedule.time}
-                  </p>
+                  </div>
+                  <div style={{ flexGrow: 1 }}>
+                    <h3 style={{ 
+                      fontSize: '1.125rem', 
+                      fontWeight: '600',
+                      color: '#111827',
+                      marginBottom: '0.25rem'
+                    }}>
+                      {schedule.event}
+                    </h3>
+                    <p style={{ 
+                      fontSize: '0.875rem', 
+                      color: '#6b7280',
+                      margin: 0
+                    }}>
+                      {schedule.desc}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -561,13 +786,13 @@ export default function Home() {
               overflow: 'hidden',
               boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)'
             }} className="animate-fadeInUp">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3501.0123456789!2d77.12345678901234!3d28.123456789012345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sDelhi%20University!5e0!3m2!1sen!2sin!4v1234567890123!5m2!1sen!2sin"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
+              <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3199.5466743621614!2d77.20813749999999!3d28.678913099999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfdf53b2058b5%3A0x90ba420109930cec!2sISKCON%20student%20centre%20(%20DU%20BACE)!5e1!3m2!1sen!2sin!4v1754807751377!5m2!1sen!2sin" 
+                width="100%" 
+                height="100%" 
+                style={{ border: 0 }} 
+                allowFullScreen 
+                loading="lazy" 
                 referrerPolicy="no-referrer-when-downgrade"
               ></iframe>
             </div>
@@ -599,26 +824,98 @@ export default function Home() {
               marginTop: '3rem'
             }}>
               <div className="animate-fadeInUp">
-                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '1rem' }}>
-                  📍 Visit Us
+                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                  <span style={{
+                    width: '24px',
+                    height: '24px',
+                    backgroundColor: '#ff6b35',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'white',
+                    fontSize: '14px'
+                  }}>🏛</span>
+                  Visit Us
                 </h3>
-                <p>Near Delhi University<br />New Delhi, India</p>
+                <p>B-15, IITF Road, Pocket B,<br />Sector 3, Rohini, Delhi, 110085</p>
               </div>
               
               <div className="animate-fadeInUp">
-                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '1rem' }}>
-                  📱 Connect
+                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                  <span style={{
+                    width: '24px',
+                    height: '24px',
+                    backgroundColor: '#ff6b35',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'white',
+                    fontSize: '14px'
+                  }}>📱</span>
+                  Connect
                 </h3>
                 <p>
-                  <a href="tel:+919876543210" style={{ color: '#ff6b35', textDecoration: 'none' }}>📞 +91 98765 43210</a><br />
-                  <a href="https://instagram.com/iskcondelhiuniversity" style={{ color: '#ff6b35', textDecoration: 'none' }}>📸 Instagram</a><br />
-                  <a href="https://youtube.com/@iskcondelhiuniversity" style={{ color: '#ff6b35', textDecoration: 'none' }}>📺 YouTube</a>
+                  <a href="tel:+919876543210" style={{ color: '#ff6b35', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                    <span style={{
+                      width: '16px',
+                      height: '16px',
+                      backgroundColor: '#ff6b35',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'white',
+                      fontSize: '10px'
+                    }}>📞</span>
+                    +91 98765 43210
+                  </a>
+                  <a href="https://instagram.com/iskcondelhiuniversity" style={{ color: '#ff6b35', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                    <span style={{
+                      width: '16px',
+                      height: '16px',
+                      backgroundColor: '#ff6b35',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'white',
+                      fontSize: '10px'
+                    }}>📸</span>
+                    Instagram
+                  </a>
+                  <a href="https://youtube.com/@iskcondelhiuniversity" style={{ color: '#ff6b35', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                    <span style={{
+                      width: '16px',
+                      height: '16px',
+                      backgroundColor: '#ff6b35',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'white',
+                      fontSize: '10px'
+                    }}>📺</span>
+                    YouTube
+                  </a>
                 </p>
               </div>
               
               <div className="animate-fadeInUp">
-                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '1rem' }}>
-                  🚀 Join Now
+                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                  <span style={{
+                    width: '24px',
+                    height: '24px',
+                    backgroundColor: '#ff6b35',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'white',
+                    fontSize: '14px'
+                  }}>🚀</span>
+                  Join Now
                 </h3>
                 <a 
                   href="https://forms.google.com/your-form-id"
