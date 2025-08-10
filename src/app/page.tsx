@@ -232,8 +232,8 @@ export default function Home() {
             textAlign: 'center'
           }}>
             <div style={{ 
-              width: '60px',
-              height: '60px',
+              width: '80px',
+              height: '80px',
               backgroundImage: "url('/prabhupada.png')",
               backgroundSize: 'contain',
               backgroundPosition: 'center',
@@ -241,11 +241,11 @@ export default function Home() {
               marginBottom: '0.25rem'
             }} />
             <div style={{
-              fontSize: '0.6rem',
+              fontSize: '0.5rem',
               fontWeight: '600',
               color: '#ea580c',
-              lineHeight: '1.1',
-              maxWidth: '80px',
+              lineHeight: '1',
+              whiteSpace: 'nowrap',
               textTransform: 'uppercase',
               letterSpacing: '0.5px'
             }}>
