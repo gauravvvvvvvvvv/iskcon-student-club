@@ -151,7 +151,7 @@ export default function Home() {
           }
           
           .carousel-container {
-            height: clamp(300px, 40vh, 450px) !important;
+            height: clamp(400px, 55vh, 600px) !important;
           }
           
           .carousel-content {
@@ -185,7 +185,7 @@ export default function Home() {
           }
           
           .carousel-container {
-            height: clamp(250px, 35vh, 350px) !important;
+            height: clamp(350px, 45vh, 500px) !important;
           }
           
           .carousel-nav {
@@ -348,7 +348,7 @@ export default function Home() {
         {/* Image Carousel Section */}
         <section style={{
           position: 'relative',
-          height: 'clamp(350px, 50vh, 600px)',
+          height: 'clamp(450px, 65vh, 750px)',
           overflow: 'hidden',
           backgroundColor: 'white',
           display: 'flex',
@@ -736,7 +736,7 @@ export default function Home() {
 
         {/* Programs Section */}
         <section id="programs" style={{ 
-          padding: '4rem 2rem', 
+          padding: '6rem 2rem 4rem 2rem', 
           backgroundColor: '#f9fafb'
         }}>
           <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -853,7 +853,6 @@ export default function Home() {
                     { name: 'Spiritual Friendship', desc: 'Meaningful spiritual connections' },
                     { name: 'Personal Mentorship', desc: 'One-on-one spiritual guidance' },
                     { name: 'Spiritual Counseling for Life Related Problems', desc: 'Life guidance & support' },
-                    { name: 'Accommodation', desc: 'Student housing facilities' },
                     { name: 'Prasadam', desc: 'Sacred vegetarian meals' }
                   ].map((item, i) => (
                     <div key={i} style={{
@@ -1138,7 +1137,8 @@ export default function Home() {
               {[
                 { name: 'Prayer Hall', desc: 'Peaceful meditation space' },
                 { name: 'Library', desc: 'Spiritual books & resources' },
-                { name: 'Kitchen', desc: 'Prasadam preparation' }
+                { name: 'Kitchen', desc: 'Prasadam preparation' },
+                { name: 'Accommodation', desc: 'Student housing facilities' }
               ].map((facility, i) => (
                 <div 
                   key={i}
