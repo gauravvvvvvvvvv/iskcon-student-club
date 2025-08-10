@@ -725,9 +725,7 @@ export default function Home() {
                 { name: 'Prayer Hall', desc: 'Peaceful meditation space' },
                 { name: 'Library', desc: 'Spiritual books & resources' },
                 { name: 'Kitchen', desc: 'Prasadam preparation' },
-                { name: 'Study Rooms', desc: 'Group discussions' },
-                { name: 'Garden', desc: 'Outdoor meditation' },
-                { name: 'Guest Rooms', desc: 'Visitor accommodation' }
+                { name: 'Study Rooms', desc: 'Group discussions' }
               ].map((facility, i) => (
                 <div 
                   key={i}
@@ -834,11 +832,12 @@ export default function Home() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     color: 'white',
-                    fontSize: '14px'
-                  }}>🏛</span>
+                    fontSize: '14px',
+                    fontWeight: 'bold'
+                  }}>📍</span>
                   Visit Us
                 </h3>
-                <p>B-15, IITF Road, Pocket B,<br />Sector 3, Rohini, Delhi, 110085</p>
+                <p>26 Prem Niwas First Floor, Above Natural's Ice Cream,<br />Malka Ganj, New Delhi, Delhi 110007</p>
               </div>
               
               <div className="animate-fadeInUp">
@@ -852,8 +851,9 @@ export default function Home() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     color: 'white',
-                    fontSize: '14px'
-                  }}>📱</span>
+                    fontSize: '14px',
+                    fontWeight: 'bold'
+                  }}>@</span>
                   Connect
                 </h3>
                 <p>
@@ -867,8 +867,9 @@ export default function Home() {
                       alignItems: 'center',
                       justifyContent: 'center',
                       color: 'white',
-                      fontSize: '10px'
-                    }}>📞</span>
+                      fontSize: '10px',
+                      fontWeight: 'bold'
+                    }}>☎</span>
                     +91 98765 43210
                   </a>
                   <a href="https://instagram.com/iskcondelhiuniversity" style={{ color: '#ff6b35', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
@@ -881,8 +882,9 @@ export default function Home() {
                       alignItems: 'center',
                       justifyContent: 'center',
                       color: 'white',
-                      fontSize: '10px'
-                    }}>📸</span>
+                      fontSize: '10px',
+                      fontWeight: 'bold'
+                    }}>IG</span>
                     Instagram
                   </a>
                   <a href="https://youtube.com/@iskcondelhiuniversity" style={{ color: '#ff6b35', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
@@ -895,8 +897,9 @@ export default function Home() {
                       alignItems: 'center',
                       justifyContent: 'center',
                       color: 'white',
-                      fontSize: '10px'
-                    }}>📺</span>
+                      fontSize: '10px',
+                      fontWeight: 'bold'
+                    }}>YT</span>
                     YouTube
                   </a>
                 </p>
@@ -913,8 +916,9 @@ export default function Home() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     color: 'white',
-                    fontSize: '14px'
-                  }}>🚀</span>
+                    fontSize: '14px',
+                    fontWeight: 'bold'
+                  }}>+</span>
                   Join Now
                 </h3>
                 <a 
