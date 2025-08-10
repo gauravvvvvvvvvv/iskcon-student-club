@@ -319,7 +319,7 @@ export default function Home() {
             <a href="#location" style={{ color: '#ea580c', textDecoration: 'none', fontWeight: '600', whiteSpace: 'nowrap' }}>Location</a>
             <a href="#contact" style={{ color: '#ea580c', textDecoration: 'none', fontWeight: '600', whiteSpace: 'nowrap' }}>Contact</a>
             <a 
-              href="https://forms.google.com/your-form-id" 
+              href="https://docs.google.com/forms/d/e/1FVlLR7QJUP-8BedM3oRQYFact6stIYMFFo0OKGzmWvg/viewform" 
               target="_blank"
               rel="noopener noreferrer"
               style={{
@@ -925,7 +925,7 @@ export default function Home() {
                   Join Now
                 </h3>
                 <a 
-                  href="https://forms.google.com/your-form-id"
+                  href="https://docs.google.com/forms/d/e/1FVlLR7QJUP-8BedM3oRQYFact6stIYMFFo0OKGzmWvg/viewform"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{

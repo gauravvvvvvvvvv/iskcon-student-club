@@ -122,7 +122,7 @@ export function DynamicCarousel() {
               opacity: currentSlide === index ? 1 : 0,
               transition: 'opacity 0.8s ease-in-out',
               backgroundImage: `url('${image.url}')`,
-              backgroundSize: 'cover',
+              backgroundSize: 'contain',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
               backgroundColor: 'white'
@@ -157,7 +157,7 @@ export function DynamicCarousel() {
       }}>
         {/* Call to Action Buttons */}
         <a 
-          href="https://forms.google.com/your-form-id"
+          href="https://docs.google.com/forms/d/e/1FVlLR7QJUP-8BedM3oRQYFact6stIYMFFo0OKGzmWvg/viewform"
           target="_blank"
           rel="noopener noreferrer"
           style={{
