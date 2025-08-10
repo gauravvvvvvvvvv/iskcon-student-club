@@ -1,45 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
 
-// Program data from your previous files
-const programs = [
-  { icon: '📖', title: 'Learning Gita & Vedic Wisdom', description: 'Structured deep dive into Bhagavad Gita & Vedic philosophy.' },
-  { icon: '🧘', title: 'Chanting / Mantra Meditation', description: 'Daily japa & kirtan to sharpen focus and purify mind.' },
-  { icon: '🎖️', title: 'Leadership Development', description: 'Cultivating responsibility, clarity & servant-leadership.' },
-  { icon: '👥', title: 'Spiritual Friendship', description: 'Uplifting association & accountability circles.' },
-  { icon: '🎵', title: 'Kirtans / Festivals', description: 'High-energy devotional music & cultural celebrations.' },
-  { icon: '🤝', title: 'Personal Mentorship', description: 'One-on-one guidance for growth & sadhana alignment.' },
-  { icon: '🥾', title: 'Dham Yatra', description: 'Transformative pilgrimages to sacred holy places.' },
-  { icon: '💆', title: 'Sattvik Lifestyle', description: 'Balanced routine: purity, nutrition, discipline & seva.' },
-  { icon: '📚', title: 'Spreading Vedic Wisdom', description: 'Outreach, seminars & distribution of sacred texts.' },
-  { icon: '🎧', title: 'Spiritual Counseling', description: 'Support for life decisions & inner emotional balance.' },
-  { icon: '🏠', title: 'Accommodation', description: 'Focused spiritual student residential environment.' },
-  { icon: '🍽️', title: 'Prasadam', description: 'Wholesome sanctified vegetarian nourishment.' },
-  { icon: '❤️', title: 'Mental / Physical Detox', description: 'Habit reset using mantra, regulated sleep & diet.' },
-  { icon: '⚖️', title: 'Debate Circles', description: 'Structured philosophical dialogue & reasoning.' },
-  { icon: '🎭', title: 'Drama', description: 'Devotional theater & expressive arts seva.' },
-  { icon: '🏆', title: 'Competitions', description: 'Quizzes, recitation & character challenges.' },
-];
-
-const facilities = [
-  { icon: '🏠', title: 'Accommodation', description: 'Comfortable, focused student living.' },
-  { icon: '🏛️', title: 'Library', description: 'Spiritual & academic study space.' },
-  { icon: '🍴', title: 'Dining Hall', description: 'Nutritious daily prasadam meals.' },
-  { icon: '💆', title: 'Meditation Hall', description: 'Quiet space for reflection & prayer.' },
-];
-
-const schedule = [
-  { time: '5:00 AM', activity: 'Morning Prayer & Meditation' },
-  { time: '6:00 AM', activity: 'Yoga & Exercise' },
-  { time: '7:30 AM', activity: 'Breakfast Prasadam' },
-  { time: '9:00 AM', activity: 'Bhagavad Gita Class' },
-  { time: '12:00 PM', activity: 'Lunch & Rest' },
-  { time: '4:00 PM', activity: 'Cultural Activities' },
-  { time: '6:00 PM', activity: 'Evening Kirtan' },
-  { time: '7:30 PM', activity: 'Dinner Prasadam' },
-  { time: '9:00 PM', activity: 'Personal Study & Rest' },
-];
-
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -776,132 +737,205 @@ export default function Home() {
         {/* Programs Section */}
         <section id="programs" style={{ 
           padding: '4rem 2rem', 
-          background: 'linear-gradient(135deg, #ffffff 0%, #fff9f2 50%, #fef3e7 100%)',
-          position: 'relative'
+          backgroundColor: '#f9fafb'
         }}>
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'radial-gradient(circle at 20% 80%, rgba(245,158,11,0.05), transparent 50%)',
-            pointerEvents: 'none'
-          }} />
-          <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative' }}>
-            <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-              <p style={{ 
-                fontSize: '0.875rem', 
-                fontWeight: '700', 
-                color: '#ea580c', 
-                textTransform: 'uppercase',
-                letterSpacing: '2px',
-                marginBottom: '0.5rem'
-              }}>
-                FEATURES
-              </p>
-              <h2 style={{ 
-                fontSize: '2.5rem', 
-                fontWeight: '800', 
-                marginBottom: '1rem',
-                letterSpacing: '-1px',
-                color: '#111827'
-              }}>
-                Holistic Offerings
-              </h2>
-              <p style={{
-                fontSize: '1.1rem',
-                color: '#6b7280',
-                maxWidth: '780px',
-                margin: '0 auto',
-                lineHeight: '1.6'
-              }}>
-                Integrated spiritual ecosystem: learning, meditation, leadership, friendship, lifestyle transformation and joyful seva.
-              </p>
-            </div>
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            <h2 style={{ 
+              fontSize: '2.5rem', 
+              fontWeight: '800', 
+              textAlign: 'center', 
+              marginBottom: '0.5rem',
+              background: 'linear-gradient(135deg, #111827, #374151)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }} className="animate-fadeInUp">
+              What We Offer
+            </h2>
+            <p style={{
+              fontSize: '1.1rem',
+              color: '#6b7280',
+              textAlign: 'center',
+              marginBottom: '3rem',
+              maxWidth: '600px',
+              margin: '0 auto 3rem auto'
+            }} className="animate-fadeInUp">
+              Comprehensive spiritual development through study, practice, and community
+            </p>
             
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
               gap: '2rem',
               alignItems: 'start'
-            }}>
-              {programs.map((program, i) => (
-                <div 
-                  key={i}
-                  style={{
-                    backgroundColor: 'white',
-                    padding: '2rem',
-                    borderRadius: '24px',
-                    boxShadow: '0 4px 8px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04)',
-                    border: 'none',
-                    background: 'linear-gradient(145deg, #ffffff 0%, #fffaf0 100%)',
-                    position: 'relative',
-                    overflow: 'hidden',
-                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                    cursor: 'pointer'
-                  }}
-                  className="card-hover"
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-6px)';
-                    e.currentTarget.style.boxShadow = '0 12px 24px rgba(0,0,0,0.15), 0 6px 12px rgba(0,0,0,0.08)';
-                    const topBar = e.currentTarget.querySelector('.top-bar');
-                    if (topBar) topBar.style.opacity = '1';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04)';
-                    const topBar = e.currentTarget.querySelector('.top-bar');
-                    if (topBar) topBar.style.opacity = '0';
-                  }}
-                >
-                  <div 
-                    className="top-bar"
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      height: '4px',
-                      background: 'linear-gradient(90deg, #ea580c, #f59e0b)',
-                      opacity: 0,
-                      transition: 'opacity 0.3s ease'
-                    }} 
-                  />
-                  <div style={{
-                    width: '42px',
-                    height: '42px',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: '#fed7aa',
-                    color: '#ea580c',
-                    boxShadow: '0 2px 6px rgba(234,88,12,0.35)',
-                    marginBottom: '1rem',
-                    fontSize: '1.2rem'
-                  }}>
-                    {program.icon}
-                  </div>
-                  <h3 style={{ 
-                    fontSize: '1.1rem', 
-                    fontWeight: '700',
-                    marginBottom: '0.75rem',
-                    color: '#111827',
-                    lineHeight: '1.4'
-                  }}>
-                    {program.title}
-                  </h3>
-                  <p style={{ 
-                    fontSize: '0.875rem', 
-                    color: '#6b7280',
-                    margin: 0,
-                    lineHeight: '1.45'
-                  }}>
-                    {program.description}
-                  </p>
+            }} className="grid-responsive">
+              
+              {/* Spiritual Practices Column */}
+              <div style={{
+                backgroundColor: 'white',
+                padding: '2rem',
+                borderRadius: '16px',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                border: '1px solid #e5e7eb'
+              }} className="card-hover animate-fadeInUp">
+                <h3 style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '700',
+                  color: '#ea580c',
+                  marginBottom: '1.5rem',
+                  textAlign: 'center',
+                  borderBottom: '2px solid #fed7aa',
+                  paddingBottom: '0.5rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px'
+                }}>
+                  Spiritual Practices
+                </h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  {[
+                    { name: 'Bhagavad Gita Study', desc: 'Weekly scripture discussions' },
+                    { name: 'Japa Meditation', desc: 'Daily chanting practice' },
+                    { name: 'Kirtan Sessions', desc: 'Devotional music & singing' },
+                    { name: 'Temple Worship', desc: 'Deity darshan & prayers' }
+                  ].map((item, i) => (
+                    <div key={i} style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: '0.75rem',
+                      backgroundColor: '#fef7ed',
+                      borderRadius: '8px',
+                      borderLeft: '3px solid #ea580c'
+                    }}>
+                      <div style={{
+                        width: '8px',
+                        height: '8px',
+                        backgroundColor: '#ea580c',
+                        borderRadius: '50%',
+                        marginRight: '1rem'
+                      }}></div>
+                      <div>
+                        <h4 style={{ fontSize: '1rem', fontWeight: '600', margin: 0, color: '#111827' }}>
+                          {item.name}
+                        </h4>
+                        <p style={{ fontSize: '0.875rem', color: '#6b7280', margin: 0 }}>
+                          {item.desc}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+
+              {/* Community & Learning Column */}
+              <div style={{
+                backgroundColor: 'white',
+                padding: '2rem',
+                borderRadius: '16px',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                border: '1px solid #e5e7eb'
+              }} className="card-hover animate-fadeInUp">
+                <h3 style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '700',
+                  color: '#ea580c',
+                  marginBottom: '1.5rem',
+                  textAlign: 'center',
+                  borderBottom: '2px solid #fed7aa',
+                  paddingBottom: '0.5rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px'
+                }}>
+                  Community
+                </h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  {[
+                    { name: 'Leadership Training', desc: 'Character development programs' },
+                    { name: 'Spiritual Mentorship', desc: 'Personal guidance & counseling' },
+                    { name: 'Youth Programs', desc: 'Age-appropriate activities' },
+                    { name: 'Community Service', desc: 'Social outreach projects' }
+                  ].map((item, i) => (
+                    <div key={i} style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: '0.75rem',
+                      backgroundColor: '#fef7ed',
+                      borderRadius: '8px',
+                      borderLeft: '3px solid #ea580c'
+                    }}>
+                      <div style={{
+                        width: '8px',
+                        height: '8px',
+                        backgroundColor: '#ea580c',
+                        borderRadius: '50%',
+                        marginRight: '1rem'
+                      }}></div>
+                      <div>
+                        <h4 style={{ fontSize: '1rem', fontWeight: '600', margin: 0, color: '#111827' }}>
+                          {item.name}
+                        </h4>
+                        <p style={{ fontSize: '0.875rem', color: '#6b7280', margin: 0 }}>
+                          {item.desc}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Events & Lifestyle Column */}
+              <div style={{
+                backgroundColor: 'white',
+                padding: '2rem',
+                borderRadius: '16px',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                border: '1px solid #e5e7eb'
+              }} className="card-hover animate-fadeInUp">
+                <h3 style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '700',
+                  color: '#ea580c',
+                  marginBottom: '1.5rem',
+                  textAlign: 'center',
+                  borderBottom: '2px solid #fed7aa',
+                  paddingBottom: '0.5rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px'
+                }}>
+                  Events & Lifestyle
+                </h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  {[
+                    { name: 'Festival Celebrations', desc: 'Traditional spiritual festivals' },
+                    { name: 'Pilgrimage Tours', desc: 'Sacred place visits' },
+                    { name: 'Healthy Lifestyle', desc: 'Yoga, meditation & wellness' },
+                    { name: 'Prasadam Cooking', desc: 'Sacred food preparation' }
+                  ].map((item, i) => (
+                    <div key={i} style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: '0.75rem',
+                      backgroundColor: '#fef7ed',
+                      borderRadius: '8px',
+                      borderLeft: '3px solid #ea580c'
+                    }}>
+                      <div style={{
+                        width: '8px',
+                        height: '8px',
+                        backgroundColor: '#ea580c',
+                        borderRadius: '50%',
+                        marginRight: '1rem'
+                      }}></div>
+                      <div>
+                        <h4 style={{ fontSize: '1rem', fontWeight: '600', margin: 0, color: '#111827' }}>
+                          {item.name}
+                        </h4>
+                        <p style={{ fontSize: '0.875rem', color: '#6b7280', margin: 0 }}>
+                          {item.desc}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -909,100 +943,79 @@ export default function Home() {
         {/* Schedule Section */}
         <section id="schedule" style={{ 
           padding: '4rem 2rem', 
-          position: 'relative', 
-          background: 'linear-gradient(135deg, #fef3c7, #fff)'
+          backgroundColor: '#ffffff'
         }}>
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'radial-gradient(circle at 85% 15%, rgba(245,158,11,0.08), transparent 55%)'
-          }} />
-          <div style={{ maxWidth: '800px', margin: '0 auto', position: 'relative' }}>
-            <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-              <p style={{ 
-                fontSize: '0.875rem', 
-                fontWeight: '700', 
-                color: '#ea580c', 
-                textTransform: 'uppercase',
-                letterSpacing: '2px',
-                marginBottom: '0.5rem'
-              }}>
-                DAILY FLOW
-              </p>
-              <h2 style={{ 
-                fontSize: '2.5rem', 
-                fontWeight: '800', 
-                marginBottom: '1rem',
-                letterSpacing: '-1px',
-                color: '#111827'
-              }}>
-                Daily Schedule
-              </h2>
-              <p style={{
-                fontSize: '1.1rem',
-                color: '#6b7280',
-                maxWidth: '640px',
-                margin: '0 auto',
-                lineHeight: '1.6'
-              }}>
-                Balanced routine blending meditation, study, service, culture and personal development.
-              </p>
-            </div>
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            <h2 style={{ 
+              fontSize: '2.5rem', 
+              fontWeight: '800', 
+              textAlign: 'center', 
+              marginBottom: '3rem',
+              background: 'linear-gradient(135deg, #ea580c, #f97316)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }} className="animate-fadeInUp">
+              Daily Schedule
+            </h2>
             
             <div style={{
-              backgroundColor: 'white',
-              borderRadius: '20px',
-              padding: '2rem',
-              boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
-              backdropFilter: 'blur(8px)'
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1rem',
+              maxWidth: '800px',
+              margin: '0 auto'
             }}>
-              <div>
-                {schedule.map((item, idx) => (
-                  <div key={idx}>
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      padding: '1rem 0'
-                    }}>
-                      <div style={{
-                        minWidth: '48px',
-                        marginRight: '1rem',
-                        display: 'flex',
-                        justifyContent: 'center'
-                      }}>
-                        <span style={{ fontSize: '1.5rem' }}>⏰</span>
-                      </div>
-                      <div style={{ flexGrow: 1 }}>
-                        <p style={{ 
-                          fontWeight: '700', 
-                          color: '#ea580c',
-                          margin: 0,
-                          marginBottom: '0.25rem'
-                        }}>
-                          {item.time}
-                        </p>
-                        <p style={{ 
-                          color: '#111827', 
-                          fontWeight: '500',
-                          margin: 0
-                        }}>
-                          {item.activity}
-                        </p>
-                      </div>
-                    </div>
-                    {idx < schedule.length - 1 && (
-                      <div style={{
-                        height: '1px',
-                        backgroundColor: '#e5e7eb',
-                        margin: '0 3rem'
-                      }} />
-                    )}
+              {[
+                { time: '4:30 AM', event: 'Mangala Arati & Tulasi Puja', desc: 'Morning prayer and worship' },
+                { time: '5:00 AM', event: 'Japa Meditation', desc: 'Chanting of the Holy Name' },
+                { time: '7:00 AM', event: 'Guru Puja & Kirtan', desc: 'Devotional songs and prayers' },
+                { time: '8:00 AM', event: 'Srimad Bhagavatam Class', desc: 'Scripture study and discussion' },
+                { time: '12:30 PM', event: 'Raj Bhoga Arati', desc: 'Midday offering to the deities' },
+                { time: '1:00 PM', event: 'Prasadam', desc: 'Sacred vegetarian meal' },
+                { time: '6:30 PM', event: 'Sandhya Arati', desc: 'Evening prayer ceremony' },
+                { time: '7:00 PM', event: 'Evening Programs', desc: 'Special classes and discussions' }
+              ].map((schedule, i) => (
+                <div 
+                  key={i}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    backgroundColor: i % 2 === 0 ? '#f8fafc' : 'white',
+                    padding: '1.5rem',
+                    borderRadius: '8px',
+                    borderLeft: '4px solid #ea580c',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
+                  }}
+                  className="card-hover animate-fadeInUp"
+                >
+                  <div style={{
+                    minWidth: '80px',
+                    fontSize: '1rem',
+                    fontWeight: '700',
+                    color: '#ea580c',
+                    marginRight: '2rem'
+                  }}>
+                    {schedule.time}
                   </div>
-                ))}
-              </div>
+                  <div style={{ flexGrow: 1 }}>
+                    <h3 style={{ 
+                      fontSize: '1.125rem', 
+                      fontWeight: '600',
+                      color: '#111827',
+                      marginBottom: '0.25rem'
+                    }}>
+                      {schedule.event}
+                    </h3>
+                    <p style={{ 
+                      fontSize: '0.875rem', 
+                      color: '#6b7280',
+                      margin: 0
+                    }}>
+                      {schedule.desc}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>
@@ -1010,106 +1023,57 @@ export default function Home() {
         {/* Facilities Section */}
         <section id="facilities" style={{ 
           padding: '4rem 2rem', 
-          position: 'relative', 
-          background: 'linear-gradient(135deg, #fff, #fef9e7)'
+          backgroundColor: '#f9fafb'
         }}>
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'radial-gradient(circle at 15% 20%, rgba(245,158,11,0.08), transparent 55%)'
-          }} />
-          <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative' }}>
-            <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-              <p style={{ 
-                fontSize: '0.875rem', 
-                fontWeight: '700', 
-                color: '#ea580c', 
-                textTransform: 'uppercase',
-                letterSpacing: '2px',
-                marginBottom: '0.5rem'
-              }}>
-                FACILITIES
-              </p>
-              <h2 style={{ 
-                fontSize: '2.5rem', 
-                fontWeight: '800', 
-                marginBottom: '1rem',
-                letterSpacing: '-1px',
-                color: '#111827'
-              }}>
-                Your Spiritual Campus
-              </h2>
-              <p style={{
-                fontSize: '1.1rem',
-                color: '#6b7280',
-                maxWidth: '700px',
-                margin: '0 auto',
-                lineHeight: '1.6'
-              }}>
-                Spaces designed to nurture reflection, community, health and growth.
-              </p>
-            </div>
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            <h2 style={{ 
+              fontSize: '2.5rem', 
+              fontWeight: '800', 
+              textAlign: 'center', 
+              marginBottom: '3rem',
+              background: 'linear-gradient(135deg, #111827, #374151)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }} className="animate-fadeInUp">
+              Our Facilities
+            </h2>
             
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-              gap: '2rem'
-            }}>
-              {facilities.map((facility, i) => (
+              gap: '1.5rem'
+            }} className="grid-responsive">
+              {[
+                { name: 'Prayer Hall', desc: 'Peaceful meditation space' },
+                { name: 'Library', desc: 'Spiritual books & resources' },
+                { name: 'Kitchen', desc: 'Prasadam preparation' },
+                { name: 'Study Rooms', desc: 'Group discussions' }
+              ].map((facility, i) => (
                 <div 
                   key={i}
                   style={{
                     backgroundColor: 'white',
-                    padding: '2rem',
-                    borderRadius: '16px',
-                    border: '1px solid #e5e7eb',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.06)',
-                    transition: 'all 0.25s ease',
-                    cursor: 'pointer',
-                    textAlign: 'center'
+                    padding: '1.5rem',
+                    borderRadius: '12px',
+                    textAlign: 'center',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                   }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-4px)';
-                    e.currentTarget.style.boxShadow = '0 6px 16px -4px rgba(0,0,0,0.15)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.06)';
-                  }}
+                  className="card-hover animate-fadeInUp"
                 >
-                  <div style={{
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: '#fed7aa',
-                    color: '#ea580c',
-                    boxShadow: '0 2px 5px rgba(234,88,12,0.3)',
-                    margin: '0 auto 1rem auto',
-                    fontSize: '1.2rem'
-                  }}>
-                    {facility.icon}
-                  </div>
                   <h3 style={{ 
-                    fontSize: '1.1rem', 
-                    fontWeight: '700',
-                    marginBottom: '0.75rem',
-                    color: '#111827'
+                    fontSize: '1.125rem', 
+                    fontWeight: '700', 
+                    marginBottom: '0.5rem',
+                    color: '#ea580c'
                   }}>
-                    {facility.title}
+                    {facility.name}
                   </h3>
                   <p style={{ 
                     fontSize: '0.875rem', 
                     color: '#6b7280',
-                    margin: 0,
-                    lineHeight: '1.45'
+                    margin: 0
                   }}>
-                    {facility.description}
+                    {facility.desc}
                   </p>
                 </div>
               ))}
@@ -1158,150 +1122,120 @@ export default function Home() {
         {/* Contact Section */}
         <section id="contact" style={{ 
           padding: '4rem 2rem', 
-          background: 'linear-gradient(135deg, #fff, #fffbf0)',
-          position: 'relative'
+          backgroundColor: '#111827',
+          color: 'white'
         }}>
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'radial-gradient(circle at 50% 0%, rgba(245,158,11,0.08), transparent 60%)'
-          }} />
-          <div style={{ maxWidth: '600px', margin: '0 auto', position: 'relative' }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
+            <h2 style={{ 
+              fontSize: '2.5rem', 
+              fontWeight: '800', 
+              marginBottom: '2rem',
+              background: 'linear-gradient(135deg, #ff6b35, #f7931e)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }} className="animate-fadeInUp">
+              Ready to Begin Your Journey?
+            </h2>
+            
             <div style={{
-              backgroundColor: 'white',
-              borderRadius: '20px',
-              padding: '3rem',
-              boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
-              textAlign: 'center'
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+              gap: '2rem',
+              marginTop: '3rem'
             }}>
-              <div style={{ marginBottom: '2rem' }}>
-                <p style={{ 
-                  fontSize: '0.875rem', 
+              <div className="animate-fadeInUp">
+                <h3 style={{ 
+                  fontSize: '1.25rem', 
                   fontWeight: '700', 
-                  color: '#ea580c', 
+                  marginBottom: '1rem', 
+                  color: '#ff6b35',
+                  textAlign: 'center',
                   textTransform: 'uppercase',
-                  letterSpacing: '2px',
-                  marginBottom: '0.5rem'
+                  letterSpacing: '1px'
                 }}>
-                  CONNECT
+                  Visit Us
+                </h3>
+                <p style={{ textAlign: 'center', lineHeight: '1.6', color: '#e5e7eb' }}>
+                  26 Prem Niwas First Floor, Above Natural's Ice Cream,<br />
+                  Malka Ganj, New Delhi, Delhi 110007
                 </p>
-                <h2 style={{ 
-                  fontSize: '2.5rem', 
-                  fontWeight: '800', 
-                  marginBottom: '1rem',
-                  letterSpacing: '-1px',
-                  color: '#111827'
-                }}>
-                  Get In Touch
-                </h2>
               </div>
               
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '1rem'
+              <div className="animate-fadeInUp">
+                <h3 style={{ 
+                  fontSize: '1.25rem', 
+                  fontWeight: '700', 
+                  marginBottom: '1rem', 
+                  color: '#ff6b35',
+                  textAlign: 'center',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px'
                 }}>
-                  <span style={{ fontSize: '1.5rem' }}>📱</span>
-                  <a 
-                    href="tel:+918318342494" 
-                    style={{ 
-                      color: '#ea580c', 
-                      textDecoration: 'none', 
-                      fontWeight: '600',
-                      fontSize: '1rem'
-                    }}
-                  >
-                    +91 83183 42494
-                  </a>
-                </div>
-                
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  justifyContent: 'center',
-                  gap: '1rem'
-                }}>
-                  <span style={{ fontSize: '1.5rem' }}>📍</span>
-                  <p style={{ 
-                    maxWidth: '320px',
-                    lineHeight: '1.6',
-                    color: '#4b5563',
-                    fontWeight: '600',
-                    margin: 0
+                  Connect
+                </h3>
+                <div style={{ textAlign: 'center' }}>
+                  <a href="tel:+919876543210" style={{ 
+                    color: '#ff6b35', 
+                    textDecoration: 'none', 
+                    display: 'block', 
+                    marginBottom: '0.5rem',
+                    fontWeight: '500',
+                    fontSize: '1rem'
                   }}>
-                    26 Prem Niwas First Floor, Above Natural's Ice Cream, Malka Ganj, New Delhi, Delhi 110007
-                  </p>
-                </div>
-                
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '1rem'
-                }}>
-                  <span style={{ fontSize: '1.5rem' }}>📸</span>
-                  <a 
-                    href="https://instagram.com/iskcondelhiuniversity" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    style={{ 
-                      color: '#ea580c', 
-                      textDecoration: 'none', 
-                      fontWeight: '600',
-                      fontSize: '1rem'
-                    }}
-                  >
-                    @iskcondelhiuniversity
+                    Phone: +91 98765 43210
                   </a>
-                </div>
-                
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '1rem'
-                }}>
-                  <span style={{ fontSize: '1.5rem' }}>📺</span>
-                  <a 
-                    href="https://youtube.com/@ISKCONDelhiUniversity" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    style={{ 
-                      color: '#ea580c', 
-                      textDecoration: 'none', 
-                      fontWeight: '600',
-                      fontSize: '1rem'
-                    }}
-                  >
-                    @ISKCONDelhiUniversity
+                  <a href="https://instagram.com/iskcondelhiuniversity" style={{ 
+                    color: '#ff6b35', 
+                    textDecoration: 'none', 
+                    display: 'block', 
+                    marginBottom: '0.5rem',
+                    fontWeight: '500',
+                    fontSize: '1rem'
+                  }}>
+                    Instagram
+                  </a>
+                  <a href="https://youtube.com/@iskcondelhiuniversity" style={{ 
+                    color: '#ff6b35', 
+                    textDecoration: 'none', 
+                    display: 'block',
+                    fontWeight: '500',
+                    fontSize: '1rem'
+                  }}>
+                    YouTube
                   </a>
                 </div>
               </div>
               
-              <a 
-                href="https://instagram.com/iskcondelhiuniversity"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  backgroundColor: '#ea580c',
-                  color: 'white',
-                  padding: '1rem 2rem',
-                  borderRadius: '999px',
-                  textDecoration: 'none',
-                  fontWeight: '700',
-                  display: 'inline-block',
-                  marginTop: '2rem',
-                  fontSize: '1.1rem'
-                }}
-                className="button-primary"
-              >
-                Join Our Community
-              </a>
+              <div className="animate-fadeInUp">
+                <h3 style={{ 
+                  fontSize: '1.25rem', 
+                  fontWeight: '700', 
+                  marginBottom: '1rem', 
+                  color: '#ff6b35',
+                  textAlign: 'center',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px'
+                }}>
+                  Join Now
+                </h3>
+                <a 
+                  href="https://forms.google.com/your-form-id"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    backgroundColor: '#ff6b35',
+                    color: 'white',
+                    padding: '1rem 2rem',
+                    borderRadius: '999px',
+                    textDecoration: 'none',
+                    fontWeight: '700',
+                    display: 'inline-block'
+                  }}
+                  className="button-primary"
+                >
+                  Start Your Journey
+                </a>
+              </div>
             </div>
           </div>
         </section>
