@@ -487,7 +487,7 @@ export default function Home() {
                   textTransform: 'uppercase',
                   letterSpacing: '1px'
                 }}>
-                  Community & Learning
+                  Community
                 </h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   {[
