@@ -3,7 +3,6 @@ import React from 'react';
 import {
   AppBar, Box, Toolbar, Typography, Container, Button, IconButton, Stack, Grid, Card, CardContent, Chip, Divider, List, ListItem, ListItemIcon, ListItemText, useScrollTrigger, Slide, Tooltip
 } from '@mui/material';
-import { DarkModeIcon, LightModeIcon, MenuBookIcon, SelfImprovementIcon, MusicNoteIcon, RestaurantIcon, LibraryBooksIcon, TheaterComedyIcon, HomeIcon, LocalLibraryIcon, LocalDiningIcon, SpaIcon, AccessTimeIcon, InstagramIcon, YouTubeIcon, PhoneIcon, PlaceIcon, GroupIcon, VolunteerActivismIcon, GavelIcon, MilitaryTechIcon, HikingIcon, FavoriteBorderIcon } from '../icons/FallbackIcons';
 import { useContext } from 'react';
 import { ColorModeContext } from './theme/AppThemeProvider';
 
@@ -17,29 +16,29 @@ function HideOnScroll({ children }: { children: React.ReactElement }) {
 }
 
 const programs = [
-  { icon: <MenuBookIcon color="warning" />, title: 'Learning Gita & Vedic Wisdom', description: 'Structured deep dive into Bhagavad Gita & Vedic philosophy.' },
-  { icon: <SelfImprovementIcon color="warning" />, title: 'Chanting / Mantra Meditation', description: 'Daily japa & kirtan to sharpen focus and purify mind.' },
-  { icon: <MilitaryTechIcon color="warning" />, title: 'Leadership Development', description: 'Cultivating responsibility, clarity & servant-leadership.' },
-  { icon: <GroupIcon color="warning" />, title: 'Spiritual Friendship', description: 'Uplifting association & accountability circles.' },
-  { icon: <MusicNoteIcon color="warning" />, title: 'Kirtans / Festivals', description: 'High-energy devotional music & cultural celebrations.' },
-  { icon: <VolunteerActivismIcon color="warning" />, title: 'Personal Mentorship', description: 'One-on-one guidance for growth & sadhana alignment.' },
-  { icon: <HikingIcon color="warning" />, title: 'Dham Yatra', description: 'Transformative pilgrimages to sacred holy places.' },
-  { icon: <SpaIcon color="warning" />, title: 'Sattvik Lifestyle', description: 'Balanced routine: purity, nutrition, discipline & seva.' },
-  { icon: <LibraryBooksIcon color="warning" />, title: 'Spreading Vedic Wisdom', description: 'Outreach, seminars & distribution of sacred texts.' },
-  { icon: <SupportAgentIcon color="warning" />, title: 'Spiritual Counseling', description: 'Support for life decisions & inner emotional balance.' },
-  { icon: <HomeIcon color="warning" />, title: 'Accommodation', description: 'Focused spiritual student residential environment.' },
-  { icon: <RestaurantIcon color="warning" />, title: 'Prasadam', description: 'Wholesome sanctified vegetarian nourishment.' },
-  { icon: <FavoriteBorderIcon color="warning" />, title: 'Mental / Physical Detox', description: 'Habit reset using mantra, regulated sleep & diet.' },
-  { icon: <GavelIcon color="warning" />, title: 'Debate Circles', description: 'Structured philosophical dialogue & reasoning.' },
-  { icon: <TheaterComedyIcon color="warning" />, title: 'Drama', description: 'Devotional theater & expressive arts seva.' },
-  { icon: <EmojiEventsIcon color="warning" />, title: 'Competitions', description: 'Quizzes, recitation & character challenges.' },
+  { icon: <span style={{fontSize:'1.5rem'}}>📖</span>, title: 'Learning Gita & Vedic Wisdom', description: 'Structured deep dive into Bhagavad Gita & Vedic philosophy.' },
+  { icon: <span style={{fontSize:'1.5rem'}}>🧘</span>, title: 'Chanting / Mantra Meditation', description: 'Daily japa & kirtan to sharpen focus and purify mind.' },
+  { icon: <span style={{fontSize:'1.5rem'}}>🎖️</span>, title: 'Leadership Development', description: 'Cultivating responsibility, clarity & servant-leadership.' },
+  { icon: <span style={{fontSize:'1.5rem'}}>👥</span>, title: 'Spiritual Friendship', description: 'Uplifting association & accountability circles.' },
+  { icon: <span style={{fontSize:'1.5rem'}}>🎵</span>, title: 'Kirtans / Festivals', description: 'High-energy devotional music & cultural celebrations.' },
+  { icon: <span style={{fontSize:'1.5rem'}}>🤝</span>, title: 'Personal Mentorship', description: 'One-on-one guidance for growth & sadhana alignment.' },
+  { icon: <span style={{fontSize:'1.5rem'}}>🥾</span>, title: 'Dham Yatra', description: 'Transformative pilgrimages to sacred holy places.' },
+  { icon: <span style={{fontSize:'1.5rem'}}>💆</span>, title: 'Sattvik Lifestyle', description: 'Balanced routine: purity, nutrition, discipline & seva.' },
+  { icon: <span style={{fontSize:'1.5rem'}}>📚</span>, title: 'Spreading Vedic Wisdom', description: 'Outreach, seminars & distribution of sacred texts.' },
+  { icon: <span style={{fontSize:'1.5rem'}}>🎧</span>, title: 'Spiritual Counseling', description: 'Support for life decisions & inner emotional balance.' },
+  { icon: <span style={{fontSize:'1.5rem'}}>🏠</span>, title: 'Accommodation', description: 'Focused spiritual student residential environment.' },
+  { icon: <span style={{fontSize:'1.5rem'}}>🍽️</span>, title: 'Prasadam', description: 'Wholesome sanctified vegetarian nourishment.' },
+  { icon: <span style={{fontSize:'1.5rem'}}>❤️</span>, title: 'Mental / Physical Detox', description: 'Habit reset using mantra, regulated sleep & diet.' },
+  { icon: <span style={{fontSize:'1.5rem'}}>⚖️</span>, title: 'Debate Circles', description: 'Structured philosophical dialogue & reasoning.' },
+  { icon: <span style={{fontSize:'1.5rem'}}>🎭</span>, title: 'Drama', description: 'Devotional theater & expressive arts seva.' },
+  { icon: <span style={{fontSize:'1.5rem'}}>🏆</span>, title: 'Competitions', description: 'Quizzes, recitation & character challenges.' },
 ];
 
 const facilities = [
-  { icon: <HomeIcon color="warning" />, title: 'Accommodation', description: 'Comfortable, focused student living.' },
-  { icon: <LocalLibraryIcon color="warning" />, title: 'Library', description: 'Spiritual & academic study space.' },
-  { icon: <LocalDiningIcon color="warning" />, title: 'Dining Hall', description: 'Nutritious daily prasadam meals.' },
-  { icon: <SpaIcon color="warning" />, title: 'Meditation Hall', description: 'Quiet space for reflection & prayer.' },
+  { icon: <span style={{fontSize:'1.5rem'}}>🏠</span>, title: 'Accommodation', description: 'Comfortable, focused student living.' },
+  { icon: <span style={{fontSize:'1.5rem'}}>🏛️</span>, title: 'Library', description: 'Spiritual & academic study space.' },
+  { icon: <span style={{fontSize:'1.5rem'}}>🍴</span>, title: 'Dining Hall', description: 'Nutritious daily prasadam meals.' },
+  { icon: <span style={{fontSize:'1.5rem'}}>💆</span>, title: 'Meditation Hall', description: 'Quiet space for reflection & prayer.' },
 ];
 
 const schedule = [
@@ -76,7 +75,7 @@ export default function Home() {
                 Join Now
               </Button>
               <IconButton onClick={toggle} color="warning" aria-label="Toggle color mode" sx={{ ml: 0.5 }}>
-                {mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
+                {mode === 'light' ? <span style={{fontSize:'1.5rem'}}>🌙</span> : <span style={{fontSize:'1.5rem'}}>☀️</span>}
               </IconButton>
             </Stack>
           </Toolbar>
@@ -173,7 +172,19 @@ export default function Home() {
       </Box>
 
   {/* Programs / Features */}
-  <Box id="programs" py={12} sx={{ background: (theme) => theme.palette.mode === 'light' ? 'linear-gradient(135deg, #ffffff, #fff9f2)' : 'linear-gradient(135deg, #1e2124, #181b1e)', transition: 'background 0.4s' }}>
+  <Box id="programs" py={12} sx={{ 
+    background: (theme) => theme.palette.mode === 'light' 
+      ? 'linear-gradient(135deg, #ffffff 0%, #fff9f2 50%, #fef3e7 100%)' 
+      : 'linear-gradient(135deg, #1e2124 0%, #181b1e 50%, #161a1d 100%)', 
+    transition: 'background 0.4s',
+    position: 'relative'
+  }}>
+    <Box sx={{ 
+      position: 'absolute', 
+      inset: 0, 
+      background: 'radial-gradient(circle at 20% 80%, rgba(245,158,11,0.05), transparent 50%)',
+      pointerEvents: 'none'
+    }} />
         <Container maxWidth="lg">
           <Stack spacing={2} textAlign="center" mb={6}>
     <Typography variant="overline" fontWeight={700} color="warning.main">FEATURES</Typography>
@@ -190,12 +201,33 @@ export default function Home() {
                   display: 'flex',
                   flexDirection: 'column',
                   border: 'none',
-                  background: (theme) => theme.palette.mode === 'light' ? 'linear-gradient(180deg, #ffffff, #fffaf0)' : 'linear-gradient(180deg, #1e2124, #1a1f20)',
-                  boxShadow: (theme) => theme.palette.mode === 'light' ? '0 4px 8px rgba(0,0,0,0.1)' : '0 4px 8px rgba(0,0,0,0.6)',
+                  background: (theme) => theme.palette.mode === 'light' 
+                    ? `linear-gradient(145deg, #ffffff 0%, #fffaf0 100%)` 
+                    : `linear-gradient(145deg, #1e2124 0%, #1a1f20 100%)`,
+                  boxShadow: (theme) => theme.palette.mode === 'light' 
+                    ? '0 4px 8px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04)' 
+                    : '0 4px 8px rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.4)',
                   transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                  overflow: 'hidden',
                   '&:hover': {
-                    boxShadow: (theme) => theme.palette.mode === 'light' ? '0 10px 20px rgba(0,0,0,0.15)' : '0 10px 20px rgba(0,0,0,0.7)',
-                    transform: 'translateY(-5px)'
+                    boxShadow: (theme) => theme.palette.mode === 'light' 
+                      ? '0 12px 24px rgba(0,0,0,0.15), 0 6px 12px rgba(0,0,0,0.08)' 
+                      : '0 12px 24px rgba(0,0,0,0.7), 0 6px 12px rgba(0,0,0,0.5)',
+                    transform: 'translateY(-6px)'
+                  },
+                  '&:before': {
+                    content: '""',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: 4,
+                    background: 'linear-gradient(90deg, #ea580c, #f59e0b)',
+                    opacity: 0,
+                    transition: 'opacity 0.3s ease'
+                  },
+                  '&:hover:before': {
+                    opacity: 1
                   }
                 }}>
                   <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', gap: 1.25, pb: 3 }}>
@@ -237,7 +269,7 @@ export default function Home() {
               {schedule.map((item, idx) => (
                 <React.Fragment key={idx}>
                   <ListItem sx={{ px: { xs: 0, md: 1 } }}>
-                    <ListItemIcon sx={{ minWidth: 48 }}><AccessTimeIcon color="warning" /></ListItemIcon>
+                    <ListItemIcon sx={{ minWidth: 48 }}><span style={{fontSize:'1.5rem'}}>⏰</span></ListItemIcon>
                     <ListItemText
                       primary={<Typography fontWeight={700} color="warning.main">{item.time}</Typography>}
                       secondary={<Typography color="text.primary" fontWeight={500}>{item.activity}</Typography>}
@@ -295,19 +327,19 @@ export default function Home() {
               <Typography variant="h4" fontWeight={800} sx={{ letterSpacing: -1 }}>Get In Touch</Typography>
               <Stack spacing={2}>
                 <Stack direction="row" spacing={2} alignItems="center" justifyContent="center">
-                  <PhoneIcon color="warning" />
+                  <span style={{fontSize:'1.5rem'}}>📱</span>
                   <Button href="tel:+918318342494" color="warning" sx={{ fontWeight: 600, textTransform: 'none' }}>+91 83183 42494</Button>
                 </Stack>
                 <Stack direction="row" spacing={2} alignItems="flex-start" justifyContent="center">
-                  <PlaceIcon color="warning" />
+                  <span style={{fontSize:'1.5rem'}}>📍</span>
                   <Typography maxWidth={320}>ADDRESS:- ISKCON STUDENT CENTER, 1ST FLOOR, OPPOSITE HANSRAJ COLLEGE, ABOVE NATURAL'S ICE CREAM, NEAR STARBUCKS, KAMLA NAGAR, DELHI 110007</Typography>
                 </Stack>
                 <Stack direction="row" spacing={2} alignItems="center" justifyContent="center">
-                  <InstagramIcon color="warning" />
+                  <span style={{fontSize:'1.5rem'}}>📸</span>
                   <Button href="https://instagram.com/iskcondelhiuniversity" target="_blank" rel="noopener" color="warning">@iskcondelhiuniversity</Button>
                 </Stack>
                 <Stack direction="row" spacing={2} alignItems="center" justifyContent="center">
-                  <YouTubeIcon color="warning" />
+                  <span style={{fontSize:'1.5rem'}}>📺</span>
                   <Button href="https://youtube.com/@ISKCONDelhiUniversity" target="_blank" rel="noopener" color="warning">@ISKCONDelhiUniversity</Button>
                 </Stack>
               </Stack>
@@ -331,15 +363,15 @@ export default function Home() {
                 </Typography>
                 <Stack spacing={2}>
                   <Stack direction="row" spacing={1.5} alignItems="flex-start">
-                    <PlaceIcon color="warning" />
+                    <span style={{fontSize:'1.5rem'}}>📍</span>
                     <Typography fontWeight={600}>ADDRESS:- ISKCON STUDENT CENTER, 1ST FLOOR, OPPOSITE HANSRAJ COLLEGE, ABOVE NATURAL'S ICE CREAM, NEAR STARBUCKS, KAMLA NAGAR, DELHI 110007</Typography>
                   </Stack>
                   <Stack direction="row" spacing={1.5} alignItems="center">
-                    <PhoneIcon color="warning" />
+                    <span style={{fontSize:'1.5rem'}}>📱</span>
                     <Button href="tel:+918318342494" color="warning" sx={{ fontWeight: 600, textTransform: 'none', px: 0 }}>+91 83183 42494</Button>
                   </Stack>
                   <Stack direction="row" spacing={1.5} alignItems="center">
-                    <InstagramIcon color="warning" />
+                    <span style={{fontSize:'1.5rem'}}>📸</span>
                     <Button href="https://instagram.com/iskcondelhiuniversity" target="_blank" rel="noopener" color="warning" sx={{ fontWeight: 600, textTransform: 'none' }}>@iskcondelhiuniversity</Button>
                   </Stack>
                 </Stack>
@@ -376,10 +408,10 @@ export default function Home() {
                 </Typography>
                 <Stack direction="row" spacing={2}>
                   <IconButton size="small" color="warning" href="https://instagram.com/iskcondelhiuniversity" target="_blank" rel="noopener" sx={{ bgcolor: 'warning.light', '&:hover': { bgcolor: 'warning.light', transform: 'translateY(-3px) scale(1.05)' }, transition: '0.35s', boxShadow: '0 4px 12px -2px rgba(234,88,12,0.35)' }}>
-                    <InstagramIcon />
+                    <span style={{fontSize:'1.5rem'}}>📸</span>
                   </IconButton>
                   <IconButton size="small" color="warning" href="https://youtube.com/@ISKCONDelhiUniversity" target="_blank" rel="noopener" sx={{ bgcolor: 'warning.light', '&:hover': { bgcolor: 'warning.light', transform: 'translateY(-3px) scale(1.05)' }, transition: '0.35s', boxShadow: '0 4px 12px -2px rgba(234,88,12,0.35)' }}>
-                    <YouTubeIcon />
+                    <span style={{fontSize:'1.5rem'}}>📺</span>
                   </IconButton>
                 </Stack>
               </Stack>
@@ -399,19 +431,19 @@ export default function Home() {
                 <Typography variant="subtitle2" fontWeight={700} color="warning.main">Connect</Typography>
                 <Stack spacing={1.5}>
                   <Stack direction="row" spacing={1.2} alignItems="center">
-                    <PhoneIcon fontSize="small" color="warning" />
+                    <span style={{fontSize:'1rem'}}>📱</span>
                     <Button href="tel:+918318342494" variant="text" color="inherit" sx={{ fontWeight: 600, textTransform: 'none', px: 0, minWidth: 0, '&:hover': { color: 'warning.main', background: 'transparent' } }}>+91 83183 42494</Button>
                   </Stack>
                   <Stack direction="row" spacing={1.2} alignItems="center">
-                    <InstagramIcon fontSize="small" color="warning" />
+                    <span style={{fontSize:'1rem'}}>📸</span>
                     <Button href="https://instagram.com/iskcondelhiuniversity" target="_blank" rel="noopener" variant="text" color="inherit" sx={{ fontWeight: 600, textTransform: 'none', px: 0, minWidth: 0, position: 'relative', '&:after': { content: '""', position: 'absolute', left: 0, bottom: 0, height: 2, width: 0, bgcolor: 'warning.main', transition: '0.4s' }, '&:hover': { color: 'warning.main', background: 'transparent' }, '&:hover:after': { width: '100%' } }}>@iskcondelhiuniversity</Button>
                   </Stack>
                   <Stack direction="row" spacing={1.2} alignItems="center">
-                    <YouTubeIcon fontSize="small" color="warning" />
+                    <span style={{fontSize:'1rem'}}>📺</span>
                     <Button href="https://youtube.com/@ISKCONDelhiUniversity" target="_blank" rel="noopener" variant="text" color="inherit" sx={{ fontWeight: 600, textTransform: 'none', px: 0, minWidth: 0, position: 'relative', '&:after': { content: '""', position: 'absolute', left: 0, bottom: 0, height: 2, width: 0, bgcolor: 'warning.main', transition: '0.4s' }, '&:hover': { color: 'warning.main', background: 'transparent' }, '&:hover:after': { width: '100%' } }}>@ISKCONDelhiUniversity</Button>
                   </Stack>
                   <Stack direction="row" spacing={1.2} alignItems="flex-start">
-                    <PlaceIcon fontSize="small" color="warning" />
+                    <span style={{fontSize:'1rem'}}>📍</span>
                     <Typography variant="body2" fontWeight={600} maxWidth={260}>ADDRESS:- ISKCON STUDENT CENTER, 1ST FLOOR, OPPOSITE HANSRAJ COLLEGE, ABOVE NATURAL'S ICE CREAM, NEAR STARBUCKS, KAMLA NAGAR, DELHI 110007</Typography>
                   </Stack>
                 </Stack>
