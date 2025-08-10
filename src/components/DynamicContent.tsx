@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { fetchCarouselImages, fetchAnnouncements, type CarouselImage, type Announcement } from '../lib/cms';
 
 // Dynamic Carousel Component
@@ -439,22 +439,27 @@ export function DynamicAnnouncements() {
     );
   }
 
-  const activeAnnouncements = announcements.filter(ann => ann.isActive);
-  
-  // Create announcement text with clickable links
+export default function AnnouncementBar({ announcements }) {
+  const containerRef = useRef(null);
+  const textRef = useRef(null);
+  const [duration, setDuration] = useState(25);
+
+  const activeAnnouncements = announcements?.filter(ann => ann.isActive) || [];
+
   const createAnnouncementContent = () => {
     if (activeAnnouncements.length === 0) {
+      // fallback so ticker starts instantly
       return 'Welcome to ISKCON Student Center • Join us for daily morning programs at 6:30 AM • Bhagavad Gita classes every Sunday at 5 PM • Free prasadam for all students';
     }
-
     return activeAnnouncements.map((ann, index) => {
       const baseText = ann.text;
       if (ann.link) {
         return (
           <span key={ann.id}>
-            {baseText} • <a 
-              href={ann.link} 
-              target="_blank" 
+            {baseText} •{' '}
+            <a
+              href={ann.link}
+              target="_blank"
               rel="noopener noreferrer"
               style={{
                 color: '#ea580c',
@@ -476,36 +481,53 @@ export function DynamicAnnouncements() {
       );
     });
   };
-  
+
+  // auto-adjust speed based on text length
+  useEffect(() => {
+    if (containerRef.current && textRef.current) {
+      const textWidth = textRef.current.scrollWidth;
+      const containerWidth = containerRef.current.offsetWidth;
+      const speed = 50; // pixels/sec
+      setDuration((textWidth + containerWidth) / speed);
+    }
+  }, [announcements]);
 
   return (
-    <div style={{
-      backgroundColor: '#f8f9fa',
-      color: '#1f2937',
-      padding: '0.75rem 0',
-      overflow: 'hidden',
-      position: 'relative',
-      whiteSpace: 'nowrap',
-      marginTop: '70px',
-      borderTop: '3px solid #ea580c',
-      borderBottom: '3px solid #ea580c'
-    }}>
-      <div style={{
-        display: 'inline-block',
-        animation: 'scroll-announcement 25s linear infinite',
-        fontSize: '1rem',
-        fontWeight: '500'
-      }}>
+    <div
+      ref={containerRef}
+      style={{
+        backgroundColor: '#f8f9fa',
+        color: '#1f2937',
+        padding: '0.75rem 0',
+        overflow: 'hidden',
+        position: 'relative',
+        whiteSpace: 'nowrap',
+        marginTop: '70px',
+        borderTop: '3px solid #ea580c',
+        borderBottom: '3px solid #ea580c'
+      }}
+    >
+      <div
+        ref={textRef}
+        style={{
+          display: 'inline-block',
+          animation: `scroll-announcement ${duration}s linear infinite`,
+          fontSize: '1rem',
+          fontWeight: '500'
+        }}
+      >
         {createAnnouncementContent()}
       </div>
-      <style dangerouslySetInnerHTML={{
-        __html: `
-          @keyframes scroll-announcement {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-          }
-        `
-      }} />
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            @keyframes scroll-announcement {
+              0% { transform: translateX(100%); }
+              100% { transform: translateX(-100%); }
+            }
+          `
+        }}
+      />
     </div>
   );
 }
