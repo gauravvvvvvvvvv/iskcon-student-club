@@ -83,7 +83,7 @@ export default function Home() {
   return (
     <Box sx={{ bgcolor: 'background.default', color: 'text.primary', minHeight: '100vh' }}>
       <HideOnScroll>
-        <AppBar elevation={0} color="default" sx={{ backdropFilter: 'blur(16px)', bgcolor: 'rgba(255,255,255,0.85)', borderBottom: 1, borderColor: 'divider' }}>
+        <AppBar elevation={0} color="default" sx={{ backdropFilter: 'blur(16px)', borderBottom: 1, borderColor: 'divider' }}>
           <Toolbar sx={{ maxWidth: 1280, mx: 'auto', width: '100%' }}>
             <Typography variant="h6" sx={{ fontWeight: 700, flexGrow: 1, letterSpacing: 0.5, color: 'warning.main' }}>
               ISKCON Student Center
@@ -125,13 +125,24 @@ export default function Home() {
             mb: { xs: 6, md: 8 },
             flexWrap: 'nowrap'
           }}>
-            <Box sx={{ position: 'relative', width: { xs: 80, sm: 130, md: 170 }, height: { xs: 80, sm: 130, md: 170 }, borderRadius: '50%', overflow: 'hidden', boxShadow: '0 6px 18px -6px rgba(0,0,0,0.25)', flexShrink: 0, bgcolor: 'warning.light' }}>
-              <Box
+            <Box sx={{ 
+              position: 'relative', 
+              width: { xs: 80, sm: 130, md: 170 }, 
+              height: { xs: 80, sm: 130, md: 170 }, 
+              borderRadius: '50%', 
+              overflow: 'hidden', 
+              boxShadow: '0 6px 18px -6px rgba(0,0,0,0.25)', 
+              flexShrink: 0
+            }}>
+              <Box 
                 component="img"
                 src="/prabhupada.jpg"
                 alt="Srila Prabhupada"
-                onError={(e: any) => { e.currentTarget.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"><rect width="300" height="300" rx="150" fill="%23ffe8d0"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="34" font-family="Arial" fill="%23ea580c">IMAGE</text></svg>'; }}
-                style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover'
+                }}
               />
             </Box>
             <Typography component="h1" sx={{
@@ -148,13 +159,23 @@ export default function Home() {
             }}>
               INTERNATIONAL SOCIETY FOR KRISHNA CONSCIOUSNESS
             </Typography>
-            <Box sx={{ position: 'relative', width: { xs: 80, sm: 130, md: 180 }, height: { xs: 80, sm: 150, md: 200 }, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', p: 1 }}>
-              <Box
+            <Box sx={{ 
+              position: 'relative', 
+              width: { xs: 80, sm: 130, md: 180 }, 
+              height: { xs: 80, sm: 150, md: 200 }, 
+              flexShrink: 0, 
+              overflow: 'hidden',
+              borderRadius: '50%'
+            }}>
+              <Box 
                 component="img"
                 src="/iskcon-logo.png"
                 alt="ISKCON Logo"
-                onError={(e: any) => { e.currentTarget.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><rect width="400" height="400" fill="%23fff3e0"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="46" font-family="Arial" fill="%23ea580c">LOGO</text></svg>'; }}
-                style={{ objectFit: 'contain', width: '100%', height: '100%', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.25))' }}
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain'
+                }}
               />
             </Box>
           </Box>

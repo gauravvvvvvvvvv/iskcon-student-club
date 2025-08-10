@@ -55,7 +55,10 @@ export function AppThemeProvider({ children }: { children: ReactNode }) {
   const toggle = useCallback(() => {
     setMode(m => {
       const next = m === 'light' ? 'dark' : 'light';
-      if (typeof window !== 'undefined') window.localStorage.setItem('isc-mode', next);
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem('isc-mode', next);
+        document.documentElement.dataset.theme = next;
+      }
       return next;
     });
   }, []);
@@ -63,6 +66,7 @@ export function AppThemeProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (typeof document !== 'undefined') {
       document.documentElement.dataset.theme = mode;
+      document.documentElement.style.colorScheme = mode;
     }
   }, [mode]);
 
