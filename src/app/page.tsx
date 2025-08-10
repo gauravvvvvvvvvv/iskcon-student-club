@@ -37,6 +37,15 @@ const schedule = [
   { time: '7:30 PM', activity: 'Dinner Prasadam' }
 ];
 
+const facilities = [
+  { icon: '🏠', title: 'Accommodation', desc: 'Comfortable student housing with spiritual atmosphere' },
+  { icon: '📚', title: 'Library', desc: 'Extensive collection of spiritual and academic texts' },
+  { icon: '🍽️', title: 'Dining Hall', desc: 'Fresh prasadam meals prepared with devotion' },
+  { icon: '🧘', title: 'Meditation Hall', desc: 'Peaceful space for prayer and contemplation' },
+  { icon: '🎵', title: 'Kirtan Hall', desc: 'Sacred space for devotional music and dance' },
+  { icon: '🏃', title: 'Fitness Center', desc: 'Holistic wellness and yoga facilities' }
+];
+
 export default function Home() {
   const { mode, toggle } = useContext(ColorModeContext);
   
@@ -49,8 +58,8 @@ export default function Home() {
             ISKCON Student Center
           </Typography>
           <Stack direction="row" spacing={1} sx={{ display: { xs: 'none', md: 'flex' } }}>
-            {['Programs', 'Schedule', 'Contact'].map(item => (
-              <Button key={item} href={`#${item.toLowerCase()}`} color="warning" variant="text" sx={{ fontWeight: 600 }}>
+            {['Programs', 'Schedule', 'Facilities', 'Location', 'Contact'].map(item => (
+              <Button key={item} href={`#${item.toLower Case()}`} color="warning" variant="text" sx={{ fontWeight: 600 }}>
                 {item}
               </Button>
             ))}
@@ -248,57 +257,365 @@ export default function Home() {
         </Container>
       </Box>
 
-      {/* Contact Section */}
-      <Box id="contact" py={8} sx={{ bgcolor: 'background.paper' }}>
-        <Container maxWidth="sm">
-          <Paper elevation={4} sx={{ borderRadius: 4, p: 4, textAlign: 'center' }}>
-            <Typography variant="h4" fontWeight={800} mb={3}>
-              Get In Touch
-            </Typography>
-            
-            <Stack spacing={3}>
-              <Stack direction="row" spacing={2} alignItems="center" justifyContent="center">
-                <span style={{fontSize:'1.5rem'}}>📱</span>
-                <Button href="tel:+918318342494" color="warning" sx={{ fontWeight: 600, textTransform: 'none' }}>
-                  +91 83183 42494
-                </Button>
-              </Stack>
-              
-              <Stack direction="row" spacing={2} alignItems="center" justifyContent="center">
-                <span style={{fontSize:'1.5rem'}}>📸</span>
-                <Button href="https://instagram.com/iskcondelhiuniversity" target="_blank" color="warning">
-                  @iskcondelhiuniversity
-                </Button>
-              </Stack>
-              
-              <Stack direction="row" spacing={2} alignItems="center" justifyContent="center">
-                <span style={{fontSize:'1.5rem'}}>📺</span>
-                <Button href="https://youtube.com/@ISKCONDelhiUniversity" target="_blank" color="warning">
-                  @ISKCONDelhiUniversity
-                </Button>
-              </Stack>
-              
-              <Box>
-                <Stack direction="row" spacing={1} alignItems="flex-start" justifyContent="center">
-                  <span style={{fontSize:'1.5rem'}}>📍</span>
-                  <Typography variant="body2" sx={{ maxWidth: 400 }}>
-                    ISKCON STUDENT CENTER, 1ST FLOOR, OPPOSITE HANSRAJ COLLEGE, ABOVE NATURAL'S ICE CREAM, NEAR STARBUCKS, KAMLA NAGAR, DELHI 110007
+      {/* Facilities Section */}
+      <Box id="facilities" py={8} sx={{ bgcolor: 'background.paper' }}>
+        <Container maxWidth="lg">
+          <Typography variant="h4" fontWeight={800} textAlign="center" mb={1}>
+            Our Facilities
+          </Typography>
+          <Typography variant="subtitle1" color="text.secondary" textAlign="center" mb={6} maxWidth={600} mx="auto">
+            Modern amenities designed to support your spiritual and academic journey
+          </Typography>
+          
+          <Grid container spacing={4}>
+            {facilities.map((facility, i) => (
+              <Grid item xs={12} sm={6} md={4} key={i}>
+                <Paper 
+                  elevation={3}
+                  sx={{
+                    p: 4,
+                    height: '100%',
+                    borderRadius: 4,
+                    textAlign: 'center',
+                    background: (theme) => theme.palette.mode === 'light' 
+                      ? 'linear-gradient(145deg, #ffffff 0%, #fef7ed 100%)' 
+                      : 'linear-gradient(145deg, #1e2124 0%, #1a1f20 100%)',
+                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    '&:hover': {
+                      transform: 'translateY(-6px)',
+                      boxShadow: (theme) => theme.palette.mode === 'light' 
+                        ? '0 12px 30px rgba(234,88,12,0.15)' 
+                        : '0 12px 30px rgba(0,0,0,0.4)',
+                      borderColor: 'warning.main'
+                    }
+                  }}
+                >
+                  <Box 
+                    sx={{
+                      width: 64,
+                      height: 64,
+                      borderRadius: '50%',
+                      bgcolor: 'warning.light',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      mx: 'auto',
+                      mb: 2,
+                      fontSize: '2rem'
+                    }}
+                  >
+                    {facility.icon}
+                  </Box>
+                  <Typography variant="h6" fontWeight={700} mb={2}>
+                    {facility.title}
                   </Typography>
+                  <Typography variant="body2" color="text.secondary" lineHeight={1.6}>
+                    {facility.desc}
+                  </Typography>
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      </Box>
+
+      {/* Location & Map Section */}
+      <Box id="location" py={10} sx={{ 
+        background: (theme) => theme.palette.mode === 'light' 
+          ? 'linear-gradient(135deg, #fff7ed, #ffffff)' 
+          : 'linear-gradient(135deg, #161a1d, #111416)' 
+      }}>
+        <Container maxWidth="lg">
+          <Typography variant="h4" fontWeight={800} textAlign="center" mb={1}>
+            Visit Our Center
+          </Typography>
+          <Typography variant="subtitle1" color="text.secondary" textAlign="center" mb={8} maxWidth={600} mx="auto">
+            Located in the heart of North Delhi, easily accessible from all DU colleges
+          </Typography>
+          
+          <Grid container spacing={6} alignItems="stretch">
+            <Grid item xs={12} md={5}>
+              <Paper elevation={6} sx={{ p: 4, height: '100%', borderRadius: 4 }}>
+                <Stack spacing={3} sx={{ height: '100%', justifyContent: 'center' }}>
+                  <Chip 
+                    label="📍 FIND US" 
+                    color="warning" 
+                    variant="outlined" 
+                    sx={{ fontWeight: 600, alignSelf: 'flex-start', fontSize: '1rem' }} 
+                  />
+                  
+                  <Typography variant="h5" fontWeight={700}>
+                    Easy to Reach
+                  </Typography>
+                  
+                  <Typography variant="body1" color="text.secondary" lineHeight={1.7}>
+                    We are located in the heart of North Delhi, easily reachable from Delhi University colleges. 
+                    Drop in for a class, kirtan, meditation or just a peaceful study break with prasadam.
+                  </Typography>
+                  
+                  <Stack spacing={3}>
+                    <Stack direction="row" spacing={2} alignItems="flex-start">
+                      <span style={{fontSize:'1.5rem', marginTop: '2px'}}>📍</span>
+                      <Box>
+                        <Typography variant="subtitle2" fontWeight={700} color="warning.main" mb={0.5}>
+                          Address
+                        </Typography>
+                        <Typography variant="body2" lineHeight={1.5}>
+                          ISKCON STUDENT CENTER, 1ST FLOOR, OPPOSITE HANSRAJ COLLEGE, 
+                          ABOVE NATURAL'S ICE CREAM, NEAR STARBUCKS, KAMLA NAGAR, DELHI 110007
+                        </Typography>
+                      </Box>
+                    </Stack>
+                    
+                    <Stack direction="row" spacing={2} alignItems="center">
+                      <span style={{fontSize:'1.5rem'}}>📱</span>
+                      <Box>
+                        <Typography variant="subtitle2" fontWeight={700} color="warning.main" mb={0.5}>
+                          Phone
+                        </Typography>
+                        <Button 
+                          href="tel:+918318342494" 
+                          color="warning" 
+                          sx={{ fontWeight: 600, textTransform: 'none', p: 0, minWidth: 'auto' }}
+                        >
+                          +91 83183 42494
+                        </Button>
+                      </Box>
+                    </Stack>
+                  </Stack>
+                </Stack>
+              </Paper>
+            </Grid>
+            
+            <Grid item xs={12} md={7}>
+              <Paper elevation={8} sx={{ height: '100%', borderRadius: 4, overflow: 'hidden', position: 'relative', minHeight: 400 }}>
+                <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg,rgba(255,247,237,0.25),rgba(255,255,255,0.25))', pointerEvents: 'none', zIndex: 1 }} />
+                <Box sx={{ position: 'relative', width: '100%', height: '100%' }}>
+                  <iframe
+                    title="ISKCON Student Center Location"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3199.5466743621614!2d77.20813749999999!3d28.678913099999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfdf53b2058b5%3A0x90ba420109930cec!2sISKCON%20student%20centre%20(%20DU%20BACE)!5e1!3m2!1sen!2sin!4v1754795768086!5m2!1sen!2sin"
+                    style={{ border: 0, position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                    loading="lazy"
+                    allowFullScreen
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+                </Box>
+              </Paper>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
+
+      {/* Get Involved Section */}
+      <Box id="contact" py={10} sx={{ 
+        background: (theme) => theme.palette.mode === 'light' 
+          ? 'linear-gradient(135deg, #ea580c 0%, #ff7f3f 50%, #ffa41b 100%)' 
+          : 'linear-gradient(135deg, #7c2d12 0%, #9a3412 50%, #b45309 100%)',
+      }}>
+        <Container maxWidth="lg">
+          <Grid container spacing={6} alignItems="center">
+            <Grid item xs={12} md={6}>
+              <Box sx={{ color: 'white', mb: { xs: 4, md: 0 } }}>
+                <Typography variant="h3" fontWeight={900} mb={2}>
+                  Ready to Begin Your Journey?
+                </Typography>
+                <Typography variant="h6" mb={4} sx={{ opacity: 0.95, lineHeight: 1.6 }}>
+                  Join hundreds of students discovering their spiritual potential through ancient wisdom and modern learning.
+                </Typography>
+                
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} mb={4}>
+                  <Button 
+                    variant="contained" 
+                    size="large"
+                    href="#programs"
+                    sx={{ 
+                      bgcolor: 'white', 
+                      color: 'warning.main', 
+                      fontWeight: 700,
+                      px: 4,
+                      borderRadius: '999px',
+                      '&:hover': { bgcolor: 'grey.100' }
+                    }}
+                  >
+                    Explore Programs
+                  </Button>
+                  <Button 
+                    variant="outlined" 
+                    size="large"
+                    href="#location"
+                    sx={{ 
+                      borderColor: 'white', 
+                      color: 'white', 
+                      fontWeight: 700,
+                      px: 4,
+                      borderRadius: '999px',
+                      '&:hover': { 
+                        borderColor: 'white', 
+                        bgcolor: 'rgba(255,255,255,0.1)' 
+                      }
+                    }}
+                  >
+                    Visit Center
+                  </Button>
                 </Stack>
               </Box>
-              
-              <Button 
-                variant="contained" 
-                color="warning" 
-                size="large"
-                href="https://instagram.com/iskcondelhiuniversity"
-                target="_blank"
-                sx={{ borderRadius: '999px', mt: 3, fontWeight: 700 }}
-              >
-                Join Our Community
-              </Button>
-            </Stack>
-          </Paper>
+            </Grid>
+            
+            <Grid item xs={12} md={6}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                <Paper 
+                  elevation={8} 
+                  sx={{ 
+                    p: 4, 
+                    borderRadius: 4,
+                    background: (theme) => theme.palette.mode === 'light' 
+                      ? 'rgba(255,255,255,0.95)' 
+                      : 'rgba(30,33,36,0.95)',
+                    backdropFilter: 'blur(10px)'
+                  }}
+                >
+                  <Typography variant="h5" fontWeight={700} mb={3} textAlign="center">
+                    Connect With Us
+                  </Typography>
+                  
+                  <Grid container spacing={3}>
+                    <Grid item xs={12} sm={6}>
+                      <Paper 
+                        elevation={2} 
+                        sx={{ 
+                          p: 3, 
+                          textAlign: 'center', 
+                          borderRadius: 3,
+                          transition: 'all 0.3s ease',
+                          cursor: 'pointer',
+                          textDecoration: 'none',
+                          '&:hover': { 
+                            transform: 'translateY(-4px)', 
+                            boxShadow: 4 
+                          }
+                        }}
+                        component="a"
+                        href="tel:+918318342494"
+                      >
+                        <Box 
+                          sx={{
+                            width: 48,
+                            height: 48,
+                            borderRadius: '50%',
+                            bgcolor: 'success.light',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            mx: 'auto',
+                            mb: 2,
+                            fontSize: '1.5rem'
+                          }}
+                        >
+                          �
+                        </Box>
+                        <Typography variant="subtitle2" fontWeight={700} color="text.secondary">
+                          Call Us
+                        </Typography>
+                        <Typography variant="body2" fontWeight={600} color="success.main">
+                          +91 83183 42494
+                        </Typography>
+                      </Paper>
+                    </Grid>
+                    
+                    <Grid item xs={12} sm={6}>
+                      <Paper 
+                        elevation={2} 
+                        sx={{ 
+                          p: 3, 
+                          textAlign: 'center', 
+                          borderRadius: 3,
+                          transition: 'all 0.3s ease',
+                          cursor: 'pointer',
+                          textDecoration: 'none',
+                          '&:hover': { 
+                            transform: 'translateY(-4px)', 
+                            boxShadow: 4 
+                          }
+                        }}
+                        component="a"
+                        href="https://instagram.com/iskcondelhiuniversity"
+                        target="_blank"
+                      >
+                        <Box 
+                          sx={{
+                            width: 48,
+                            height: 48,
+                            borderRadius: '50%',
+                            bgcolor: 'error.light',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            mx: 'auto',
+                            mb: 2,
+                            fontSize: '1.5rem'
+                          }}
+                        >
+                          �
+                        </Box>
+                        <Typography variant="subtitle2" fontWeight={700} color="text.secondary">
+                          Follow
+                        </Typography>
+                        <Typography variant="body2" fontWeight={600} color="error.main">
+                          @iskcondelhiuniversity
+                        </Typography>
+                      </Paper>
+                    </Grid>
+                    
+                    <Grid item xs={12}>
+                      <Paper 
+                        elevation={2} 
+                        sx={{ 
+                          p: 3, 
+                          textAlign: 'center', 
+                          borderRadius: 3,
+                          transition: 'all 0.3s ease',
+                          cursor: 'pointer',
+                          textDecoration: 'none',
+                          '&:hover': { 
+                            transform: 'translateY(-4px)', 
+                            boxShadow: 4 
+                          }
+                        }}
+                        component="a"
+                        href="https://youtube.com/@ISKCONDelhiUniversity"
+                        target="_blank"
+                      >
+                        <Box 
+                          sx={{
+                            width: 48,
+                            height: 48,
+                            borderRadius: '50%',
+                            bgcolor: 'primary.light',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            mx: 'auto',
+                            mb: 2,
+                            fontSize: '1.5rem'
+                          }}
+                        >
+                          📺
+                        </Box>
+                        <Typography variant="subtitle2" fontWeight={700} color="text.secondary">
+                          Subscribe
+                        </Typography>
+                        <Typography variant="body2" fontWeight={600} color="primary.main">
+                          @ISKCONDelhiUniversity
+                        </Typography>
+                      </Paper>
+                    </Grid>
+                  </Grid>
+                </Paper>
+              </Box>
+            </Grid>
+          </Grid>
         </Container>
       </Box>
 
