@@ -234,7 +234,7 @@ export default function Home() {
           {/* Left Image - Prabhupada */}
           <div style={{ marginRight: '1rem' }} className="floating">
             <img 
-              src="/prabhupada.jpg" 
+              src="/prabhupada.png" 
               alt="Srila Prabhupada" 
               style={{ height: '40px', width: 'auto' }}
             />
@@ -257,7 +257,7 @@ export default function Home() {
           {/* Right Image - ISKCON Logo */}
           <div style={{ marginLeft: '1rem' }} className="floating">
             <img 
-              src="/iskcon-logo.jpg" 
+              src="/iskcon.png" 
               alt="ISKCON Logo" 
               style={{ height: '40px', width: 'auto' }}
             />
@@ -365,9 +365,9 @@ export default function Home() {
               '/mahaprabhu.jpg', 
               '/radhakrishna.jpg',
               '/siyaram.jpg',
-              '/haran.jpeg',
+              '/charan.jpeg',
               '/hogwarts.jpg',
-              '/krishna.jpg' // Using krishna.jpg again for the 7th image
+              '/mahaprabhu 2.jpg'
             ].map((imageUrl, index) => (
               <div
                 key={index}
@@ -396,12 +396,14 @@ export default function Home() {
                     objectFit: 'contain',
                     borderRadius: '8px'
                   }}
+                  onLoad={() => console.log(`Image loaded successfully: ${imageUrl}`)}
                   onError={(e) => {
+                    console.error(`Failed to load image: ${imageUrl}`);
                     // Fallback if image fails to load
                     e.target.style.display = 'none';
                     e.target.parentElement.style.backgroundColor = `hsl(${index * 50}, 70%, 60%)`;
                     const imageName = imageUrl.split('/')[1] || `Image ${index + 1}`;
-                    e.target.parentElement.innerHTML = `<div style="color: white; font-size: 2rem; font-weight: bold; text-align: center;">ISKCON<br/>${imageName}</div>`;
+                    e.target.parentElement.innerHTML = `<div style="color: white; font-size: 2rem; font-weight: bold; text-align: center;">ISKCON<br/>${imageName}<br/>Not Found</div>`;
                   }}
                 />
               </div>
