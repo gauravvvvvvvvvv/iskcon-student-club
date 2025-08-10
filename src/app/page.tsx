@@ -219,16 +219,17 @@ export default function Home() {
           margin: '0 auto', 
           display: 'flex', 
           alignItems: 'center',
-          padding: '0 2rem',
+          padding: '0 1rem',
           flexWrap: 'nowrap',
-          minHeight: '80px'
+          minHeight: '80px',
+          justifyContent: 'space-between'
         }}>
           {/* Left side - Prabhupada image and text */}
           <div style={{ 
             display: 'flex',
             alignItems: 'center',
             gap: '1rem',
-            marginRight: '2rem'
+            flexShrink: 0
           }}>
             <div style={{ 
               width: '120px',
@@ -253,14 +254,17 @@ export default function Home() {
           
           <h1 style={{ 
             fontSize: '1.25rem', 
-            fontWeight: '700', 
-            flexGrow: 1, 
+            fontWeight: '700',
             letterSpacing: '0.5px', 
             background: 'linear-gradient(135deg, #ea580c, #f97316)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             margin: 0,
-            textAlign: 'center'
+            textAlign: 'center',
+            whiteSpace: 'nowrap',
+            flex: 1,
+            paddingLeft: '2rem',
+            paddingRight: '2rem'
           }} className="animate-fadeInUp">
             ISKCON STUDENT CENTER
           </h1>
