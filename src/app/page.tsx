@@ -234,7 +234,7 @@ export default function Home() {
           {/* Left Image - Prabhupada */}
           <div style={{ marginRight: '1rem' }} className="floating">
             <img 
-              src="/prabhupada.svg" 
+              src="/prabhupada.jpg" 
               alt="Srila Prabhupada" 
               style={{ height: '40px', width: 'auto' }}
             />
@@ -257,7 +257,7 @@ export default function Home() {
           {/* Right Image - ISKCON Logo */}
           <div style={{ marginLeft: '1rem' }} className="floating">
             <img 
-              src="/iskcon-logo.svg" 
+              src="/iskcon-logo.jpg" 
               alt="ISKCON Logo" 
               style={{ height: '40px', width: 'auto' }}
             />
@@ -360,14 +360,14 @@ export default function Home() {
             zIndex: 1
           }}>
             {[
-              // Colorful placeholder images for testing
-              'https://via.placeholder.com/1200x600/FF6B35/FFFFFF?text=ISKCON+Image+1',
-              'https://via.placeholder.com/1200x600/1E40AF/FFFFFF?text=ISKCON+Image+2',
-              'https://via.placeholder.com/1200x600/EA580C/FFFFFF?text=ISKCON+Image+3',
-              'https://via.placeholder.com/1200x600/10B981/FFFFFF?text=ISKCON+Image+4',
-              'https://via.placeholder.com/1200x600/8B5CF6/FFFFFF?text=ISKCON+Image+5',
-              'https://via.placeholder.com/1200x600/F59E0B/FFFFFF?text=ISKCON+Image+6',
-              'https://via.placeholder.com/1200x600/EF4444/FFFFFF?text=ISKCON+Image+7'
+              // Your custom images from public folder
+              '/krishna.jpg',
+              '/mahaprabhu.jpg', 
+              '/radhakrishna.jpg',
+              '/siyaram.jpg',
+              '/haran.jpeg',
+              '/hogwarts.jpg',
+              '/krishna.jpg' // Using krishna.jpg again for the 7th image
             ].map((imageUrl, index) => (
               <div
                 key={index}
@@ -387,7 +387,7 @@ export default function Home() {
               >
                 <img 
                   src={imageUrl}
-                  alt={`ISKCON Slide ${index + 1}`}
+                  alt={`ISKCON Image ${index + 1}: ${imageUrl.split('/')[1]}`}
                   style={{
                     maxWidth: '100%',
                     maxHeight: '100%',
@@ -400,7 +400,8 @@ export default function Home() {
                     // Fallback if image fails to load
                     e.target.style.display = 'none';
                     e.target.parentElement.style.backgroundColor = `hsl(${index * 50}, 70%, 60%)`;
-                    e.target.parentElement.innerHTML = `<div style="color: white; font-size: 2rem; font-weight: bold; text-align: center;">ISKCON<br/>Image ${index + 1}</div>`;
+                    const imageName = imageUrl.split('/')[1] || `Image ${index + 1}`;
+                    e.target.parentElement.innerHTML = `<div style="color: white; font-size: 2rem; font-weight: bold; text-align: center;">ISKCON<br/>${imageName}</div>`;
                   }}
                 />
               </div>
