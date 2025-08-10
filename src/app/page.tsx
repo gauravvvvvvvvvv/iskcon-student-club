@@ -4,6 +4,140 @@ export default function Home() {
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#ffffff', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
       <style jsx>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes slideInLeft {
+          from {
+            opacity: 0;
+            transform: translateX(-30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        
+        @keyframes slideInRight {
+          from {
+            opacity: 0;
+            transform: translateX(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        
+        @keyframes pulse {
+          0%, 100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.05);
+          }
+        }
+        
+        .animate-fadeInUp {
+          animation: fadeInUp 0.6s ease-out forwards;
+        }
+        
+        .animate-slideInLeft {
+          animation: slideInLeft 0.6s ease-out forwards;
+        }
+        
+        .animate-slideInRight {
+          animation: slideInRight 0.6s ease-out forwards;
+        }
+        
+        .card-hover {
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          cursor: pointer;
+        }
+        
+        .card-hover:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .button-primary {
+          background: linear-gradient(135deg, #ff6b35, #f7931e);
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .button-primary:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 20px rgba(255, 107, 53, 0.3);
+        }
+        
+        .button-primary:active {
+          transform: translateY(0);
+        }
+        
+        .material-icon {
+          width: 24px;
+          height: 24px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          color: #ff6b35;
+          font-weight: bold;
+          font-size: 14px;
+          margin-right: 12px;
+          flex-shrink: 0;
+          transition: all 0.3s ease;
+        }
+        
+        .material-icon.prayer { background: linear-gradient(135deg, #ff9a9e, #fecfef); }
+        .material-icon.book { background: linear-gradient(135deg, #a8edea, #fed6e3); }
+        .material-icon.music { background: linear-gradient(135deg, #d299c2, #fef9d7); }
+        .material-icon.community { background: linear-gradient(135deg, #89f7fe, #66a6ff); }
+        .material-icon.event { background: linear-gradient(135deg, #fdbb2d, #22c1c3); }
+        .material-icon.food { background: linear-gradient(135deg, #ff9a9e, #fad0c4); }
+        
+        .material-icon.gym { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .material-icon.library { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .material-icon.cafe { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+        .material-icon.hall { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+        .material-icon.garden { background: linear-gradient(135deg, #fa709a, #fee140); }
+        .material-icon.parking { background: linear-gradient(135deg, #a8edea, #fed6e3); }
+        
+        .material-icon.phone { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .material-icon.instagram { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .material-icon.youtube { background: linear-gradient(135deg, #ff4b1f, #ff9068); }
+        
+        .hero-gradient {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #ff6b35 100%);
+          background-size: 400% 400%;
+          animation: gradientShift 8s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        
+        .floating {
+          animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
+        }
+        
         @media (max-width: 768px) {
           .grid-2-col {
             grid-template-columns: 1fr !important;
@@ -27,8 +161,9 @@ export default function Home() {
         backdropFilter: 'blur(16px)',
         borderBottom: '1px solid #e5e7eb',
         zIndex: 1000,
-        padding: '1rem 0'
-      }}>
+        padding: '1rem 0',
+        transition: 'all 0.3s ease'
+      }} className="animate-slideInLeft">
         <div style={{ 
           maxWidth: '1280px', 
           margin: '0 auto', 
@@ -37,11 +172,11 @@ export default function Home() {
           padding: '0 2rem'
         }}>
           {/* Left Image - Prabhupada */}
-          <div style={{ marginRight: '1rem' }}>
+          <div style={{ marginRight: '1rem' }} className="floating">
             <img 
               src="/prabhupada.svg" 
               alt="Srila Prabhupada" 
-              style={{ height: '40px', width: 'auto' }}
+              style={{ height: '40px', width: 'auto', transition: 'transform 0.3s ease' }}
             />
           </div>
           
@@ -50,18 +185,22 @@ export default function Home() {
             fontWeight: '700', 
             flexGrow: 1, 
             letterSpacing: '0.5px', 
-            color: '#ea580c',
-            margin: 0
-          }}>
-            ISKCON Student Center
+            background: 'linear-gradient(135deg, #ea580c, #f97316)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            margin: 0,
+            textAlign: 'center'
+          }} className="animate-fadeInUp">
+            INTERNATIONAL SOCIETY FOR KRISHNA CONSCIOUSNESS
           </h1>
           
           {/* Right Image - ISKCON Logo */}
-          <div style={{ marginRight: '2rem' }}>
+          <div style={{ marginRight: '2rem' }} className="floating">
             <img 
               src="/iskcon-logo.svg" 
               alt="ISKCON Logo" 
-              style={{ height: '40px', width: 'auto' }}
+              style={{ height: '40px', width: 'auto', transition: 'transform 0.3s ease' }}
             />
           </div>
           
@@ -97,8 +236,9 @@ export default function Home() {
         <section style={{
           padding: '6rem 2rem',
           background: 'linear-gradient(135deg, #fff7ed 0%, #ffffff 50%, #fff3cd 100%)',
-          position: 'relative'
-        }}>
+          position: 'relative',
+          overflow: 'hidden'
+        }} className="hero-gradient">
           <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
             {/* Image placeholders row */}
             <div style={{ 
@@ -114,8 +254,10 @@ export default function Home() {
                 backgroundColor: '#fed7aa', 
                 display: 'flex', 
                 alignItems: 'center', 
-                justifyContent: 'center' 
-              }}>
+                justifyContent: 'center',
+                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
+                transition: 'all 0.3s ease'
+              }} className="animate-slideInLeft card-hover floating">
                 <img 
                   src="/prabhupada.svg" 
                   alt="Prabhupada" 
@@ -123,7 +265,7 @@ export default function Home() {
                 />
               </div>
               
-              <div style={{ textAlign: 'center', flexGrow: 1, padding: '0 2rem' }}>
+              <div style={{ textAlign: 'center', flexGrow: 1, padding: '0 2rem' }} className="animate-fadeInUp">
                 <h2 style={{ 
                   fontSize: '2.5rem', 
                   fontWeight: '900', 
@@ -131,6 +273,8 @@ export default function Home() {
                   background: 'linear-gradient(45deg, #ea580c, #f97316, #fb923c)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                  textShadow: '0 0 30px rgba(234, 88, 12, 0.3)',
                   margin: 0
                 }} className="hero-text">
                   INTERNATIONAL SOCIETY FOR KRISHNA CONSCIOUSNESS
@@ -144,8 +288,10 @@ export default function Home() {
                 backgroundColor: '#fed7aa', 
                 display: 'flex', 
                 alignItems: 'center', 
-                justifyContent: 'center' 
-              }}>
+                justifyContent: 'center',
+                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
+                transition: 'all 0.3s ease'
+              }} className="animate-slideInRight card-hover floating">
                 <img 
                   src="/iskcon-logo.svg" 
                   alt="ISKCON Logo" 
@@ -186,10 +332,15 @@ export default function Home() {
                   borderRadius: '999px',
                   textDecoration: 'none',
                   fontWeight: '700',
-                  fontSize: '1.1rem'
+                  fontSize: '1.1rem',
+                  marginRight: '1rem',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
                 }}
+                className="button-primary animate-fadeInUp"
               >
-                Join Now
+                ✨ Join Now
               </a>
               <a 
                 href="#programs"
@@ -201,10 +352,23 @@ export default function Home() {
                   borderRadius: '999px',
                   textDecoration: 'none',
                   fontWeight: '700',
-                  fontSize: '1.1rem'
+                  fontSize: '1.1rem',
+                  transition: 'all 0.3s ease',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}
+                className="card-hover animate-fadeInUp"
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#ea580c';
+                  e.currentTarget.style.color = 'white';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.color = '#ea580c';
                 }}
               >
-                Explore Programs
+                📚 Explore Programs
               </a>
             </div>
 
@@ -234,7 +398,8 @@ export default function Home() {
         {/* Programs Section */}
         <section id="programs" style={{ 
           padding: '4rem 2rem', 
-          backgroundColor: '#f9fafb' 
+          backgroundColor: '#f9fafb',
+          position: 'relative'
         }}>
           <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
             <h2 style={{ 
@@ -242,8 +407,11 @@ export default function Home() {
               fontWeight: '800', 
               textAlign: 'center', 
               marginBottom: '0.5rem',
-              color: '#111827'
-            }}>
+              background: 'linear-gradient(135deg, #111827, #374151)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
+            }} className="animate-fadeInUp">
               What We Offer
             </h2>
             <p style={{
@@ -253,7 +421,7 @@ export default function Home() {
               marginBottom: '3rem',
               maxWidth: '600px',
               margin: '0 auto 3rem auto'
-            }}>
+            }} className="animate-fadeInUp">
               Comprehensive spiritual development through study, practice, and community
             </p>
             
@@ -263,18 +431,18 @@ export default function Home() {
               gap: '1.5rem'
             }}>
               {[
-                { icon: 'BOOK', title: 'Gita Study', desc: 'Vedic wisdom & philosophy' },
-                { icon: 'MED', title: 'Meditation', desc: 'Daily japa & mindfulness' },
-                { icon: 'LEAD', title: 'Leadership', desc: 'Character development' },
-                { icon: 'COM', title: 'Community', desc: 'Spiritual friendship' },
-                { icon: 'SONG', title: 'Kirtans', desc: 'Music & festivals' },
-                { icon: 'GURU', title: 'Mentorship', desc: 'Personal guidance' },
-                { icon: 'TRIP', title: 'Pilgrimage', desc: 'Sacred journeys' },
-                { icon: 'LIFE', title: 'Lifestyle', desc: 'Balanced living' },
-                { icon: 'OUT', title: 'Outreach', desc: 'Share wisdom' },
-                { icon: 'TALK', title: 'Counseling', desc: 'Life guidance' },
-                { icon: 'HOME', title: 'Housing', desc: 'Student residence' },
-                { icon: 'FOOD', title: 'Prasadam', desc: 'Sacred meals' }
+                { icon: 'book', title: 'Gita Study', desc: 'Vedic wisdom & philosophy' },
+                { icon: 'prayer', title: 'Meditation', desc: 'Daily japa & mindfulness' },
+                { icon: 'community', title: 'Leadership', desc: 'Character development' },
+                { icon: 'community', title: 'Community', desc: 'Spiritual friendship' },
+                { icon: 'music', title: 'Kirtans', desc: 'Music & festivals' },
+                { icon: 'book', title: 'Mentorship', desc: 'Personal guidance' },
+                { icon: 'event', title: 'Pilgrimage', desc: 'Sacred journeys' },
+                { icon: 'food', title: 'Lifestyle', desc: 'Balanced living' },
+                { icon: 'community', title: 'Outreach', desc: 'Share wisdom' },
+                { icon: 'prayer', title: 'Counseling', desc: 'Life guidance' },
+                { icon: 'food', title: 'Housing', desc: 'Student residence' },
+                { icon: 'food', title: 'Prasadam', desc: 'Sacred meals' }
               ].map((program, i) => (
                 <div 
                   key={i}
@@ -284,33 +452,31 @@ export default function Home() {
                     borderRadius: '12px',
                     textAlign: 'center',
                     boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-                    transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-                    cursor: 'pointer'
+                    border: '1px solid rgba(255, 107, 53, 0.1)',
+                    position: 'relative',
+                    overflow: 'hidden'
                   }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-4px)';
-                    e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
-                  }}
+                  className="card-hover animate-fadeInUp"
                 >
-                  <div style={{ 
-                    fontSize: '0.75rem', 
-                    marginBottom: '1rem',
-                    fontWeight: '700',
-                    color: '#ea580c',
-                    backgroundColor: '#fed7aa',
-                    width: '48px',
-                    height: '48px',
-                    borderRadius: '50%',
+                  <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: '4px',
+                    background: 'linear-gradient(90deg, #ff6b35, #f7931e)'
+                  }}></div>
+                  
+                  <div className={`material-icon ${program.icon}`} style={{ 
+                    margin: '0 auto 1rem auto',
+                    width: '60px',
+                    height: '60px',
+                    fontSize: '24px',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: '0 auto 1rem auto'
+                    justifyContent: 'center'
                   }}>
-                    {program.icon}
+                    ✦
                   </div>
                   <h3 style={{ 
                     fontSize: '1.125rem', 
