@@ -151,7 +151,7 @@ export default function Home() {
           }
           
           .carousel-container {
-            height: clamp(400px, 55vh, 600px) !important;
+            height: clamp(500px, 70vh, 750px) !important;
           }
           
           .carousel-content {
@@ -185,7 +185,7 @@ export default function Home() {
           }
           
           .carousel-container {
-            height: clamp(350px, 45vh, 500px) !important;
+            height: clamp(450px, 60vh, 650px) !important;
           }
           
           .carousel-nav {
@@ -348,7 +348,7 @@ export default function Home() {
         {/* Image Carousel Section */}
         <section style={{
           position: 'relative',
-          height: 'clamp(450px, 65vh, 750px)',
+          height: 'clamp(600px, 80vh, 900px)',
           overflow: 'hidden',
           backgroundColor: 'white',
           display: 'flex',
@@ -736,7 +736,7 @@ export default function Home() {
 
         {/* Programs Section */}
         <section id="programs" style={{ 
-          padding: '6rem 2rem 4rem 2rem', 
+          padding: '4rem 2rem', 
           backgroundColor: '#f9fafb'
         }}>
           <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
