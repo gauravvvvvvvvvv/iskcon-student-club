@@ -388,27 +388,32 @@ export function DynamicAnnouncements() {
   const loadAnnouncements = async () => {
     try {
       const announcementsData = await fetchAnnouncements();
+      
+      // Default ISKCON announcement (always present)
+      const defaultAnnouncement = {
+        id: 'iskcon-default',
+        text: 'Welcome to ISKCON Student Center • Join us for daily morning programs at 6:30 AM • Bhagavad Gita classes every Sunday at 5 PM • Free prasadam for all students',
+        isActive: true,
+        createdAt: '2024-01-01',
+        updatedAt: '2024-01-01'
+      };
+      
       if (announcementsData.length > 0) {
-        setAnnouncements(announcementsData);
+        // If there are uploaded announcements, put them first and default at the end
+        setAnnouncements([...announcementsData, defaultAnnouncement]);
       } else {
-        // Fallback announcement
-        setAnnouncements([{
-          id: '1',
-          text: 'Welcome to ISKCON Student Center • Join us for daily morning programs at 6:30 AM • Bhagavad Gita classes every Sunday at 5 PM • Free prasadam for all students • Register for upcoming spiritual retreats • Follow us on social media for updates •',
-          isActive: true,
-          createdAt: '',
-          updatedAt: ''
-        }]);
+        // If no uploaded announcements, show only default
+        setAnnouncements([defaultAnnouncement]);
       }
     } catch (error) {
       console.error('Error loading announcements:', error);
-      // Use fallback announcement
+      // On error, show only default
       setAnnouncements([{
-        id: '1',
-        text: 'Welcome to ISKCON Student Center • Join us for daily morning programs at 6:30 AM • Bhagavad Gita classes every Sunday at 5 PM • Free prasadam for all students • Register for upcoming spiritual retreats • Follow us on social media for updates •',
+        id: 'iskcon-default',
+        text: 'Welcome to ISKCON Student Center • Join us for daily morning programs at 6:30 AM • Bhagavad Gita classes every Sunday at 5 PM • Free prasadam for all students',
         isActive: true,
-        createdAt: '',
-        updatedAt: ''
+        createdAt: '2024-01-01',
+        updatedAt: '2024-01-01'
       }]);
     } finally {
       setLoading(false);
@@ -439,14 +444,42 @@ export function DynamicAnnouncements() {
   }
 
   const activeAnnouncements = announcements.filter(ann => ann.isActive);
-  const announcementText = activeAnnouncements.length > 0 
-    ? activeAnnouncements.map(ann => {
-        if (ann.link) {
-          return `${ann.text} (${ann.link})`;
-        }
-        return ann.text;
-      }).join(' • ')
-    : 'Welcome to ISKCON Student Center • Join us for daily morning programs at 6:30 AM • Bhagavad Gita classes every Sunday at 5 PM • Free prasadam for all students • Register for upcoming spiritual retreats • Follow us on social media for updates •';
+  
+  // Create announcement text with clickable links
+  const createAnnouncementContent = () => {
+    if (activeAnnouncements.length === 0) {
+      return 'Welcome to ISKCON Student Center • Join us for daily morning programs at 6:30 AM • Bhagavad Gita classes every Sunday at 5 PM • Free prasadam for all students';
+    }
+
+    return activeAnnouncements.map((ann, index) => {
+      const baseText = ann.text;
+      if (ann.link) {
+        return (
+          <span key={ann.id}>
+            {baseText} • <a 
+              href={ann.link} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{
+                color: 'white',
+                textDecoration: 'underline',
+                fontWeight: 'bold'
+              }}
+            >
+              Click here
+            </a>
+            {index < activeAnnouncements.length - 1 ? ' • ' : ''}
+          </span>
+        );
+      }
+      return (
+        <span key={ann.id}>
+          {baseText}
+          {index < activeAnnouncements.length - 1 ? ' • ' : ''}
+        </span>
+      );
+    });
+  };
 
   return (
     <div style={{
@@ -464,7 +497,7 @@ export function DynamicAnnouncements() {
         fontSize: '1rem',
         fontWeight: '500'
       }}>
-        {announcementText}
+        {createAnnouncementContent()}
       </div>
       <style dangerouslySetInnerHTML={{
         __html: `

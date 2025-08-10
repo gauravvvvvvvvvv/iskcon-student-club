@@ -155,6 +155,12 @@ export default function AdminDashboard() {
   };
 
   const handleAnnouncementDelete = async (id: string) => {
+    // Prevent deletion of default ISKCON announcement
+    if (id === 'iskcon-default') {
+      alert('Cannot delete the default ISKCON announcement. This announcement is always present.');
+      return;
+    }
+
     if (!confirm('Are you sure you want to delete this announcement?')) return;
 
     try {
@@ -699,17 +705,20 @@ export default function AdminDashboard() {
                             </button>
                             <button
                               onClick={() => handleAnnouncementDelete(announcement.id)}
+                              disabled={announcement.id === 'iskcon-default'}
                               style={{
-                                backgroundColor: '#ef4444',
+                                backgroundColor: announcement.id === 'iskcon-default' ? '#9ca3af' : '#ef4444',
                                 color: 'white',
                                 padding: '0.25rem 0.75rem',
                                 border: 'none',
                                 borderRadius: '4px',
                                 fontSize: '0.875rem',
-                                cursor: 'pointer'
+                                cursor: announcement.id === 'iskcon-default' ? 'not-allowed' : 'pointer',
+                                opacity: announcement.id === 'iskcon-default' ? 0.6 : 1
                               }}
+                              title={announcement.id === 'iskcon-default' ? 'Default announcement cannot be deleted' : 'Delete announcement'}
                             >
-                              Delete
+                              {announcement.id === 'iskcon-default' ? 'Default' : 'Delete'}
                             </button>
                           </div>
                           <p style={{ 
