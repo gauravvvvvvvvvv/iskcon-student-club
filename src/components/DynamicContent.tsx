@@ -370,68 +370,63 @@ export function DynamicCarousel() {
   );
 }
 
-// Dynamic Announcements Component - Optimized for Speed
+// Dynamic Announcements Component - Ultra Fast Loading
 export function DynamicAnnouncements() {
-  // Multiple default announcements for variety
-  const defaultAnnouncements = [
-    {
-      id: 'iskcon-default-1',
-      text: 'Welcome to ISKCON Student Center • Join us for daily morning programs at 6:30 AM • Bhagavad Gita classes every Sunday at 5 PM • Free prasadam for all students',
-      isActive: true,
-      createdAt: '2024-01-01',
-      updatedAt: '2024-01-01'
-    },
-    {
-      id: 'iskcon-default-2',
-      text: 'Experience spiritual growth through ancient wisdom • Weekly kirtan sessions • Study groups available • All students welcome regardless of background',
-      isActive: true,
-      createdAt: '2024-01-01',
-      updatedAt: '2024-01-01'
-    },
-    {
-      id: 'iskcon-default-3',
-      text: 'Discover the timeless teachings of Bhagavad Gita • Community service opportunities • Meditation workshops • Join our inclusive spiritual community',
-      isActive: true,
-      createdAt: '2024-01-01',
-      updatedAt: '2024-01-01'
-    }
-  ];
-
-  const [announcements, setAnnouncements] = useState<Announcement[]>(defaultAnnouncements);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [currentAnnouncementIndex, setCurrentAnnouncementIndex] = useState(0);
-  const [hasLoadedDynamic, setHasLoadedDynamic] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  // Default fallback announcement
+  const fallbackAnnouncement = {
+    id: 'iskcon-fallback',
+    text: 'Welcome to ISKCON Student Center • Join us for daily morning programs at 6:30 AM • Bhagavad Gita classes every Sunday at 5 PM • Free prasadam for all students',
+    isActive: true,
+    createdAt: '2024-01-01',
+    updatedAt: '2024-01-01'
+  };
 
   useEffect(() => {
-    // Load dynamic announcements in background without blocking UI
+    // Start loading immediately with no delay
     loadAnnouncements();
-    
-    // Rotate through announcements every 8 seconds
-    const rotationTimer = setInterval(() => {
-      setCurrentAnnouncementIndex(prev => (prev + 1) % announcements.length);
-    }, 8000);
+  }, []);
 
-    return () => clearInterval(rotationTimer);
+  useEffect(() => {
+    if (announcements.length > 0) {
+      // Rotate through announcements every 8 seconds
+      const rotationTimer = setInterval(() => {
+        setCurrentAnnouncementIndex(prev => (prev + 1) % announcements.length);
+      }, 8000);
+
+      return () => clearInterval(rotationTimer);
+    }
   }, [announcements.length]);
 
   const loadAnnouncements = async () => {
     try {
-      // Add a small timeout to prevent blocking the UI
-      setTimeout(async () => {
-        const announcementsData = await fetchAnnouncements();
-        
-        if (announcementsData.length > 0) {
-          // Merge dynamic announcements with defaults
-          const activeAnnouncements = announcementsData.filter(ann => ann.isActive);
-          if (activeAnnouncements.length > 0) {
-            setAnnouncements([...activeAnnouncements, ...defaultAnnouncements]);
-          }
-        }
-        setHasLoadedDynamic(true);
-      }, 100); // Small delay to let UI render first
+      // Load with Promise.race to timeout after 1 second
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Timeout')), 1000)
+      );
+      
+      const announcementsData = await Promise.race([
+        fetchAnnouncements(),
+        timeoutPromise
+      ]) as Announcement[];
+      
+      const activeAnnouncements = announcementsData.filter(ann => ann.isActive);
+      
+      if (activeAnnouncements.length > 0) {
+        setAnnouncements(activeAnnouncements);
+      } else {
+        // No active announcements, use fallback
+        setAnnouncements([fallbackAnnouncement]);
+      }
     } catch (error) {
-      console.error('Error loading announcements:', error);
-      // Keep using defaults on error
-      setHasLoadedDynamic(true);
+      console.error('Error loading announcements (using fallback):', error);
+      // Use fallback on error or timeout
+      setAnnouncements([fallbackAnnouncement]);
+    } finally {
+      setLoading(false);
     }
   };
 
