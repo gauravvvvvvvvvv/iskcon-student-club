@@ -394,7 +394,11 @@ export function DynamicAnnouncements() {
     if (announcements.length > 0) {
       // Rotate through announcements every 8 seconds
       const rotationTimer = setInterval(() => {
-        setCurrentAnnouncementIndex(prev => (prev + 1) % announcements.length);
+        setCurrentAnnouncementIndex(prev => {
+          const nextIndex = (prev + 1) % announcements.length;
+          // Safety check to ensure valid index
+          return nextIndex < announcements.length ? nextIndex : 0;
+        });
       }, 8000);
 
       return () => clearInterval(rotationTimer);
@@ -430,11 +434,15 @@ export function DynamicAnnouncements() {
     }
   };
 
-  // Get current announcement to display
-  const currentAnnouncement = announcements[currentAnnouncementIndex];
+  // Get current announcement to display with safety check
+  const currentAnnouncement = announcements[currentAnnouncementIndex] || fallbackAnnouncement;
   
   // Create announcement content with clickable links
   const createAnnouncementContent = (announcement: Announcement) => {
+    if (!announcement || !announcement.text) {
+      return 'Welcome to ISKCON Student Center • Join us for daily programs';
+    }
+    
     const baseText = announcement.text;
     if (announcement.link) {
       return (
