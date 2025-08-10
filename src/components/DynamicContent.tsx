@@ -383,13 +383,14 @@ export function DynamicAnnouncements() {
 
   const [announcements, setAnnouncements] = useState<Announcement[]>([fallbackAnnouncement]);
   const [currentAnnouncementIndex, setCurrentAnnouncementIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     loadAnnouncements();
   }, []);
 
   useEffect(() => {
-    if (announcements.length > 0) {
+    if (announcements.length > 0 && !loading) {
       const rotationTimer = setInterval(() => {
         setCurrentAnnouncementIndex(prev => {
           const nextIndex = (prev + 1) % announcements.length;
@@ -399,7 +400,7 @@ export function DynamicAnnouncements() {
 
       return () => clearInterval(rotationTimer);
     }
-  }, [announcements.length]);
+  }, [announcements.length, loading]);
 
   const loadAnnouncements = async () => {
     try {
@@ -423,7 +424,7 @@ export function DynamicAnnouncements() {
       console.error('Error loading announcements:', error);
       // Keep the fallback announcement that's already set
     } finally {
-      // No loading state change needed
+      setLoading(false);
     }
   };
 
@@ -457,6 +458,34 @@ export function DynamicAnnouncements() {
     }
     return baseText;
   };
+
+  // Show loading state briefly
+  if (loading) {
+    return (
+      <div style={{
+        backgroundColor: '#f8f9fa',
+        color: '#1f2937',
+        padding: '0.75rem 0',
+        overflow: 'hidden',
+        position: 'relative',
+        whiteSpace: 'nowrap',
+        marginTop: '70px',
+        borderTop: '3px solid #ea580c',
+        borderBottom: '3px solid #ea580c',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <div style={{
+          fontSize: '1rem',
+          fontWeight: '500',
+          color: '#6b7280'
+        }}>
+          Loading...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{
