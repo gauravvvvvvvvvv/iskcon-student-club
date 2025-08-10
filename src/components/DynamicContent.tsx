@@ -24,32 +24,31 @@ export function DynamicCarousel() {
   const loadImages = async () => {
     try {
       const imagesData = await fetchCarouselImages();
+      
+      // Default Jagannath image (always present)
+      const jagannathImage = {
+        id: 'jagannath-default',
+        url: '/jagannath.jpg',
+        filename: 'jagannath.jpg',
+        uploadedAt: '2024-01-01'
+      };
+      
       if (imagesData.length > 0) {
-        setImages(imagesData);
+        // If there are uploaded images, put them first and Jagannath at the end
+        setImages([...imagesData, jagannathImage]);
       } else {
-        // Fallback to static images if no dynamic images
-        setImages([
-          { id: '1', url: '/krishna.jpg', filename: 'krishna.jpg', uploadedAt: '' },
-          { id: '2', url: '/mahaprabhu.jpg', filename: 'mahaprabhu.jpg', uploadedAt: '' },
-          { id: '3', url: '/radhakrishna.jpg', filename: 'radhakrishna.jpg', uploadedAt: '' },
-          { id: '4', url: '/siyaram.jpg', filename: 'siyaram.jpg', uploadedAt: '' },
-          { id: '5', url: '/charan.jpeg', filename: 'charan.jpeg', uploadedAt: '' },
-          { id: '6', url: '/hogwarts.jpg', filename: 'hogwarts.jpg', uploadedAt: '' },
-          { id: '7', url: '/mahaprabhu-2.jpg', filename: 'mahaprabhu-2.jpg', uploadedAt: '' }
-        ]);
+        // If no uploaded images, show only Jagannath
+        setImages([jagannathImage]);
       }
     } catch (error) {
       console.error('Error loading carousel images:', error);
-      // Use static images as fallback
-      setImages([
-        { id: '1', url: '/krishna.jpg', filename: 'krishna.jpg', uploadedAt: '' },
-        { id: '2', url: '/mahaprabhu.jpg', filename: 'mahaprabhu.jpg', uploadedAt: '' },
-        { id: '3', url: '/radhakrishna.jpg', filename: 'radhakrishna.jpg', uploadedAt: '' },
-        { id: '4', url: '/siyaram.jpg', filename: 'siyaram.jpg', uploadedAt: '' },
-        { id: '5', url: '/charan.jpeg', filename: 'charan.jpeg', uploadedAt: '' },
-        { id: '6', url: '/hogwarts.jpg', filename: 'hogwarts.jpg', uploadedAt: '' },
-        { id: '7', url: '/mahaprabhu-2.jpg', filename: 'mahaprabhu-2.jpg', uploadedAt: '' }
-      ]);
+      // On error, show only Jagannath
+      setImages([{
+        id: 'jagannath-default',
+        url: '/jagannath.jpg',
+        filename: 'jagannath.jpg',
+        uploadedAt: '2024-01-01'
+      }]);
     } finally {
       setLoading(false);
     }

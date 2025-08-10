@@ -91,6 +91,12 @@ export default function AdminDashboard() {
   };
 
   const handleImageDelete = async (image: CarouselImage) => {
+    // Prevent deletion of default Jagannath image
+    if (image.id === 'jagannath-default') {
+      alert('Cannot delete the default Jagannath image. This image is always present.');
+      return;
+    }
+
     if (!confirm('Are you sure you want to delete this image?')) return;
 
     try {
@@ -436,17 +442,20 @@ export default function AdminDashboard() {
                         <div style={{ display: 'flex', gap: '0.5rem' }}>
                           <button
                             onClick={() => handleImageDelete(image)}
+                            disabled={image.id === 'jagannath-default'}
                             style={{
-                              backgroundColor: '#ef4444',
+                              backgroundColor: image.id === 'jagannath-default' ? '#9ca3af' : '#ef4444',
                               color: 'white',
                               padding: '0.25rem 0.5rem',
                               border: 'none',
                               borderRadius: '4px',
                               fontSize: '0.75rem',
-                              cursor: 'pointer'
+                              cursor: image.id === 'jagannath-default' ? 'not-allowed' : 'pointer',
+                              opacity: image.id === 'jagannath-default' ? 0.6 : 1
                             }}
+                            title={image.id === 'jagannath-default' ? 'Default image cannot be deleted' : 'Delete image'}
                           >
-                            Delete
+                            {image.id === 'jagannath-default' ? 'Default' : 'Delete'}
                           </button>
                           {index > 0 && (
                             <button
