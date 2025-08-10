@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import {
-  AppBar, Box, Toolbar, Typography, Container, Button, IconButton, Stack, Grid, Card, CardContent, Chip, Divider, List, ListItem, ListItemIcon, ListItemText, useScrollTrigger, Slide, Avatar
+  AppBar, Box, Toolbar, Typography, Container, Button, IconButton, Stack, Grid, Card, CardContent, Chip, Divider, List, ListItem, ListItemIcon, ListItemText, useScrollTrigger, Slide
 } from '@mui/material';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
@@ -80,32 +80,57 @@ export default function Home() {
       </HideOnScroll>
       <Toolbar />
 
-      {/* Hero */}
-      <Box id="home" sx={{ pt: { xs: 10, md: 14 }, pb: { xs: 10, md: 16 }, position: 'relative', overflow: 'hidden' }}>
-        <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg,#fff7ed,#fff)', zIndex: -1 }} />
-        <Container maxWidth="lg">
-          <Grid container spacing={6} alignItems="center">
-            <Grid item xs={12} md={7}>
-              <Stack spacing={3}>
-                <Chip label="Student Spiritual Hub" color="warning" variant="outlined" sx={{ alignSelf: 'flex-start', fontWeight: 600 }} />
-                <Typography variant="h2" sx={{ fontSize: { xs: '2.2rem', md: '3.2rem' }, fontWeight: 800, lineHeight: 1.1, letterSpacing: -1, background: 'linear-gradient(90deg,#ea580c,#f59e0b)', WebkitBackgroundClip: 'text', color: 'transparent' }}>
-                  Transform Your Student Life with Timeless Wisdom
-                </Typography>
-                <Typography variant="h6" sx={{ fontWeight: 400, color: 'text.secondary', lineHeight: 1.5, maxWidth: 560 }}>
-                  Discover authentic spirituality, vibrant community, meditation, study, service and growth—rooted in the teachings of Bhagavad Gita & Bhakti Yoga.
+      {/* Hero / Banner with two image placeholders and full form */}
+      <Box id="home" sx={{ pt: { xs: 12, md: 16 }, pb: { xs: 10, md: 14 }, position: 'relative', overflow: 'hidden' }}>
+        <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg,#fff,#fff7ed)', zIndex: -1 }} />
+        <Container maxWidth="xl">
+          <Grid container spacing={4} alignItems="stretch">
+            {/* Left image placeholder */}
+            <Grid item xs={12} md={3} sx={{ display: { xs: 'none', md: 'block' } }}>
+              <Box sx={{
+                height: '100%',
+                minHeight: 280,
+                borderRadius: 4,
+                border: '2px dashed #f59e0b',
+                background: 'repeating-linear-gradient(45deg,#fff8ed,#fff8ed 10px,#fff 10px,#fff 20px)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'warning.main',
+                fontWeight: 600,
+                letterSpacing: 1,
+                fontSize: 14
+              }}>
+                IMAGE SPACE
+              </Box>
+            </Grid>
+            {/* Center heading */}
+            <Grid item xs={12} md={6}>
+              <Stack spacing={4} alignItems="center" textAlign="center" height="100%" justifyContent="center">
+                <Chip label="STUDENT SPIRITUAL HUB" color="warning" variant="outlined" sx={{ fontWeight: 600 }} />
+                <Stack spacing={2}>
+                  <Typography variant="h3" sx={{ fontSize: { xs: '1.6rem', md: '2.2rem' }, fontWeight: 800, lineHeight: 1.15, letterSpacing: -0.5 }}>
+                    INTERNATIONAL SOCIETY FOR KRISHNA CONSCIOUSNESS
+                  </Typography>
+                  <Typography variant="h5" sx={{ fontWeight: 700, color: 'warning.main', letterSpacing: 1 }}>
+                    ISKCON STUDENT CENTER
+                  </Typography>
+                </Stack>
+                <Typography variant="h6" sx={{ fontWeight: 400, color: 'text.secondary', lineHeight: 1.5, maxWidth: 720 }}>
+                  Transform your student journey with meditation, wisdom, service, culture and nourishing prasadam rooted in the timeless Bhakti tradition.
                 </Typography>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                  <Button href="#programs" size="large" variant="contained" color="warning" sx={{ fontWeight: 700, px: 4, borderRadius: '999px' }}>Explore Programs</Button>
-                  <Button href="#contact" size="large" variant="outlined" color="warning" sx={{ fontWeight: 700, px: 4, borderRadius: '999px' }}>Visit Center</Button>
+                  <Button href="#programs" size="large" variant="contained" color="warning" sx={{ fontWeight: 700, px: 5, borderRadius: '999px', boxShadow: '0 0 0 0 rgba(245,158,11,0.5)', animation: 'pulseJoin 2.5s infinite' }}>Explore Programs</Button>
+                  <Button href="#contact" size="large" variant="outlined" color="warning" sx={{ fontWeight: 700, px: 5, borderRadius: '999px' }}>Visit Center</Button>
                 </Stack>
-                <Stack direction="row" spacing={4} pt={2}>
+                <Stack direction="row" spacing={6} pt={2}>
                   <Stack>
                     <Typography variant="h5" fontWeight={800}>250+</Typography>
                     <Typography variant="caption" color="text.secondary" fontWeight={600}>Active Students</Typography>
                   </Stack>
                   <Stack>
                     <Typography variant="h5" fontWeight={800}>365</Typography>
-                    <Typography variant="caption" color="text.secondary" fontWeight={600}>Days of Programs</Typography>
+                    <Typography variant="caption" color="text.secondary" fontWeight={600}>Days/Year</Typography>
                   </Stack>
                   <Stack>
                     <Typography variant="h5" fontWeight={800}>100%</Typography>
@@ -114,29 +139,31 @@ export default function Home() {
                 </Stack>
               </Stack>
             </Grid>
-            <Grid item xs={12} md={5}>
-              <Box sx={{ position: 'relative' }}>
-                <Box sx={{
-                  aspectRatio: '4/5',
-                  borderRadius: 6,
-                  boxShadow: 6,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexDirection: 'column',
-                  p: 4,
-                  background: 'linear-gradient(135deg,#fff,#fff7ed)'
-                }}>
-                  <Avatar sx={{ width: 96, height: 96, bgcolor: 'warning.light', mb: 3, boxShadow: 3 }}>🕉️</Avatar>
-                  <Typography variant="h6" fontWeight={700} gutterBottom color="warning.main">A Space to Grow</Typography>
-                  <Typography variant="body1" color="text.secondary" textAlign="center">
-                    Quiet meditation, deep study, nourishing meals & uplifting kirtan—all under one roof for students.
-                  </Typography>
-                </Box>
+            {/* Right image placeholder */}
+            <Grid item xs={12} md={3} sx={{ display: { xs: 'none', md: 'block' } }}>
+              <Box sx={{
+                height: '100%',
+                minHeight: 280,
+                borderRadius: 4,
+                border: '2px dashed #f59e0b',
+                background: 'repeating-linear-gradient(45deg,#fff8ed,#fff8ed 10px,#fff 10px,#fff 20px)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'warning.main',
+                fontWeight: 600,
+                letterSpacing: 1,
+                fontSize: 14
+              }}>
+                IMAGE SPACE
               </Box>
             </Grid>
           </Grid>
         </Container>
+        {/* Keyframes for pulsing button */}
+        <style>{`
+          @keyframes pulseJoin { 0% { box-shadow: 0 0 0 0 rgba(245,158,11,0.5);} 70% { box-shadow: 0 0 0 28px rgba(245,158,11,0); } 100% { box-shadow: 0 0 0 0 rgba(245,158,11,0);} }
+        `}</style>
       </Box>
 
       {/* Programs */}
@@ -248,6 +275,38 @@ export default function Home() {
               </Button>
             </Stack>
           </Card>
+        </Container>
+      </Box>
+      {/* Footer */}
+      <Box component="footer" sx={{ bgcolor: 'background.paper', borderTop: 1, borderColor: 'divider', py: 6 }}>
+        <Container maxWidth="lg">
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={4}>
+              <Stack spacing={2}>
+                <Typography variant="h6" fontWeight={800} color="warning.main">ISKCON STUDENT CENTER</Typography>
+                <Typography variant="body2" color="text.secondary">A nurturing hub for students to explore devotion, character, wisdom and joyful service.</Typography>
+              </Stack>
+            </Grid>
+            <Grid item xs={6} md={4}>
+              <Stack spacing={1}>
+                <Typography variant="subtitle2" fontWeight={700} color="warning.main">Explore</Typography>
+                {['Programs','Schedule','Facilities','Contact'].map(link => (
+                  <Button key={link} href={`#${link.toLowerCase()}`} variant="text" color="inherit" sx={{ justifyContent: 'flex-start', textTransform: 'none', fontWeight: 500 }}>{link}</Button>
+                ))}
+              </Stack>
+            </Grid>
+            <Grid item xs={6} md={4}>
+              <Stack spacing={1}>
+                <Typography variant="subtitle2" fontWeight={700} color="warning.main">Connect</Typography>
+                <Typography variant="body2">Phone: +91 83183 42494</Typography>
+                <Typography variant="body2">Instagram: @iskcondelhiuniversity</Typography>
+                <Typography variant="body2">YouTube: @ISKCONDelhiUniversity</Typography>
+                <Typography variant="body2">Address: 26 Prem Niwas First Floor, Malka Ganj, New Delhi</Typography>
+              </Stack>
+            </Grid>
+          </Grid>
+          <Divider sx={{ my: 4 }} />
+          <Typography variant="caption" color="text.secondary" display="block" textAlign="center">© {new Date().getFullYear()} ISKCON Student Center. All rights reserved.</Typography>
         </Container>
       </Box>
     </Box>
