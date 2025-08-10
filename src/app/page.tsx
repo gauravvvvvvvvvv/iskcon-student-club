@@ -134,7 +134,7 @@ export default function Home() {
           .nav-desktop { display: none !important; }
         }
         
-        /* Additional responsive styles */
+        /* Additional responsive styles */counselling
         @media (max-width: 768px) {
           .announcement-banner {
             font-size: 0.9rem !important;
@@ -243,7 +243,7 @@ export default function Home() {
             <div style={{ 
               width: '130px',
               height: '130px',
-              backgroundImage: "url('/prabhupada.png')",
+              backgroundImage: "url('/prabhupada.jpg')",
               backgroundSize: 'contain',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat'
@@ -867,7 +867,7 @@ export default function Home() {
                     { name: 'Leadership Development', desc: 'Character & leadership building' },
                     { name: 'Spiritual Friendship', desc: 'Meaningful spiritual connections' },
                     { name: 'Personal Mentorship', desc: 'One-on-one spiritual guidance' },
-                    { name: 'Spiritual Counseling for Life Related Problems', desc: 'Life guidance & support' },
+                    { name: 'Spiritual Counseling', desc: 'Life guidance & support' },
                     { name: 'Prasadam', desc: 'Sacred vegetarian meals' }
                   ].map((item, i) => (
                     <div key={i} style={{
