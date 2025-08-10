@@ -59,7 +59,7 @@ export default function Home() {
           </Typography>
           <Stack direction="row" spacing={1} sx={{ display: { xs: 'none', md: 'flex' } }}>
             {['Programs', 'Schedule', 'Facilities', 'Location', 'Contact'].map(item => (
-              <Button key={item} href={`#${item.toLower Case()}`} color="warning" variant="text" sx={{ fontWeight: 600 }}>
+              <Button key={item} href={`#${item.toLowerCase()}`} color="warning" variant="text" sx={{ fontWeight: 600 }}>
                 {item}
               </Button>
             ))}
