@@ -370,76 +370,96 @@ export function DynamicCarousel() {
   );
 }
 
-// Dynamic Announcements Component
+// Dynamic Announcements Component - Optimized for Speed
 export function DynamicAnnouncements() {
-  // Default announcement that shows immediately
-  const defaultAnnouncement = {
-    id: 'iskcon-default',
-    text: 'Welcome to ISKCON Student Center • Join us for daily morning programs at 6:30 AM • Bhagavad Gita classes every Sunday at 5 PM • Free prasadam for all students',
-    isActive: true,
-    createdAt: '2024-01-01',
-    updatedAt: '2024-01-01'
-  };
+  // Multiple default announcements for variety
+  const defaultAnnouncements = [
+    {
+      id: 'iskcon-default-1',
+      text: 'Welcome to ISKCON Student Center • Join us for daily morning programs at 6:30 AM • Bhagavad Gita classes every Sunday at 5 PM • Free prasadam for all students',
+      isActive: true,
+      createdAt: '2024-01-01',
+      updatedAt: '2024-01-01'
+    },
+    {
+      id: 'iskcon-default-2',
+      text: 'Experience spiritual growth through ancient wisdom • Weekly kirtan sessions • Study groups available • All students welcome regardless of background',
+      isActive: true,
+      createdAt: '2024-01-01',
+      updatedAt: '2024-01-01'
+    },
+    {
+      id: 'iskcon-default-3',
+      text: 'Discover the timeless teachings of Bhagavad Gita • Community service opportunities • Meditation workshops • Join our inclusive spiritual community',
+      isActive: true,
+      createdAt: '2024-01-01',
+      updatedAt: '2024-01-01'
+    }
+  ];
 
-  const [announcements, setAnnouncements] = useState<Announcement[]>([defaultAnnouncement]);
-  const [loading, setLoading] = useState(false); // Start as false for immediate display
+  const [announcements, setAnnouncements] = useState<Announcement[]>(defaultAnnouncements);
+  const [currentAnnouncementIndex, setCurrentAnnouncementIndex] = useState(0);
+  const [hasLoadedDynamic, setHasLoadedDynamic] = useState(false);
 
   useEffect(() => {
+    // Load dynamic announcements in background without blocking UI
     loadAnnouncements();
-  }, []);
+    
+    // Rotate through announcements every 8 seconds
+    const rotationTimer = setInterval(() => {
+      setCurrentAnnouncementIndex(prev => (prev + 1) % announcements.length);
+    }, 8000);
+
+    return () => clearInterval(rotationTimer);
+  }, [announcements.length]);
 
   const loadAnnouncements = async () => {
     try {
-      // Load dynamic announcements in background
-      const announcementsData = await fetchAnnouncements();
-      
-      if (announcementsData.length > 0) {
-        // If there are uploaded announcements, put them first and default at the end
-        setAnnouncements([...announcementsData, defaultAnnouncement]);
-      }
-      // If no announcements, keep showing default (already set in useState)
+      // Add a small timeout to prevent blocking the UI
+      setTimeout(async () => {
+        const announcementsData = await fetchAnnouncements();
+        
+        if (announcementsData.length > 0) {
+          // Merge dynamic announcements with defaults
+          const activeAnnouncements = announcementsData.filter(ann => ann.isActive);
+          if (activeAnnouncements.length > 0) {
+            setAnnouncements([...activeAnnouncements, ...defaultAnnouncements]);
+          }
+        }
+        setHasLoadedDynamic(true);
+      }, 100); // Small delay to let UI render first
     } catch (error) {
       console.error('Error loading announcements:', error);
-      // On error, keep showing default (already set in useState)
+      // Keep using defaults on error
+      setHasLoadedDynamic(true);
     }
   };
 
-  const activeAnnouncements = announcements.filter(ann => ann.isActive);
+  // Get current announcement to display
+  const currentAnnouncement = announcements[currentAnnouncementIndex];
   
-  // Create announcement text with clickable links
-  const createAnnouncementContent = () => {
-    if (activeAnnouncements.length === 0) {
-      return 'Welcome to ISKCON Student Center • Join us for daily morning programs at 6:30 AM • Bhagavad Gita classes every Sunday at 5 PM • Free prasadam for all students';
-    }
-
-    return activeAnnouncements.map((ann, index) => {
-      const baseText = ann.text;
-      if (ann.link) {
-        return (
-          <span key={ann.id}>
-            {baseText} • <a 
-              href={ann.link} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              style={{
-                color: '#ea580c',
-                textDecoration: 'underline',
-                fontWeight: 'bold'
-              }}
-            >
-              Click here
-            </a>
-            {index < activeAnnouncements.length - 1 ? ' • ' : ''}
-          </span>
-        );
-      }
+  // Create announcement content with clickable links
+  const createAnnouncementContent = (announcement: Announcement) => {
+    const baseText = announcement.text;
+    if (announcement.link) {
       return (
-        <span key={ann.id}>
-          {baseText}
-          {index < activeAnnouncements.length - 1 ? ' • ' : ''}
+        <span>
+          {baseText} • <a 
+            href={announcement.link} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            style={{
+              color: '#ea580c',
+              textDecoration: 'underline',
+              fontWeight: 'bold'
+            }}
+          >
+            Click here
+          </a>
         </span>
       );
-    });
+    }
+    return baseText;
   };
 
   return (
@@ -460,8 +480,24 @@ export function DynamicAnnouncements() {
         fontSize: '1rem',
         fontWeight: '500'
       }}>
-        {createAnnouncementContent()}
+        {createAnnouncementContent(currentAnnouncement)}
       </div>
+      
+      {/* Optional: Show loading indicator for dynamic content */}
+      {!hasLoadedDynamic && (
+        <div style={{
+          position: 'absolute',
+          right: '10px',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          fontSize: '0.8rem',
+          color: '#6b7280',
+          opacity: 0.7
+        }}>
+          ↻
+        </div>
+      )}
+      
       <style dangerouslySetInnerHTML={{
         __html: `
           @keyframes scroll-announcement {
