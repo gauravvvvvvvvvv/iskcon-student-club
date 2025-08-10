@@ -3,6 +3,7 @@ import React from 'react';
 import {
   AppBar, Box, Toolbar, Typography, Container, Button, IconButton, Stack, Grid, Card, CardContent, Chip, Divider, List, ListItem, ListItemIcon, ListItemText, useScrollTrigger, Slide, Tooltip
 } from '@mui/material';
+import Image from 'next/image';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import { useContext } from 'react';
@@ -108,28 +109,48 @@ export default function Home() {
       </HideOnScroll>
       <Toolbar />
 
-      {/* Hero with top-corner images */}
-      <Box id="home" sx={{ pt: { xs: 18, md: 20 }, pb: { xs: 10, md: 14 }, position: 'relative', overflow: 'hidden' }}>
+      {/* Hero with left/right images and full form centered */}
+      <Box id="home" sx={{ pt: { xs: 18, md: 24 }, pb: { xs: 10, md: 14 }, position: 'relative', overflow: 'hidden' }}>
         <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(115deg,#ffffff,#fff9f1 55%,#fff3e0)', zIndex: -3 }} />
         {/* Subtle decorative orbs */}
         <Box sx={{ position: 'absolute', width: 380, height: 380, top: -120, left: -120, borderRadius: '50%', background: 'radial-gradient(circle,#ffd9b0,transparent 60%)', filter: 'blur(40px)', opacity: 0.55 }} />
         <Box sx={{ position: 'absolute', width: 420, height: 420, bottom: -160, right: -140, borderRadius: '50%', background: 'radial-gradient(circle,#ffe4c4,transparent 70%)', filter: 'blur(50px)', opacity: 0.55 }} />
-        {/* Top corner image placeholders */}
-  <Box sx={{ position: 'absolute', top: 24, left: 24, width: { xs: 110, md: 190 }, height: { xs: 130, md: 230 }, borderRadius: 6, background: 'linear-gradient(160deg,#fff3e0 0%,#ffe1bc 60%)', boxShadow: '0 10px 26px -12px rgba(234,88,12,0.25)', overflow: 'hidden', display: { xs: 'none', sm: 'block' }, border: '1px solid rgba(234,88,12,0.2)' }}>
-          <Box sx={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 30% 25%,rgba(245,158,11,0.35),transparent 60%)' }} />
-          <Typography sx={{ position: 'absolute', bottom: 8, left: 0, right: 0, textAlign: 'center', fontSize: 10, letterSpacing: 2, fontWeight: 700, color: 'warning.main' }}>ADD IMAGE</Typography>
-        </Box>
-  <Box sx={{ position: 'absolute', top: 24, right: 24, width: { xs: 110, md: 190 }, height: { xs: 130, md: 230 }, borderRadius: 6, background: 'linear-gradient(210deg,#fff3e0 0%,#ffe1bc 65%)', boxShadow: '0 10px 26px -12px rgba(234,88,12,0.25)', overflow: 'hidden', display: { xs: 'none', sm: 'block' }, border: '1px solid rgba(234,88,12,0.2)' }}>
-          <Box sx={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 70% 25%,rgba(245,158,11,0.35),transparent 60%)' }} />
-          <Typography sx={{ position: 'absolute', bottom: 8, left: 0, right: 0, textAlign: 'center', fontSize: 10, letterSpacing: 2, fontWeight: 700, color: 'warning.main' }}>ADD IMAGE</Typography>
+        {/* Horizontal hero banner with images */}
+        <Box sx={{
+          position: 'absolute',
+          top: { xs: 80, md: 90 },
+          left: '50%',
+            transform: 'translateX(-50%)',
+          display: { xs: 'none', sm: 'flex' },
+          alignItems: 'center',
+          gap: { sm: 4, md: 8 },
+          px: 2,
+          zIndex: 2
+        }}>
+          <Box sx={{ position: 'relative', width: { sm: 160, md: 220 }, height: { sm: 160, md: 220 } }}>
+            <Image src="/prabhupada.jpg" alt="Srila Prabhupada" fill style={{ objectFit: 'cover', borderRadius: '50%' }} />
+          </Box>
+          <Typography variant="h4" sx={{
+            fontWeight: 800,
+            lineHeight: 1.1,
+            textAlign: 'center',
+            maxWidth: { sm: 360, md: 520 },
+            fontSize: { sm: '1.4rem', md: '1.9rem' },
+            letterSpacing: { sm: 1, md: 2 },
+            background: 'linear-gradient(90deg,#ea580c,#f59e0b)',
+            WebkitBackgroundClip: 'text',
+            color: 'transparent'
+          }}>
+            INTERNATIONAL SOCIETY FOR KRISHNA CONSCIOUSNESS
+          </Typography>
+          <Box sx={{ position: 'relative', width: { sm: 160, md: 220 }, height: { sm: 160, md: 220 } }}>
+            <Image src="/iskcon-logo.png" alt="ISKCON Logo" fill style={{ objectFit: 'contain' }} />
+          </Box>
         </Box>
         <Container maxWidth="lg">
           <Stack spacing={5} alignItems="center" textAlign="center">
-            <Stack spacing={2}>
-              <Typography variant="h3" sx={{ fontSize: { xs: '1.9rem', md: '2.7rem' }, fontWeight: 800, lineHeight: 1.1, letterSpacing: -0.75, background: 'linear-gradient(90deg,#ea580c,#f59e0b)', WebkitBackgroundClip: 'text', color: 'transparent' }}>
-                INTERNATIONAL SOCIETY FOR KRISHNA CONSCIOUSNESS
-              </Typography>
-              <Typography variant="h4" sx={{ fontWeight: 800, color: 'warning.main', letterSpacing: 4 }}>
+            <Stack spacing={2} sx={{ mt: { xs: 0, md: 20 } }}>
+              <Typography variant="h3" sx={{ fontSize: { xs: '1.9rem', md: '2.7rem' }, fontWeight: 800, lineHeight: 1.1, letterSpacing: -0.75, color: 'warning.main' }}>
                 ISKCON STUDENT CENTER
               </Typography>
             </Stack>
