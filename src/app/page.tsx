@@ -227,13 +227,13 @@ export default function Home() {
           <div style={{ 
             display: 'flex',
             alignItems: 'center',
-            gap: '0.5rem',
+            gap: '0.1rem',
             flexShrink: 0,
             paddingLeft: '0.5rem'
           }}>
             <div style={{ 
-              width: '80px',
-              height: '80px',
+              width: '70px',
+              height: '70px',
               backgroundImage: "url('/image.png')",
               backgroundSize: 'contain',
               backgroundPosition: 'center',
