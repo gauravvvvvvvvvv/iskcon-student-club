@@ -1,44 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 
-      <style dangerouslySetInnerHTML={{
-        __html: `
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(30px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes slideInLeft {
-          from { opacity: 0; transform: translateX(-50px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes slideInRight {
-          from { opacity: 0; transform: translateX(50px); }
-          to { opacity: 1; transform: translateX(0); }
-          <div style={{
-            position: 'absolute',
-            bottom: '15px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            zIndex: 4,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: 'clamp(0.5rem, 2vw, 1rem)',
-            width: '100%',
-            maxWidth: '400px',
-            padding: '0 1rem'
-          }} className="carousel-nav">
-            {/* Previous Button */}
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                setCurrentSlide(prev => prev === 0 ? 6 : prev - 1);
-              }}
-              style={{
-                backgroundColor: 'rgba(0, 0, 0, 0.4)',
-                border: '2px solid rgba(255, 255, 255, 0.6)',
-                color: 'white',
-                width: 'clamp(35px, 8vw, 45px)',
+// ...existing code...
                 height: 'clamp(35px, 8vw, 45px)',
                 borderRadius: '50%',
                 cursor: 'pointer',
