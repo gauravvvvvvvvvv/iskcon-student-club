@@ -41,6 +41,11 @@ export default function Home() {
           100% { background-position: 0% 50%; }
         }
         
+        @keyframes scrollText {
+          0% { transform: translateX(100%); }
+          100% { transform: translateX(-100%); }
+        }
+        
         .animate-fadeInUp {
           animation: fadeInUp 0.8s ease-out forwards;
           opacity: 0;
@@ -135,6 +140,52 @@ export default function Home() {
           .grid-responsive { grid-template-columns: 1fr !important; }
           .text-responsive { font-size: 1.5rem !important; }
           .nav-desktop { display: none !important; }
+        }
+        
+        /* Additional responsive styles */
+        @media (max-width: 768px) {
+          .announcement-banner {
+            font-size: 0.9rem !important;
+            padding: 8px 0 !important;
+          }
+          
+          .carousel-container {
+            height: 400px !important;
+            min-height: 400px !important;
+          }
+          
+          .carousel-content {
+            padding: 1rem !important;
+          }
+          
+          .carousel-images {
+            margin-bottom: 1rem !important;
+          }
+          
+          .carousel-title {
+            margin: 1rem 0 !important;
+          }
+          
+          .carousel-nav {
+            margin-top: 1rem !important;
+            gap: 0.5rem !important;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .announcement-banner {
+            font-size: 0.8rem !important;
+          }
+          
+          .carousel-container {
+            height: 350px !important;
+          }
+          
+          .carousel-images-container {
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 1rem !important;
+          }
         }
         `
       }} />
@@ -250,13 +301,32 @@ export default function Home() {
 
       {/* Add top margin for fixed header */}
       <div style={{ marginTop: '80px' }}>
+        {/* Announcement Banner */}
+        <div style={{
+          backgroundColor: '#1e40af',
+          color: 'white',
+          padding: '12px 0',
+          overflow: 'hidden',
+          position: 'relative',
+          borderBottom: '2px solid rgba(255, 255, 255, 0.2)'
+        }} className="announcement-banner">
+          <div style={{
+            whiteSpace: 'nowrap',
+            animation: 'scrollText 20s linear infinite',
+            fontSize: '1.1rem',
+            fontWeight: '600'
+          }}>
+            🎉 Welcome to ISKCON Student Center! Join our community for spiritual growth and learning 📚 Weekly programs available 🙏 Register now for upcoming events ✨
+          </div>
+        </div>
+
         {/* Image Carousel Section */}
         <section style={{
           position: 'relative',
-          height: '600px',
+          height: 'clamp(400px, 60vh, 600px)',
           overflow: 'hidden',
           backgroundColor: '#1e40af'
-        }}>
+        }} className="carousel-container">
           {/* Background Image Carousel */}
           <div style={{
             position: 'absolute',
@@ -304,19 +374,19 @@ export default function Home() {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-            padding: '2rem',
+            padding: 'clamp(1rem, 4vw, 2rem)',
             maxWidth: '1200px',
             margin: '0 auto'
-          }}>
+          }} className="carousel-content">
             {/* Top Row with Images */}
             <div style={{
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'flex-start'
-            }}>
+            }} className="carousel-images carousel-images-container">
               <div style={{
-                width: '120px',
-                height: '120px',
+                width: 'clamp(80px, 15vw, 120px)',
+                height: 'clamp(80px, 15vw, 120px)',
                 borderRadius: '16px 0 0 0',
                 backgroundColor: 'rgba(255, 255, 255, 0.95)',
                 display: 'flex',
@@ -332,8 +402,8 @@ export default function Home() {
               </div>
 
               <div style={{
-                width: '120px',
-                height: '120px',
+                width: 'clamp(80px, 15vw, 120px)',
+                height: 'clamp(80px, 15vw, 120px)',
                 borderRadius: '0 16px 0 0',
                 backgroundColor: 'rgba(255, 255, 255, 0.95)',
                 display: 'flex',
@@ -440,14 +510,15 @@ export default function Home() {
             </div>
 
             {/* Center Title */}
-            <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+            <div style={{ textAlign: 'center', marginTop: '2rem' }} className="carousel-title">
               <h1 style={{
-                fontSize: '3rem',
+                fontSize: 'clamp(1.8rem, 6vw, 3rem)',
                 fontWeight: '900',
                 color: 'white',
                 textShadow: '0 4px 8px rgba(0, 0, 0, 0.5)',
                 margin: 0,
-                letterSpacing: '0.05em'
+                letterSpacing: '0.05em',
+                lineHeight: '1.1'
               }}>
                 ISKCON Student Center
               </h1>
@@ -458,9 +529,10 @@ export default function Home() {
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              gap: '1rem',
-              marginTop: '2rem'
-            }}>
+              gap: 'clamp(0.5rem, 2vw, 1rem)',
+              marginTop: '2rem',
+              flexWrap: 'wrap'
+            }} className="carousel-nav">
               {/* Previous Button */}
               <button
                 onClick={() => setCurrentSlide(currentSlide === 0 ? 4 : currentSlide - 1)}
@@ -468,14 +540,14 @@ export default function Home() {
                   backgroundColor: 'rgba(255, 255, 255, 0.2)',
                   border: '2px solid rgba(255, 255, 255, 0.3)',
                   color: 'white',
-                  width: '50px',
-                  height: '50px',
+                  width: 'clamp(40px, 8vw, 50px)',
+                  height: 'clamp(40px, 8vw, 50px)',
                   borderRadius: '50%',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: '1.5rem',
+                  fontSize: 'clamp(1rem, 3vw, 1.5rem)',
                   transition: 'all 0.3s ease'
                 }}
               >
@@ -483,14 +555,14 @@ export default function Home() {
               </button>
 
               {/* Indicators */}
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <div style={{ display: 'flex', gap: 'clamp(0.3rem, 1vw, 0.5rem)' }}>
                 {[0, 1, 2, 3, 4].map((index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentSlide(index)}
                     style={{
-                      width: '12px',
-                      height: '12px',
+                      width: 'clamp(10px, 2vw, 12px)',
+                      height: 'clamp(10px, 2vw, 12px)',
                       borderRadius: '50%',
                       border: 'none',
                       backgroundColor: currentSlide === index ? 'white' : 'rgba(255, 255, 255, 0.5)',
@@ -508,95 +580,19 @@ export default function Home() {
                   backgroundColor: 'rgba(255, 255, 255, 0.2)',
                   border: '2px solid rgba(255, 255, 255, 0.3)',
                   color: 'white',
-                  width: '50px',
-                  height: '50px',
+                  width: 'clamp(40px, 8vw, 50px)',
+                  height: 'clamp(40px, 8vw, 50px)',
                   borderRadius: '50%',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: '1.5rem',
+                  fontSize: 'clamp(1rem, 3vw, 1.5rem)',
                   transition: 'all 0.3s ease'
                 }}
               >
                 ›
               </button>
-            </div>
-          </div>
-        </section>
-
-        {/* Action Buttons Section */}
-        <section style={{
-          padding: '3rem 2rem',
-          backgroundColor: '#f8fafc',
-          textAlign: 'center'
-        }}>
-          <div style={{
-            maxWidth: '1200px',
-            margin: '0 auto'
-          }}>
-            <p style={{
-              fontSize: '1.25rem',
-              color: '#64748b',
-              marginBottom: '2rem',
-              fontWeight: '500'
-            }}>
-              Spiritual growth, community service, and Krishna consciousness for students
-            </p>
-            
-            <div style={{
-              display: 'flex',
-              gap: '1rem',
-              justifyContent: 'center',
-              flexWrap: 'wrap'
-            }}>
-              <a
-                href="https://forms.google.com/your-form-id"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  backgroundColor: '#ea580c',
-                  color: 'white',
-                  padding: '1rem 2rem',
-                  borderRadius: '8px',
-                  textDecoration: 'none',
-                  fontWeight: '700',
-                  fontSize: '1.1rem',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  border: 'none',
-                  boxShadow: '0 4px 6px rgba(234, 88, 12, 0.3)',
-                  transition: 'all 0.3s ease',
-                  minWidth: '160px',
-                  justifyContent: 'center'
-                }}
-              >
-                Join Now
-              </a>
-              
-              <a
-                href="#programs"
-                style={{
-                  backgroundColor: '#3b82f6',
-                  color: 'white',
-                  padding: '1rem 2rem',
-                  borderRadius: '8px',
-                  textDecoration: 'none',
-                  fontWeight: '700',
-                  fontSize: '1.1rem',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  border: 'none',
-                  boxShadow: '0 4px 6px rgba(59, 130, 246, 0.3)',
-                  transition: 'all 0.3s ease',
-                  minWidth: '160px',
-                  justifyContent: 'center'
-                }}
-              >
-                Explore Programs
-              </a>
             </div>
           </div>
         </section>
