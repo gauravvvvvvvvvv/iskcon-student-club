@@ -906,7 +906,7 @@ export default function Home() {
                   Visit Us
                 </h3>
                 <p style={{ textAlign: 'center', lineHeight: '1.6', color: '#e5e7eb' }}>
-                  26 Prem Niwas First Floor, Above Natural's Ice Cream,<br />
+                  26 Prem Niwas First Floor, Opp. Hansraj College, Above Natural's Ice Cream,<br />
                   Malka Ganj, New Delhi, Delhi 110007
                 </p>
               </div>
