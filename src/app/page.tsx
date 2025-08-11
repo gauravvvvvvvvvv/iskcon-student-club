@@ -183,18 +183,18 @@ export default function Home() {
           }
           
           .carousel-buttons {
-            bottom: 20px !important;
-            position: fixed !important;
-            left: 50% !important;
-            transform: translateX(-50%) !important;
-            width: calc(100% - 2rem) !important;
-            max-width: 300px !important;
-            z-index: 10 !important;
+            bottom: 50px !important;
+            background: rgba(0, 0, 0, 0.3) !important;
+            backdrop-filter: blur(8px) !important;
+            border-radius: 15px !important;
+            padding: 0.5rem !important;
+            margin: 0 0.5rem !important;
           }
           
           .carousel-buttons a {
-            font-size: 0.75rem !important;
-            padding: 0.5rem 1rem !important;
+            font-size: 0.7rem !important;
+            padding: 0.4rem 0.8rem !important;
+            margin: 0.2rem !important;
           }
           
           .carousel-content h1 {
