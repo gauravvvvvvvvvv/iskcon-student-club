@@ -409,75 +409,81 @@ export function DynamicCarousel() {
   );
 }
 
-// Dynamic Announcements Component - FIXED for seamless flow and instant start
+// Dynamic Announcements Component - INSTANT START with aggressive fallback
 export function DynamicAnnouncements() {
-  // Default fallback announcement
-  const fallbackAnnouncement: Announcement = {
-    id: 'iskcon-fallback',
-    text: 'Welcome to ISKCON Student Center',
-    isActive: true,
-    createdAt: '2024-01-01',
-    updatedAt: '2024-01-01'
-  };
-
-  // Helper to check fallback toggle
-  const isFallbackAnnouncementEnabled = () => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('showFallbackAnnouncement');
-      return stored !== 'false';
+  // Multiple fallback announcements for immediate start
+  const defaultAnnouncements: Announcement[] = [
+    {
+      id: 'iskcon-1',
+      text: 'Welcome to ISKCON Student Center',
+      isActive: true,
+      createdAt: '2024-01-01',
+      updatedAt: '2024-01-01'
+    },
+    {
+      id: 'iskcon-2',
+      text: 'Join us for daily morning programs at 6:30 AM',
+      isActive: true,
+      createdAt: '2024-01-01',
+      updatedAt: '2024-01-01'
+    },
+    {
+      id: 'iskcon-3',
+      text: 'Bhagavad Gita classes every Sunday at 5 PM',
+      isActive: true,
+      createdAt: '2024-01-01',
+      updatedAt: '2024-01-01'
+    },
+    {
+      id: 'iskcon-4',
+      text: 'Free prasadam for all students',
+      isActive: true,
+      createdAt: '2024-01-01',
+      updatedAt: '2024-01-01'
     }
-    return true;
-  };
+  ];
 
-  const [announcements, setAnnouncements] = useState<Announcement[]>(() => {
-    // Start immediately with fallback if enabled
-    return isFallbackAnnouncementEnabled() ? [fallbackAnnouncement] : [];
-  });
+  // ALWAYS start with default announcements - NO CONDITIONS
+  const [announcements, setAnnouncements] = useState<Announcement[]>(defaultAnnouncements);
 
-  // Load announcements in background without blocking initial render
+  // Load real announcements in background (fire and forget)
   useEffect(() => {
-    // Start animation immediately, then load data
-    const loadInBackground = async () => {
+    // Use setTimeout to make this truly non-blocking
+    setTimeout(async () => {
       try {
-        const announcementsData = await fetchAnnouncements();
+        // Very quick timeout to prevent hanging
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 200); // Super short timeout
+        
+        const announcementsData = await Promise.race([
+          fetchAnnouncements(),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 200))
+        ]);
+        
+        clearTimeout(timeoutId);
         
         if (announcementsData && Array.isArray(announcementsData)) {
           const activeAnnouncements = announcementsData.filter(ann => ann && ann.isActive && ann.text);
           
           if (activeAnnouncements.length > 0) {
-            // We have user announcements
-            if (isFallbackAnnouncementEnabled()) {
-              // Include fallback + user announcements
-              setAnnouncements([...activeAnnouncements, fallbackAnnouncement]);
+            // Only update if we actually got good data
+            const shouldShowFallback = typeof window !== 'undefined' 
+              ? localStorage.getItem('showFallbackAnnouncement') !== 'false'
+              : true;
+              
+            if (shouldShowFallback) {
+              setAnnouncements([...activeAnnouncements, ...defaultAnnouncements]);
             } else {
-              // Only user announcements
               setAnnouncements(activeAnnouncements);
-            }
-          } else {
-            // No user announcements - keep fallback if enabled
-            if (!isFallbackAnnouncementEnabled()) {
-              setAnnouncements([]);
             }
           }
         }
       } catch (error) {
-        console.error('Error loading announcements:', error);
-        // Keep fallback announcement on error if enabled
+        // Silently fail - keep default announcements running
+        console.log('Using default announcements');
       }
-    };
-
-    // Load data after component mounts but don't wait for it
-    loadInBackground();
+    }, 0); // Execute immediately but non-blocking
     
-    // Listen for storage changes
-    const handleStorageChange = () => {
-      loadInBackground();
-    };
-    window.addEventListener('storage', handleStorageChange);
-    
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
   }, []);
 
   // Don't render anything if no announcements
