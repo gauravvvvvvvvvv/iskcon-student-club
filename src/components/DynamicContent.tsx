@@ -384,9 +384,9 @@ export function DynamicAnnouncements() {
     updatedAt: '2024-01-01'
   };
 
-  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([fallbackAnnouncement]);
   const [currentAnnouncementIndex, setCurrentAnnouncementIndex] = useState(0);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -431,32 +431,25 @@ export function DynamicAnnouncements() {
         const activeAnnouncements = announcementsData.filter(ann => ann && ann.isActive && ann.text);
         
         if (activeAnnouncements.length > 0) {
-          setAnnouncements(activeAnnouncements);
-          setCurrentAnnouncementIndex(0); // Reset to first announcement
-        } else {
-          // No active announcements, use fallback
-          setAnnouncements([fallbackAnnouncement]);
+          // Only update if we got actual announcements and haven't loaded before
+          if (!hasLoadedOnce) {
+            setAnnouncements(activeAnnouncements);
+            setCurrentAnnouncementIndex(0);
+          }
         }
-      } else {
-        // API call failed or returned invalid data, use fallback
-        setAnnouncements([fallbackAnnouncement]);
+        // If no active announcements, keep the fallback that's already set
       }
+      // If API call failed, keep the fallback that's already set
     } catch (error) {
       console.error('Error loading announcements:', error);
-      // On error, use fallback announcement
-      setAnnouncements([fallbackAnnouncement]);
+      // Keep the fallback announcement that's already set
     } finally {
-      setIsLoaded(true);
+      setHasLoadedOnce(true);
     }
   };
 
   // Get current announcement with safety checks
   const currentAnnouncement = announcements[currentAnnouncementIndex] || fallbackAnnouncement;
-  
-  // Don't render until announcements are loaded
-  if (!isLoaded) {
-    return null;
-  }
   
   // Create announcement content with safety checks
   const createAnnouncementContent = (announcement: Announcement) => {

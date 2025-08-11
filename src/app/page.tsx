@@ -195,6 +195,13 @@ export default function Home() {
             letter-spacing: 0.2px !important;
             max-width: 100px !important;
           }
+          
+          .main-title {
+            font-size: 0.65rem !important;
+            line-height: 1.0 !important;
+            word-break: break-word !important;
+            white-space: normal !important;
+          }
         }
         
         @media (max-width: 768px) {
@@ -278,17 +285,18 @@ export default function Home() {
             minWidth: '0'
           }}>
             <h1 style={{ 
-              fontSize: 'clamp(0.9rem, 3vw, 1.25rem)', 
+              fontSize: 'clamp(0.75rem, 2.5vw, 1.25rem)', 
               fontWeight: '700',
               letterSpacing: 'clamp(0.3px, 0.5vw, 0.5px)', 
               background: 'linear-gradient(135deg, #ea580c, #f97316)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               margin: 0,
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis'
-            }} className="animate-fadeInUp">
+              whiteSpace: 'normal',
+              wordWrap: 'break-word',
+              lineHeight: '1.1',
+              hyphens: 'auto'
+            }} className="animate-fadeInUp main-title">
               ISKCON STUDENT CENTER
             </h1>
             <div style={{
