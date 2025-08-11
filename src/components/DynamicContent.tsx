@@ -171,7 +171,7 @@ export function DynamicCarousel() {
       {/* Content Container - Floating at bottom */}
       <div style={{
         position: 'absolute',
-        bottom: '20px', // Float at bottom with some margin
+        bottom: '60px', // Moved higher to avoid navigation overlap
         left: '50%',
         transform: 'translateX(-50%)',
         zIndex: 4,

@@ -183,7 +183,7 @@ export default function Home() {
           }
           
           .carousel-buttons {
-            bottom: 15px !important;
+            bottom: 55px !important;
             left: 50% !important;
             transform: translateX(-50%) !important;
             gap: 0.5rem !important;
