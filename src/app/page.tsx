@@ -186,7 +186,7 @@ export default function Home() {
             bottom: 55px !important;
             left: 50% !important;
             transform: translateX(-50%) !important;
-            gap: 0.5rem !important;
+            gap: 0.4rem !important;
             flex-wrap: nowrap !important;
             max-width: calc(100% - 1rem) !important;
             margin: 0 !important;
@@ -194,14 +194,18 @@ export default function Home() {
             background: none !important;
             backdrop-filter: none !important;
             border-radius: 0 !important;
+            white-space: nowrap !important;
           }
           
           .carousel-buttons a {
-            font-size: 0.7rem !important;
-            padding: 0.5rem 0.8rem !important;
+            font-size: 0.65rem !important;
+            padding: 0.4rem 0.6rem !important;
             margin: 0 !important;
             border: 2px solid rgba(0, 0, 0, 0.9) !important;
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4) !important;
+            white-space: nowrap !important;
+            flex-shrink: 0 !important;
+            min-width: auto !important;
           }
           
           .carousel-content h1 {
@@ -224,6 +228,15 @@ export default function Home() {
             line-height: 1.0 !important;
             word-break: break-word !important;
             white-space: normal !important;
+          }
+        }
+        
+        /* Extra small mobile devices */
+        @media (max-width: 360px) {
+          .carousel-buttons a {
+            font-size: 0.6rem !important;
+            padding: 0.35rem 0.5rem !important;
+            gap: 0.25rem !important;
           }
         }
         
