@@ -880,7 +880,7 @@ export default function Home() {
                   Connect
                 </h3>
                 <div style={{ textAlign: 'center' }}>
-                  <a href="tel:+919876543210" style={{ 
+                  <a href="tel:+91 83183 42494" style={{ 
                     color: '#ff6b35', 
                     textDecoration: 'none', 
                     display: 'block', 
@@ -888,7 +888,7 @@ export default function Home() {
                     fontWeight: '500',
                     fontSize: '1rem'
                   }}>
-                    Phone: +91 98765 43210
+                    Phone: +91 83183 42494
                   </a>
                   <a href="https://instagram.com/iskcondelhiuniversity" style={{ 
                     color: '#ff6b35', 

@@ -1,21 +1,42 @@
 "use client";
 import { useState, useEffect, useRef } from 'react';
-import { fetchCarouselImages, fetchAnnouncements, type CarouselImage, type Announcement } from '../lib/cms';
+import { fetchCarouselImages, type CarouselImage } from '../lib/cms';
 
-// Dynamic Carousel Component
+// Define CarouselImage type for clarity
+interface CarouselImage {
+  id: string;
+  url: string;
+  filename: string;
+  uploadedAt: string;
+  alt?: string; // Optional alt text for accessibility
+}
+
 export function DynamicCarousel() {
-  const [images, setImages] = useState<CarouselImage[]>([]);
+  // Initialize with fallback image to avoid loading state
+  const [images, setImages] = useState<CarouselImage[]>([{
+    id: 'jagannath-default',
+    url: process.env.NEXT_PUBLIC_DEFAULT_IMAGE_URL || '/jagannath.jpg',
+    filename: 'jagannath.jpg',
+    uploadedAt: '2024-01-01',
+    alt: 'Default Jagannath Image',
+  }]);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const isMounted = useRef(true);
 
   useEffect(() => {
+    isMounted.current = true;
     loadImages();
+    return () => {
+      isMounted.current = false;
+    };
   }, []);
 
   useEffect(() => {
     if (images.length > 0) {
       const timer = setInterval(() => {
-        setCurrentSlide(prev => (prev + 1) % images.length);
+        if (isMounted.current) {
+          setCurrentSlide(prev => (prev + 1) % images.length);
+        }
       }, 4000);
       return () => clearInterval(timer);
     }
@@ -25,71 +46,22 @@ export function DynamicCarousel() {
     try {
       const imagesData = await fetchCarouselImages();
       
-      // Default Jagannath image (always present)
-      const jagannathImage = {
+      const jagannathImage: CarouselImage = {
         id: 'jagannath-default',
-        url: '/jagannath.jpg',
+        url: process.env.NEXT_PUBLIC_DEFAULT_IMAGE_URL || '/jagannath.jpg',
         filename: 'jagannath.jpg',
-        uploadedAt: '2024-01-01'
+        uploadedAt: '2024-01-01',
+        alt: 'Default Jagannath Image',
       };
       
-      if (imagesData.length > 0) {
-        // If there are uploaded images, put them first and Jagannath at the end
+      if (imagesData.length > 0 && isMounted.current) {
         setImages([...imagesData, jagannathImage]);
-      } else {
-        // If no uploaded images, show only Jagannath
-        setImages([jagannathImage]);
       }
     } catch (error) {
       console.error('Error loading carousel images:', error);
-      // On error, show only Jagannath
-      setImages([{
-        id: 'jagannath-default',
-        url: '/jagannath.jpg',
-        filename: 'jagannath.jpg',
-        uploadedAt: '2024-01-01'
-      }]);
-    } finally {
-      setLoading(false);
+      // Keep the fallback image that's already set
     }
   };
-
-  if (loading) {
-    return (
-      <section style={{
-        position: 'relative',
-        height: 'clamp(600px, 80vh, 900px)',
-        overflow: 'hidden',
-        backgroundColor: '#f3f4f6',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
-        <div style={{ color: '#6b7280', fontSize: '1.1rem' }}>
-          Loading carousel...
-        </div>
-      </section>
-    );
-  }
-
-  if (images.length === 0) {
-    return (
-      <section style={{
-        position: 'relative',
-        height: 'clamp(600px, 80vh, 900px)',
-        overflow: 'hidden',
-        backgroundColor: '#f3f4f6',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
-        <div style={{ textAlign: 'center', color: '#6b7280' }}>
-          <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>No images found</h2>
-          <p>Please upload images via the admin panel.</p>
-        </div>
-      </section>
-    );
-  }
 
   return (
     <section style={{
@@ -100,7 +72,7 @@ export function DynamicCarousel() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center'
-    }} className="carousel-container">
+    }} className="carousel-container" aria-live="polite">
       {/* Background Image Carousel */}
       <div style={{
         position: 'absolute',
@@ -135,7 +107,7 @@ export function DynamicCarousel() {
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
               filter: 'blur(20px) brightness(0.3)',
-              transform: 'scale(1.1)', // Slightly larger to avoid blur edges
+              transform: 'scale(1.1)',
               zIndex: 1
             }} />
             
@@ -151,7 +123,7 @@ export function DynamicCarousel() {
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
               zIndex: 2
-            }} />
+            }} aria-label={image.alt || 'Carousel image'} />
           </div>
         ))}
         
@@ -167,10 +139,10 @@ export function DynamicCarousel() {
         }} />
       </div>
 
-      {/* Content Container - Repositioned */}
+      {/* Content Container */}
       <div style={{
         position: 'absolute',
-        bottom: '80px', // Above navigation
+        bottom: '80px',
         left: '50%',
         transform: 'translateX(-50%)',
         zIndex: 4,
@@ -180,8 +152,6 @@ export function DynamicCarousel() {
         flexWrap: 'wrap',
         padding: '0 1rem'
       }}>
-        {/* Call to Action Buttons */}
-
         <a 
           href="https://docs.google.com/forms/d/e/1FVlLR7QJUP-8BedM3oRQYFact6stIYMFFo0OKGzmWvg/viewform"
           target="_blank"
@@ -279,10 +249,8 @@ export function DynamicCarousel() {
         maxWidth: '400px',
         padding: '0 1rem'
       }} className="carousel-nav">
-        {/* Previous Button */}
         <button
-          onClick={(e) => {
-            e.preventDefault();
+          onClick={() => {
             setCurrentSlide(currentSlide === 0 ? images.length - 1 : currentSlide - 1);
           }}
           style={{
@@ -307,17 +275,16 @@ export function DynamicCarousel() {
           onMouseLeave={(e) => {
             e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.4)';
           }}
+          aria-label="Previous slide"
         >
           ‹
         </button>
 
-        {/* Indicators */}
         <div style={{ display: 'flex', gap: 'clamp(0.2rem, 1vw, 0.4rem)' }} className="indicators">
           {images.map((_, index) => (
             <button
               key={index}
-              onClick={(e) => {
-                e.preventDefault();
+              onClick={() => {
                 setCurrentSlide(index);
               }}
               style={{
@@ -330,14 +297,13 @@ export function DynamicCarousel() {
                 transition: 'all 0.3s ease',
                 boxShadow: '0 1px 3px rgba(0, 0, 0, 0.2)'
               }}
+              aria-label={`Go to slide ${index + 1}`}
             />
           ))}
         </div>
 
-        {/* Next Button */}
         <button
-          onClick={(e) => {
-            e.preventDefault();
+          onClick={() => {
             setCurrentSlide(currentSlide === images.length - 1 ? 0 : currentSlide + 1);
           }}
           style={{
@@ -362,131 +328,11 @@ export function DynamicCarousel() {
           onMouseLeave={(e) => {
             e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.4)';
           }}
+          aria-label="Next slide"
         >
           ›
         </button>
       </div>
     </section>
-  );
-}
-
-// Dynamic Announcements Component - Clean and Fast
-export function DynamicAnnouncements() {
-  // Default fallback announcement
-  const fallbackAnnouncement = {
-    id: 'iskcon-fallback',
-    text: 'Welcome to ISKCON Student Center • Join us for daily morning programs at 6:30 AM • Bhagavad Gita classes every Sunday at 5 PM • Free prasadam for all students',
-    isActive: true,
-    createdAt: '2024-01-01',
-    updatedAt: '2024-01-01'
-  };
-
-  const [announcements, setAnnouncements] = useState<Announcement[]>([fallbackAnnouncement]);
-  const [currentAnnouncementIndex, setCurrentAnnouncementIndex] = useState(0);
-
-  useEffect(() => {
-    loadAnnouncements();
-  }, []);
-
-  useEffect(() => {
-    if (announcements.length > 0) {
-      const rotationTimer = setInterval(() => {
-        setCurrentAnnouncementIndex(prev => {
-          const nextIndex = (prev + 1) % announcements.length;
-          return nextIndex < announcements.length ? nextIndex : 0;
-        });
-      }, 8000);
-
-      return () => clearInterval(rotationTimer);
-    }
-  }, [announcements.length]);
-
-  const loadAnnouncements = async () => {
-    try {
-      // Quick timeout for fast loading
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Timeout')), 800)
-      );
-      
-      const announcementsData = await Promise.race([
-        fetchAnnouncements(),
-        timeoutPromise
-      ]) as Announcement[];
-      
-      const activeAnnouncements = announcementsData.filter(ann => ann.isActive);
-      
-      if (activeAnnouncements.length > 0) {
-        setAnnouncements(activeAnnouncements);
-      }
-      // If no announcements, keep the fallback that's already set
-    } catch (error) {
-      console.error('Error loading announcements:', error);
-      // Keep the fallback announcement that's already set
-    } finally {
-      // No loading state change needed
-    }
-  };
-
-  // Get current announcement with safety checks
-  const currentAnnouncement = announcements[currentAnnouncementIndex] || fallbackAnnouncement;
-  
-  // Create announcement content with safety checks
-  const createAnnouncementContent = (announcement: Announcement) => {
-    if (!announcement || !announcement.text) {
-      return 'Welcome to ISKCON Student Center • Join us for daily programs';
-    }
-    
-    const baseText = announcement.text;
-    if (announcement.link) {
-      return (
-        <span>
-          {baseText} • <a 
-            href={announcement.link} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            style={{
-              color: '#ea580c',
-              textDecoration: 'underline',
-              fontWeight: 'bold'
-            }}
-          >
-            Click here
-          </a>
-        </span>
-      );
-    }
-    return baseText;
-  };
-
-  return (
-    <div style={{
-      backgroundColor: '#f8f9fa',
-      color: '#1f2937',
-      padding: '0.75rem 0',
-      overflow: 'hidden',
-      position: 'relative',
-      whiteSpace: 'nowrap',
-      marginTop: '70px',
-      borderTop: '3px solid #ea580c',
-      borderBottom: '3px solid #ea580c'
-    }}>
-      <div style={{
-        display: 'inline-block',
-        animation: 'scroll-announcement 25s linear infinite',
-        fontSize: '1rem',
-        fontWeight: '500'
-      }}>
-        {createAnnouncementContent(currentAnnouncement)}
-      </div>
-      
-      <style dangerouslySetInnerHTML={{
-        __html: `
-          @keyframes scroll-announcement {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-          }
-        `
-      }} />
-    </div>
   );
 }
