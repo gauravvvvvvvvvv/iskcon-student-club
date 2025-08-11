@@ -286,9 +286,9 @@ export function DynamicCarousel() {
           onClick={handlePrevious}
           disabled={images.length <= 1}
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            backgroundColor: 'transparent',
             border: 'none',
-            color: '#374151',
+            color: 'rgba(255, 255, 255, 0.8)',
             width: 'clamp(35px, 8vw, 45px)',
             height: 'clamp(35px, 8vw, 45px)',
             borderRadius: '50%',
@@ -298,20 +298,19 @@ export function DynamicCarousel() {
             justifyContent: 'center',
             fontSize: 'clamp(0.9rem, 3vw, 1.2rem)',
             transition: 'all 0.3s ease',
-            backdropFilter: 'blur(10px)',
-            boxShadow: '0 2px 12px rgba(0, 0, 0, 0.15)',
-            opacity: images.length <= 1 ? 0.5 : 1
+            backdropFilter: 'blur(5px)',
+            opacity: images.length <= 1 ? 0.3 : 1
           }}
           onMouseEnter={(e) => {
             if (images.length > 1) {
-              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 1)';
-              e.currentTarget.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.2)';
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+              e.currentTarget.style.color = 'rgba(255, 255, 255, 1)';
             }
           }}
           onMouseLeave={(e) => {
             if (images.length > 1) {
-              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-              e.currentTarget.style.boxShadow = '0 2px 12px rgba(0, 0, 0, 0.15)';
+              e.currentTarget.style.backgroundColor = 'transparent';
+              e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
             }
           }}
         >
@@ -329,10 +328,10 @@ export function DynamicCarousel() {
                 height: 'clamp(8px, 2vw, 10px)',
                 borderRadius: '50%',
                 border: 'none',
-                backgroundColor: currentSlide === index ? '#ea580c' : 'rgba(255, 255, 255, 0.7)',
+                backgroundColor: currentSlide === index ? '#ea580c' : 'rgba(255, 255, 255, 0.5)',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
-                boxShadow: currentSlide === index ? '0 2px 8px rgba(234, 88, 12, 0.4)' : '0 1px 4px rgba(0, 0, 0, 0.2)'
+                opacity: currentSlide === index ? 1 : 0.7
               }}
             />
           ))}
@@ -343,9 +342,9 @@ export function DynamicCarousel() {
           onClick={handleNext}
           disabled={images.length <= 1}
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            backgroundColor: 'transparent',
             border: 'none',
-            color: '#374151',
+            color: 'rgba(255, 255, 255, 0.8)',
             width: 'clamp(35px, 8vw, 45px)',
             height: 'clamp(35px, 8vw, 45px)',
             borderRadius: '50%',
@@ -355,20 +354,19 @@ export function DynamicCarousel() {
             justifyContent: 'center',
             fontSize: 'clamp(0.9rem, 3vw, 1.2rem)',
             transition: 'all 0.3s ease',
-            backdropFilter: 'blur(10px)',
-            boxShadow: '0 2px 12px rgba(0, 0, 0, 0.15)',
-            opacity: images.length <= 1 ? 0.5 : 1
+            backdropFilter: 'blur(5px)',
+            opacity: images.length <= 1 ? 0.3 : 1
           }}
           onMouseEnter={(e) => {
             if (images.length > 1) {
-              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 1)';
-              e.currentTarget.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.2)';
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+              e.currentTarget.style.color = 'rgba(255, 255, 255, 1)';
             }
           }}
           onMouseLeave={(e) => {
             if (images.length > 1) {
-              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-              e.currentTarget.style.boxShadow = '0 2px 12px rgba(0, 0, 0, 0.15)';
+              e.currentTarget.style.backgroundColor = 'transparent';
+              e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
             }
           }}
         >
