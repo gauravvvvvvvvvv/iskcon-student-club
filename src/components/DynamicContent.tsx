@@ -430,8 +430,6 @@ export function DynamicAnnouncements() {
   };
 
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
-  const [currentAnnouncementIndex, setCurrentAnnouncementIndex] = useState(0);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     loadAnnouncements();
@@ -443,32 +441,9 @@ export function DynamicAnnouncements() {
     window.addEventListener('storage', handleStorageChange);
     
     return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
       window.removeEventListener('storage', handleStorageChange);
     };
   }, []);
-
-  useEffect(() => {
-    // Clear existing timer
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-    }
-
-    // Only start rotation if there are multiple announcements
-    if (announcements.length > 1) {
-      timerRef.current = setInterval(() => {
-        setCurrentAnnouncementIndex(prev => (prev + 1) % announcements.length);
-      }, 20000); // 20 seconds per announcement for continuous flow
-    }
-
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-    };
-  }, [announcements.length]);
 
   const loadAnnouncements = async () => {
     try {
@@ -503,7 +478,6 @@ export function DynamicAnnouncements() {
         }
       }
       
-      setCurrentAnnouncementIndex(0);
     } catch (error) {
       console.error('Error loading announcements:', error);
       if (isFallbackAnnouncementEnabled()) {
@@ -511,45 +485,80 @@ export function DynamicAnnouncements() {
       } else {
         setAnnouncements([]);
       }
-      setCurrentAnnouncementIndex(0);
     }
-  };
-
-  // Get current announcement with safety checks
-  const currentAnnouncement = announcements.length > 0 ? announcements[currentAnnouncementIndex] : null;
-  
-  // Create announcement content with safety checks
-  const createAnnouncementContent = (announcement: Announcement | null) => {
-    if (!announcement || !announcement.text) {
-      return null;
-    }
-    
-    const baseText = announcement.text;
-    if (announcement.link) {
-      return (
-        <span>
-          {baseText} • <a 
-            href={announcement.link} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            style={{
-              color: '#ea580c',
-              textDecoration: 'underline',
-              fontWeight: 'bold'
-            }}
-          >
-            Click here
-          </a>
-        </span>
-      );
-    }
-    return baseText;
   };
 
   // Don't render anything if no announcements
-  if (announcements.length === 0 || !currentAnnouncement) {
+  if (announcements.length === 0) {
     return null;
   }
+
+  // Create continuous announcement string
+  const createContinuousContent = () => {
+    const allTexts = announcements.map(ann => {
+      if (ann.link) {
+        return `${ann.text} • Click here`;
+      }
+      return ann.text;
+    });
+    
+    // Join all announcements with separator and repeat for seamless loop
+    const separator = ' • ';
+    const continuousText = allTexts.join(separator);
+    
+    return (
+      <span>
+        {announcements.map((ann, index) => (
+          <span key={`ann-${index}`}>
+            {ann.text}
+            {ann.link && (
+              <>
+                {' • '}
+                <a 
+                  href={ann.link} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  style={{
+                    color: '#ea580c',
+                    textDecoration: 'underline',
+                    fontWeight: 'bold'
+                  }}
+                >
+                  Click here
+                </a>
+              </>
+            )}
+            {index < announcements.length - 1 && ' • '}
+          </span>
+        ))}
+        {' • '}
+        {/* Repeat the content for seamless loop */}
+        {announcements.map((ann, index) => (
+          <span key={`ann-repeat-${index}`}>
+            {ann.text}
+            {ann.link && (
+              <>
+                {' • '}
+                <a 
+                  href={ann.link} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  style={{
+                    color: '#ea580c',
+                    textDecoration: 'underline',
+                    fontWeight: 'bold'
+                  }}
+                >
+                  Click here
+                </a>
+              </>
+            )}
+            {index < announcements.length - 1 && ' • '}
+          </span>
+        ))}
+      </span>
+    );
+  };
 
   return (
     <>
@@ -565,15 +574,14 @@ export function DynamicAnnouncements() {
         borderBottom: '3px solid #ea580c'
       }}>
         <div 
-          key={`announcement-${currentAnnouncementIndex}-${currentAnnouncement.id}`} // Force re-render for animation reset
           style={{
             display: 'inline-block',
-            animation: 'scroll-announcement 20s linear infinite',
+            animation: 'scroll-announcement 60s linear infinite',
             fontSize: '1rem',
             fontWeight: '500'
           }}
         >
-          {createAnnouncementContent(currentAnnouncement)}
+          {createContinuousContent()}
         </div>
       </div>
       
