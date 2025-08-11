@@ -859,11 +859,6 @@ export default function AdminDashboard() {
           </div>
         )}
       </main>
-
-      {/* Expose toggles for use in DynamicContent via window (for client-only use) */}
-      <script dangerouslySetInnerHTML={{
-        __html: `window.__ISKCON_SHOW_FALLBACK_IMAGE__ = ${showFallbackImage}; window.__ISKCON_SHOW_FALLBACK_ANNOUNCEMENT__ = ${showFallbackAnnouncement};`
-      }} />
     </div>
   );
 }

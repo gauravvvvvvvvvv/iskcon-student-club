@@ -17,15 +17,25 @@ export function DynamicCarousel() {
 
   // Helper to check fallback toggle
   const isFallbackImageEnabled = () => {
-    if (typeof window !== 'undefined' && typeof window.__ISKCON_SHOW_FALLBACK_IMAGE__ !== 'undefined') {
-      return window.__ISKCON_SHOW_FALLBACK_IMAGE__;
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('showFallbackImage');
+      return stored !== 'false';
     }
-    // Default: true
     return true;
   };
 
   useEffect(() => {
     loadImages();
+    
+    // Listen for storage changes to update when admin changes settings
+    const handleStorageChange = () => {
+      loadImages();
+    };
+    window.addEventListener('storage', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, []);
 
   useEffect(() => {
@@ -49,18 +59,21 @@ export function DynamicCarousel() {
         filename: 'jagannath.jpg',
         uploadedAt: '2024-01-01'
       };
-      // Set default image immediately if enabled
-      if (isFallbackImageEnabled()) {
-        setImages([jagannathImage]);
-      } else {
-        setImages([]);
-      }
+      
       const imagesData = await fetchCarouselImages();
+      
       if (imagesData && imagesData.length > 0) {
         if (isFallbackImageEnabled()) {
           setImages([...imagesData, jagannathImage]);
         } else {
           setImages(imagesData);
+        }
+      } else {
+        // No uploaded images
+        if (isFallbackImageEnabled()) {
+          setImages([jagannathImage]);
+        } else {
+          setImages([]);
         }
       }
     } catch (error) {
@@ -409,67 +422,106 @@ export function DynamicAnnouncements() {
 
   // Helper to check fallback toggle
   const isFallbackAnnouncementEnabled = () => {
-    if (typeof window !== 'undefined' && typeof window.__ISKCON_SHOW_FALLBACK_ANNOUNCEMENT__ !== 'undefined') {
-      return window.__ISKCON_SHOW_FALLBACK_ANNOUNCEMENT__;
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('showFallbackAnnouncement');
+      return stored !== 'false';
     }
     return true;
   };
 
-  const [announcements, setAnnouncements] = useState<Announcement[]>(isFallbackAnnouncementEnabled() ? [fallbackAnnouncement] : []);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [currentAnnouncementIndex, setCurrentAnnouncementIndex] = useState(0);
-  const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     loadAnnouncements();
+    
+    // Listen for storage changes to update when admin changes settings
+    const handleStorageChange = () => {
+      loadAnnouncements();
+    };
+    window.addEventListener('storage', handleStorageChange);
+    
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    // Clear existing timer
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+
+    // Only start rotation if there are multiple announcements
+    if (announcements.length > 1) {
+      timerRef.current = setInterval(() => {
+        setCurrentAnnouncementIndex(prev => (prev + 1) % announcements.length);
+      }, 20000); // 20 seconds per announcement for continuous flow
+    }
+
     return () => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
       }
     };
-  }, []);
+  }, [announcements.length]);
 
   const loadAnnouncements = async () => {
     try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 800);
       const announcementsData = await fetchAnnouncements();
-      clearTimeout(timeoutId);
+      
       if (announcementsData && Array.isArray(announcementsData)) {
         const activeAnnouncements = announcementsData.filter(ann => ann && ann.isActive && ann.text);
+        
         if (activeAnnouncements.length > 0) {
-          if (!hasLoadedOnce) {
+          // We have user announcements
+          if (isFallbackAnnouncementEnabled()) {
+            // Include fallback + user announcements
+            setAnnouncements([...activeAnnouncements, fallbackAnnouncement]);
+          } else {
+            // Only user announcements
             setAnnouncements(activeAnnouncements);
-            setCurrentAnnouncementIndex(0);
           }
-        } else if (isFallbackAnnouncementEnabled()) {
+        } else {
+          // No user announcements
+          if (isFallbackAnnouncementEnabled()) {
+            setAnnouncements([fallbackAnnouncement]);
+          } else {
+            setAnnouncements([]);
+          }
+        }
+      } else {
+        // API failed
+        if (isFallbackAnnouncementEnabled()) {
           setAnnouncements([fallbackAnnouncement]);
         } else {
           setAnnouncements([]);
         }
-      } else if (isFallbackAnnouncementEnabled()) {
-        setAnnouncements([fallbackAnnouncement]);
-      } else {
-        setAnnouncements([]);
       }
+      
+      setCurrentAnnouncementIndex(0);
     } catch (error) {
+      console.error('Error loading announcements:', error);
       if (isFallbackAnnouncementEnabled()) {
         setAnnouncements([fallbackAnnouncement]);
       } else {
         setAnnouncements([]);
       }
-    } finally {
-      setHasLoadedOnce(true);
+      setCurrentAnnouncementIndex(0);
     }
   };
 
   // Get current announcement with safety checks
-  const currentAnnouncement = announcements[currentAnnouncementIndex] || fallbackAnnouncement;
+  const currentAnnouncement = announcements.length > 0 ? announcements[currentAnnouncementIndex] : null;
   
   // Create announcement content with safety checks
-  const createAnnouncementContent = (announcement: Announcement) => {
+  const createAnnouncementContent = (announcement: Announcement | null) => {
     if (!announcement || !announcement.text) {
-      return 'Welcome to ISKCON Student Center • Join us for daily programs';
+      return null;
     }
     
     const baseText = announcement.text;
@@ -494,6 +546,11 @@ export function DynamicAnnouncements() {
     return baseText;
   };
 
+  // Don't render anything if no announcements
+  if (announcements.length === 0 || !currentAnnouncement) {
+    return null;
+  }
+
   return (
     <>
       <div style={{
@@ -511,7 +568,7 @@ export function DynamicAnnouncements() {
           key={`announcement-${currentAnnouncementIndex}-${currentAnnouncement.id}`} // Force re-render for animation reset
           style={{
             display: 'inline-block',
-            animation: 'scroll-announcement 25s linear infinite',
+            animation: 'scroll-announcement 20s linear infinite',
             fontSize: '1rem',
             fontWeight: '500'
           }}
