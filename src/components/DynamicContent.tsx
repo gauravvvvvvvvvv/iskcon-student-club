@@ -9,7 +9,7 @@ declare global {
   }
 }
 
-// Dynamic Carousel Component (unchanged)
+// Dynamic Carousel Component
 export function DynamicCarousel() {
   const [images, setImages] = useState<CarouselImage[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -409,99 +409,214 @@ export function DynamicCarousel() {
   );
 }
 
-// Dynamic Announcements Component - INSTANT START with aggressive fallback
+// Dynamic Announcements Component - Clean and Fast
 export function DynamicAnnouncements() {
-  // Multiple fallback announcements for immediate start
-  const defaultAnnouncements: Announcement[] = [
-    {
-      id: 'iskcon-1',
-      text: 'Welcome to ISKCON Student Center',
-      isActive: true,
-      createdAt: '2024-01-01',
-      updatedAt: '2024-01-01'
-    },
-    {
-      id: 'iskcon-2',
-      text: 'Join us for daily morning programs at 6:30 AM',
-      isActive: true,
-      createdAt: '2024-01-01',
-      updatedAt: '2024-01-01'
-    },
-    {
-      id: 'iskcon-3',
-      text: 'Bhagavad Gita classes every Sunday at 5 PM',
-      isActive: true,
-      createdAt: '2024-01-01',
-      updatedAt: '2024-01-01'
-    },
-    {
-      id: 'iskcon-4',
-      text: 'Free prasadam for all students',
-      isActive: true,
-      createdAt: '2024-01-01',
-      updatedAt: '2024-01-01'
+  // Default fallback announcement
+  const fallbackAnnouncement: Announcement = {
+    id: 'iskcon-fallback',
+    text: 'Welcome to ISKCON Student Center • Join us for daily morning programs at 6:30 AM • Bhagavad Gita classes every Sunday at 5 PM • Free prasadam for all students',
+    isActive: true,
+    createdAt: '2024-01-01',
+    updatedAt: '2024-01-01'
+  };
+
+  // Helper to check fallback toggle
+  const isFallbackAnnouncementEnabled = () => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('showFallbackAnnouncement');
+      return stored !== 'false';
     }
-  ];
+    return true;
+  };
 
-  // ALWAYS start with default announcements - NO CONDITIONS
-  const [announcements, setAnnouncements] = useState<Announcement[]>(defaultAnnouncements);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [currentAnnouncementIndex, setCurrentAnnouncementIndex] = useState(0);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Load real announcements in background (fire and forget)
   useEffect(() => {
-    // Use setTimeout to make this truly non-blocking
-    setTimeout(async () => {
-      try {
-        // Very quick timeout to prevent hanging
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 200); // Super short timeout
+    loadAnnouncements();
+    
+    // Listen for storage changes to update when admin changes settings
+    const handleStorageChange = () => {
+      loadAnnouncements();
+    };
+    window.addEventListener('storage', handleStorageChange);
+    
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    // Clear existing timer
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+
+    // Only start rotation if there are multiple announcements
+    if (announcements.length > 1) {
+      timerRef.current = setInterval(() => {
+        setCurrentAnnouncementIndex(prev => (prev + 1) % announcements.length);
+      }, 20000); // 20 seconds per announcement for continuous flow
+    }
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, [announcements.length]);
+
+  const loadAnnouncements = async () => {
+    try {
+      const announcementsData = await fetchAnnouncements();
+      
+      if (announcementsData && Array.isArray(announcementsData)) {
+        const activeAnnouncements = announcementsData.filter(ann => ann && ann.isActive && ann.text);
         
-        const announcementsData = await Promise.race([
-          fetchAnnouncements(),
-          new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 200))
-        ]);
-        
-        clearTimeout(timeoutId);
-        
-        if (announcementsData && Array.isArray(announcementsData)) {
-          const activeAnnouncements = announcementsData.filter(ann => ann && ann.isActive && ann.text);
-          
-          if (activeAnnouncements.length > 0) {
-            // Only update if we actually got good data
-            const shouldShowFallback = typeof window !== 'undefined' 
-              ? localStorage.getItem('showFallbackAnnouncement') !== 'false'
-              : true;
-              
-            if (shouldShowFallback) {
-              setAnnouncements([...activeAnnouncements, ...defaultAnnouncements]);
-            } else {
-              setAnnouncements(activeAnnouncements);
-            }
+        if (activeAnnouncements.length > 0) {
+          // We have user announcements
+          if (isFallbackAnnouncementEnabled()) {
+            // Include fallback + user announcements
+            setAnnouncements([...activeAnnouncements, fallbackAnnouncement]);
+          } else {
+            // Only user announcements
+            setAnnouncements(activeAnnouncements);
+          }
+        } else {
+          // No user announcements
+          if (isFallbackAnnouncementEnabled()) {
+            setAnnouncements([fallbackAnnouncement]);
+          } else {
+            setAnnouncements([]);
           }
         }
-      } catch (error) {
-        // Silently fail - keep default announcements running
-        console.log('Using default announcements');
+      } else {
+        // API failed
+        if (isFallbackAnnouncementEnabled()) {
+          setAnnouncements([fallbackAnnouncement]);
+        } else {
+          setAnnouncements([]);
+        }
       }
-    }, 0); // Execute immediately but non-blocking
+      
+      setCurrentAnnouncementIndex(0);
+    } catch (error) {
+      console.error('Error loading announcements:', error);
+      if (isFallbackAnnouncementEnabled()) {
+        setAnnouncements([fallbackAnnouncement]);
+      } else {
+        setAnnouncements([]);
+      }
+      setCurrentAnnouncementIndex(0);
+    }
+  };
+
+  // Get current announcement with safety checks
+  const currentAnnouncement = announcements.length > 0 ? announcements[currentAnnouncementIndex] : null;
+  
+  // Create announcement content with safety checks
+  const createAnnouncementContent = (announcement: Announcement | null) => {
+    if (!announcement || !announcement.text) {
+      return null;
+    }
     
-  }, []);
+    const baseText = announcement.text;
+    if (announcement.link) {
+      return (
+        <span>
+          {baseText} • <a 
+            href={announcement.link} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            style={{
+              color: '#ea580c',
+              textDecoration: 'underline',
+              fontWeight: 'bold'
+            }}
+          >
+            Click here
+          </a>
+        </span>
+      );
+    }
+    return baseText;
+  };
 
   // Don't render anything if no announcements
   if (announcements.length === 0) {
     return null;
   }
 
-  // Create seamless continuous string - no separators, just direct concatenation
-  const createContinuousText = () => {
-    const allTexts = announcements.map(ann => ann.text).filter(text => text);
-    // Join with no separator for seamless flow
-    return allTexts.join('');
+  // Create continuous announcement string
+  const createContinuousContent = () => {
+    const allTexts = announcements.map(ann => {
+      if (ann.link) {
+        return `${ann.text} • Click here`;
+      }
+      return ann.text;
+    });
+    
+    // Join all announcements with separator and repeat for seamless loop
+    const separator = ' • ';
+    const continuousText = allTexts.join(separator);
+    
+    return (
+      <span>
+        {announcements.map((ann, index) => (
+          <span key={`ann-${index}`}>
+            {ann.text}
+            {ann.link && (
+              <>
+                {' • '}
+                <a 
+                  href={ann.link} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  style={{
+                    color: '#ea580c',
+                    textDecoration: 'underline',
+                    fontWeight: 'bold'
+                  }}
+                >
+                  Click here
+                </a>
+              </>
+            )}
+            {index < announcements.length - 1 && ' • '}
+          </span>
+        ))}
+        {' • '}
+        {/* Repeat the content for seamless loop */}
+        {announcements.map((ann, index) => (
+          <span key={`ann-repeat-${index}`}>
+            {ann.text}
+            {ann.link && (
+              <>
+                {' • '}
+                <a 
+                  href={ann.link} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  style={{
+                    color: '#ea580c',
+                    textDecoration: 'underline',
+                    fontWeight: 'bold'
+                  }}
+                >
+                  Click here
+                </a>
+              </>
+            )}
+            {index < announcements.length - 1 && ' • '}
+          </span>
+        ))}
+      </span>
+    );
   };
-
-  const continuousText = createContinuousText();
-
-  // Calculate animation duration based on text length for consistent speed
-  const animationDuration = Math.max(15, continuousText.length * 0.1);
 
   return (
     <>
@@ -519,27 +634,20 @@ export function DynamicAnnouncements() {
         <div 
           style={{
             display: 'inline-block',
-            animation: `scroll-seamless ${animationDuration}s linear infinite`,
+            animation: 'scroll-announcement 60s linear infinite',
             fontSize: '1rem',
             fontWeight: '500'
           }}
         >
-          {/* Triple the content for seamless loop with no gaps */}
-          <span>{continuousText}</span>
-          <span>{continuousText}</span>
-          <span>{continuousText}</span>
+          {createContinuousContent()}
         </div>
       </div>
       
       <style dangerouslySetInnerHTML={{
         __html: `
-          @keyframes scroll-seamless {
-            0% { 
-              transform: translateX(100%); 
-            }
-            100% { 
-              transform: translateX(-66.666%); 
-            }
+          @keyframes scroll-announcement {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
           }
         `
       }} />
