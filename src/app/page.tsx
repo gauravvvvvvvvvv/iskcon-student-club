@@ -183,18 +183,25 @@ export default function Home() {
           }
           
           .carousel-buttons {
-            bottom: 50px !important;
-            background: rgba(0, 0, 0, 0.3) !important;
-            backdrop-filter: blur(8px) !important;
-            border-radius: 15px !important;
-            padding: 0.5rem !important;
-            margin: 0 0.5rem !important;
+            bottom: 15px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            gap: 0.5rem !important;
+            flex-wrap: nowrap !important;
+            max-width: calc(100% - 1rem) !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: none !important;
+            backdrop-filter: none !important;
+            border-radius: 0 !important;
           }
           
           .carousel-buttons a {
             font-size: 0.7rem !important;
-            padding: 0.4rem 0.8rem !important;
-            margin: 0.2rem !important;
+            padding: 0.5rem 0.8rem !important;
+            margin: 0 !important;
+            border: 2px solid rgba(0, 0, 0, 0.9) !important;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4) !important;
           }
           
           .carousel-content h1 {
@@ -343,7 +350,7 @@ export default function Home() {
             <a href="#location" style={{ color: '#ea580c', textDecoration: 'none', fontWeight: '600', whiteSpace: 'nowrap' }}>Location</a>
             <a href="#contact" style={{ color: '#ea580c', textDecoration: 'none', fontWeight: '600', whiteSpace: 'nowrap' }}>Contact</a>
             <a 
-              href="https://docs.google.com/forms/d/e/1FVlLR7QJUP-8BedM3oRQYFact6stIYMFFo0OKGzmWvg/viewform" 
+              href="https://docs.google.com/forms/d/1FVlLR7QJUP-8BedM3oRQYFact6stIYMFFo0OKGzmWvg/viewform?" 
               target="_blank"
               rel="noopener noreferrer"
               style={{
@@ -949,7 +956,7 @@ export default function Home() {
                   Join Now
                 </h3>
                 <a 
-                  href="https://docs.google.com/forms/d/e/1FVlLR7QJUP-8BedM3oRQYFact6stIYMFFo0OKGzmWvg/viewform"
+                  href="https://docs.google.com/forms/d/1FVlLR7QJUP-8BedM3oRQYFact6stIYMFFo0OKGzmWvg/viewform?"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{

@@ -168,17 +168,17 @@ export function DynamicCarousel() {
         }} />
       </div>
 
-      {/* Content Container - Repositioned */}
+      {/* Content Container - Floating at bottom */}
       <div style={{
         position: 'absolute',
-        bottom: '80px', // Above navigation
+        bottom: '20px', // Float at bottom with some margin
         left: '50%',
         transform: 'translateX(-50%)',
         zIndex: 4,
         display: 'flex',
-        gap: '1rem',
+        gap: '0.75rem',
         justifyContent: 'center',
-        flexWrap: 'wrap',
+        alignItems: 'center',
         padding: '0 1rem'
       }} className="carousel-buttons">
         {/* Call to Action Buttons */}
@@ -189,23 +189,24 @@ export function DynamicCarousel() {
           style={{
             backgroundColor: 'rgba(255, 255, 255, 0.95)',
             color: '#ea580c',
-            padding: 'clamp(0.75rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem)',
+            padding: 'clamp(0.6rem, 1.5vw, 0.8rem) clamp(1.2rem, 3vw, 1.5rem)',
             borderRadius: '999px',
             textDecoration: 'none',
             fontWeight: '700',
-            fontSize: 'clamp(0.9rem, 2.5vw, 1.1rem)',
+            fontSize: 'clamp(0.8rem, 2vw, 0.95rem)',
             display: 'inline-flex',
             alignItems: 'center',
-            gap: '0.5rem',
+            gap: '0.4rem',
             backdropFilter: 'blur(10px)',
-            border: '2px solid rgba(255, 255, 255, 0.3)',
-            transition: 'all 0.3s ease'
+            border: '2px solid rgba(0, 0, 0, 0.8)',
+            transition: 'all 0.3s ease',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
           }}
           className="card-hover animate-fadeInUp material-btn"
         >
           <span style={{ 
-            width: '18px', 
-            height: '18px', 
+            width: '16px', 
+            height: '16px', 
             backgroundColor: '#ea580c', 
             borderRadius: '50%', 
             display: 'inline-block',
@@ -217,7 +218,7 @@ export function DynamicCarousel() {
               left: '50%',
               transform: 'translate(-50%, -50%)',
               color: 'white',
-              fontSize: '10px',
+              fontSize: '9px',
               fontWeight: 'bold'
             }}>★</span>
           </span>
@@ -226,25 +227,26 @@ export function DynamicCarousel() {
         <a 
           href="#programs"
           style={{
-            border: '2px solid rgba(255, 255, 255, 0.9)',
+            border: '2px solid rgba(0, 0, 0, 0.8)',
             color: 'white',
-            backgroundColor: 'transparent',
-            padding: 'clamp(0.75rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem)',
+            backgroundColor: 'rgba(0, 0, 0, 0.4)',
+            padding: 'clamp(0.6rem, 1.5vw, 0.8rem) clamp(1.2rem, 3vw, 1.5rem)',
             borderRadius: '999px',
             textDecoration: 'none',
             fontWeight: '700',
-            fontSize: 'clamp(0.9rem, 2.5vw, 1.1rem)',
+            fontSize: 'clamp(0.8rem, 2vw, 0.95rem)',
             display: 'inline-flex',
             alignItems: 'center',
-            gap: '0.5rem',
+            gap: '0.4rem',
             backdropFilter: 'blur(10px)',
-            transition: 'all 0.3s ease'
+            transition: 'all 0.3s ease',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
           }}
           className="card-hover animate-fadeInUp material-btn"
         >
           <span style={{ 
-            width: '18px', 
-            height: '18px', 
+            width: '16px', 
+            height: '16px', 
             backgroundColor: 'rgba(255, 255, 255, 0.3)', 
             borderRadius: '50%', 
             display: 'inline-block',

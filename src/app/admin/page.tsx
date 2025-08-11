@@ -123,14 +123,54 @@ export default function AdminDashboard() {
     }
   };
 
+  // Helper function to process hyperlinks automatically
+  const processHyperlink = (link: string): string => {
+    if (!link || !link.trim()) return '';
+    
+    let processedLink = link.trim();
+    
+    // Remove existing tel: or mailto: prefixes to avoid duplication
+    processedLink = processedLink.replace(/^(tel:|mailto:)/i, '');
+    
+    // Check if it's a 10-digit number (with optional spaces, dashes, or parentheses)
+    const phonePattern = /^[\s\-\(\)]*(\d[\s\-\(\)]*){10}[\s\-\(\)]*$/;
+    if (phonePattern.test(processedLink)) {
+      // Extract only digits
+      const digits = processedLink.replace(/\D/g, '');
+      if (digits.length === 10) {
+        return `tel:+91${digits}`;
+      }
+    }
+    
+    // Check if it's an email address
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (emailPattern.test(processedLink)) {
+      return `mailto:${processedLink}`;
+    }
+    
+    // If it's already a full URL (http/https), return as is
+    if (processedLink.startsWith('http://') || processedLink.startsWith('https://')) {
+      return processedLink;
+    }
+    
+    // If it looks like a URL without protocol, add https://
+    if (processedLink.includes('.') && !processedLink.includes(' ')) {
+      return `https://${processedLink}`;
+    }
+    
+    // Return as is for other cases
+    return processedLink;
+  };
+
   const handleAnnouncementCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newAnnouncement.text.trim()) return;
 
     try {
+      const processedLink = processHyperlink(newAnnouncement.link);
       const announcement = await createAnnouncement(
         newAnnouncement.text,
-        newAnnouncement.link || undefined
+        processedLink || undefined
       );
       setAnnouncements(prev => [...prev, announcement]);
       setNewAnnouncement({ text: '', link: '' });
@@ -141,11 +181,12 @@ export default function AdminDashboard() {
 
   const handleAnnouncementUpdate = async (id: string, text: string, link: string) => {
     try {
-      await updateAnnouncement(id, text, link || undefined);
+      const processedLink = processHyperlink(link);
+      await updateAnnouncement(id, text, processedLink || undefined);
       setAnnouncements(prev => 
         prev.map(ann => 
           ann.id === id 
-            ? { ...ann, text, link: link || undefined, updatedAt: new Date().toISOString() }
+            ? { ...ann, text, link: processedLink || undefined, updatedAt: new Date().toISOString() }
             : ann
         )
       );
@@ -553,7 +594,8 @@ export default function AdminDashboard() {
                   <label style={{ 
                     display: 'block', 
                     marginBottom: '0.5rem',
-                    fontWeight: '500'
+                    fontWeight: '500',
+                    color: '#111827'
                   }}>
                     Announcement Text *
                   </label>
@@ -566,7 +608,9 @@ export default function AdminDashboard() {
                       border: '1px solid #d1d5db',
                       borderRadius: '4px',
                       minHeight: '80px',
-                      resize: 'vertical'
+                      resize: 'vertical',
+                      color: '#111827',
+                      backgroundColor: '#ffffff'
                     }}
                     placeholder="Enter announcement text..."
                     required
@@ -576,21 +620,24 @@ export default function AdminDashboard() {
                   <label style={{ 
                     display: 'block', 
                     marginBottom: '0.5rem',
-                    fontWeight: '500'
+                    fontWeight: '500',
+                    color: '#111827'
                   }}>
                     Link (optional)
                   </label>
                   <input
-                    type="url"
+                    type="text"
                     value={newAnnouncement.link}
                     onChange={(e) => setNewAnnouncement(prev => ({ ...prev, link: e.target.value }))}
                     style={{
                       width: '100%',
                       padding: '0.75rem',
                       border: '1px solid #d1d5db',
-                      borderRadius: '4px'
+                      borderRadius: '4px',
+                      color: '#111827',
+                      backgroundColor: '#ffffff'
                     }}
-                    placeholder="https://example.com"
+                    placeholder="Phone: 9876543210 | Email: example@domain.com | URL: https://example.com"
                   />
                 </div>
                 <button
@@ -791,7 +838,8 @@ function EditAnnouncementForm({
         <label style={{ 
           display: 'block', 
           marginBottom: '0.5rem',
-          fontWeight: '500'
+          fontWeight: '500',
+          color: '#111827'
         }}>
           Announcement Text *
         </label>
@@ -804,7 +852,9 @@ function EditAnnouncementForm({
             border: '1px solid #d1d5db',
             borderRadius: '4px',
             minHeight: '80px',
-            resize: 'vertical'
+            resize: 'vertical',
+            color: '#111827',
+            backgroundColor: '#ffffff'
           }}
           required
         />
@@ -813,21 +863,24 @@ function EditAnnouncementForm({
         <label style={{ 
           display: 'block', 
           marginBottom: '0.5rem',
-          fontWeight: '500'
+          fontWeight: '500',
+          color: '#111827'
         }}>
           Link (optional)
         </label>
         <input
-          type="url"
+          type="text"
           value={link}
           onChange={(e) => setLink(e.target.value)}
           style={{
             width: '100%',
             padding: '0.75rem',
             border: '1px solid #d1d5db',
-            borderRadius: '4px'
+            borderRadius: '4px',
+            color: '#111827',
+            backgroundColor: '#ffffff'
           }}
-          placeholder="https://example.com"
+          placeholder="Phone: 9876543210 | Email: example@domain.com | URL: https://example.com"
         />
       </div>
       <div style={{ display: 'flex', gap: '0.5rem' }}>
