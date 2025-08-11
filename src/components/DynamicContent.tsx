@@ -2,11 +2,27 @@
 import { useState, useEffect, useRef } from 'react';
 import { fetchCarouselImages, fetchAnnouncements, type CarouselImage, type Announcement } from '../lib/cms';
 
+declare global {
+  interface Window {
+    __ISKCON_SHOW_FALLBACK_IMAGE__?: boolean;
+    __ISKCON_SHOW_FALLBACK_ANNOUNCEMENT__?: boolean;
+  }
+}
+
 // Dynamic Carousel Component
 export function DynamicCarousel() {
   const [images, setImages] = useState<CarouselImage[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [error, setError] = useState<string | null>(null);
+
+  // Helper to check fallback toggle
+  const isFallbackImageEnabled = () => {
+    if (typeof window !== 'undefined' && typeof window.__ISKCON_SHOW_FALLBACK_IMAGE__ !== 'undefined') {
+      return window.__ISKCON_SHOW_FALLBACK_IMAGE__;
+    }
+    // Default: true
+    return true;
+  };
 
   useEffect(() => {
     loadImages();
@@ -27,35 +43,38 @@ export function DynamicCarousel() {
   const loadImages = async () => {
     try {
       setError(null);
-      
-      // Default Jagannath image (always present)
       const jagannathImage: CarouselImage = {
         id: 'jagannath-default',
         url: '/jagannath.jpg',
         filename: 'jagannath.jpg',
         uploadedAt: '2024-01-01'
       };
-      
-      // Set default image immediately
-      setImages([jagannathImage]);
-      
-      const imagesData = await fetchCarouselImages();
-      
-      if (imagesData && imagesData.length > 0) {
-        // If there are uploaded images, put them first and Jagannath at the end
-        setImages([...imagesData, jagannathImage]);
+      // Set default image immediately if enabled
+      if (isFallbackImageEnabled()) {
+        setImages([jagannathImage]);
+      } else {
+        setImages([]);
       }
-      // If no uploaded images, default image is already set
+      const imagesData = await fetchCarouselImages();
+      if (imagesData && imagesData.length > 0) {
+        if (isFallbackImageEnabled()) {
+          setImages([...imagesData, jagannathImage]);
+        } else {
+          setImages(imagesData);
+        }
+      }
     } catch (error) {
-      console.error('Error loading carousel images:', error);
       setError('Failed to load images');
-      // On error, show only Jagannath
-      setImages([{
-        id: 'jagannath-default',
-        url: '/jagannath.jpg',
-        filename: 'jagannath.jpg',
-        uploadedAt: '2024-01-01'
-      }]);
+      if (isFallbackImageEnabled()) {
+        setImages([{
+          id: 'jagannath-default',
+          url: '/jagannath.jpg',
+          filename: 'jagannath.jpg',
+          uploadedAt: '2024-01-01'
+        }]);
+      } else {
+        setImages([]);
+      }
     }
   };
 
@@ -388,7 +407,15 @@ export function DynamicAnnouncements() {
     updatedAt: '2024-01-01'
   };
 
-  const [announcements, setAnnouncements] = useState<Announcement[]>([fallbackAnnouncement]);
+  // Helper to check fallback toggle
+  const isFallbackAnnouncementEnabled = () => {
+    if (typeof window !== 'undefined' && typeof window.__ISKCON_SHOW_FALLBACK_ANNOUNCEMENT__ !== 'undefined') {
+      return window.__ISKCON_SHOW_FALLBACK_ANNOUNCEMENT__;
+    }
+    return true;
+  };
+
+  const [announcements, setAnnouncements] = useState<Announcement[]>(isFallbackAnnouncementEnabled() ? [fallbackAnnouncement] : []);
   const [currentAnnouncementIndex, setCurrentAnnouncementIndex] = useState(0);
   const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -402,51 +429,35 @@ export function DynamicAnnouncements() {
     };
   }, []);
 
-  useEffect(() => {
-    // Clear existing timer
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-    }
-
-    // Only start rotation if there are multiple announcements
-    if (announcements.length > 1) {
-      timerRef.current = setInterval(() => {
-        setCurrentAnnouncementIndex(prev => (prev + 1) % announcements.length);
-      }, 8000);
-    }
-
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-    };
-  }, [announcements.length]);
-
   const loadAnnouncements = async () => {
     try {
-      // Quick timeout for fast loading
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 800);
-      
       const announcementsData = await fetchAnnouncements();
       clearTimeout(timeoutId);
-      
       if (announcementsData && Array.isArray(announcementsData)) {
         const activeAnnouncements = announcementsData.filter(ann => ann && ann.isActive && ann.text);
-        
         if (activeAnnouncements.length > 0) {
-          // Only update if we got actual announcements and haven't loaded before
           if (!hasLoadedOnce) {
             setAnnouncements(activeAnnouncements);
             setCurrentAnnouncementIndex(0);
           }
+        } else if (isFallbackAnnouncementEnabled()) {
+          setAnnouncements([fallbackAnnouncement]);
+        } else {
+          setAnnouncements([]);
         }
-        // If no active announcements, keep the fallback that's already set
+      } else if (isFallbackAnnouncementEnabled()) {
+        setAnnouncements([fallbackAnnouncement]);
+      } else {
+        setAnnouncements([]);
       }
-      // If API call failed, keep the fallback that's already set
     } catch (error) {
-      console.error('Error loading announcements:', error);
-      // Keep the fallback announcement that's already set
+      if (isFallbackAnnouncementEnabled()) {
+        setAnnouncements([fallbackAnnouncement]);
+      } else {
+        setAnnouncements([]);
+      }
     } finally {
       setHasLoadedOnce(true);
     }

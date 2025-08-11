@@ -31,11 +31,33 @@ export default function AdminDashboard() {
   const [newAnnouncement, setNewAnnouncement] = useState({ text: '', link: '' });
   const [editingAnnouncement, setEditingAnnouncement] = useState<string | null>(null);
 
+  // Fallback toggles (persisted in localStorage)
+  const [showFallbackImage, setShowFallbackImage] = useState(true);
+  const [showFallbackAnnouncement, setShowFallbackAnnouncement] = useState(true);
+
   useEffect(() => {
     if (isAuthenticated) {
       loadData();
     }
   }, [isAuthenticated]);
+
+  // Load toggles from localStorage on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const img = localStorage.getItem('showFallbackImage');
+      const ann = localStorage.getItem('showFallbackAnnouncement');
+      setShowFallbackImage(img !== 'false');
+      setShowFallbackAnnouncement(ann !== 'false');
+    }
+  }, []);
+
+  // Save toggles to localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('showFallbackImage', showFallbackImage ? 'true' : 'false');
+      localStorage.setItem('showFallbackAnnouncement', showFallbackAnnouncement ? 'true' : 'false');
+    }
+  }, [showFallbackImage, showFallbackAnnouncement]);
 
   const loadData = async () => {
     try {
@@ -376,7 +398,7 @@ export default function AdminDashboard() {
 
       {/* Main Content */}
       <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem' }}>
-        {/* Tabs */}
+        {/* Tabs and Fallback Toggles */}
         <div style={{ marginBottom: '2rem' }}>
           <div style={{ 
             display: 'flex', 
@@ -410,6 +432,33 @@ export default function AdminDashboard() {
             >
               Announcements ({announcements.length})
             </button>
+          </div>
+          {/* Fallback toggles */}
+          <div style={{
+            display: 'flex',
+            gap: '2rem',
+            marginTop: '1rem',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+          }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 500, color: '#ea580c' }}>
+              <input
+                type="checkbox"
+                checked={showFallbackImage}
+                onChange={e => setShowFallbackImage(e.target.checked)}
+                style={{ accentColor: '#ea580c', width: '1.1em', height: '1.1em' }}
+              />
+              Show fallback image (Jagannath)
+            </label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 500, color: '#ea580c' }}>
+              <input
+                type="checkbox"
+                checked={showFallbackAnnouncement}
+                onChange={e => setShowFallbackAnnouncement(e.target.checked)}
+                style={{ accentColor: '#ea580c', width: '1.1em', height: '1.1em' }}
+              />
+              Show fallback announcement
+            </label>
           </div>
         </div>
 
@@ -810,6 +859,11 @@ export default function AdminDashboard() {
           </div>
         )}
       </main>
+
+      {/* Expose toggles for use in DynamicContent via window (for client-only use) */}
+      <script dangerouslySetInnerHTML={{
+        __html: `window.__ISKCON_SHOW_FALLBACK_IMAGE__ = ${showFallbackImage}; window.__ISKCON_SHOW_FALLBACK_ANNOUNCEMENT__ = ${showFallbackAnnouncement};`
+      }} />
     </div>
   );
 }
