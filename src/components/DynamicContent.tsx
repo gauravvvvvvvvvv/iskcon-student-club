@@ -180,7 +180,7 @@ export function DynamicCarousel() {
         justifyContent: 'center',
         flexWrap: 'wrap',
         padding: '0 1rem'
-      }}>
+      }} className="carousel-buttons">
         {/* Call to Action Buttons */}
         <a 
           href="https://docs.google.com/forms/d/e/1FVlLR7QJUP-8BedM3oRQYFact6stIYMFFo0OKGzmWvg/viewform"

@@ -1,5 +1,6 @@
 "use client";
 import { DynamicCarousel, DynamicAnnouncements } from '../components/DynamicContent';
+import { Analytics } from "@vercel/analytics/next";
 
 export default function Home() {
   return (
@@ -179,6 +180,21 @@ export default function Home() {
             width: 30px !important;
             height: 30px !important;
             font-size: 0.9rem !important;
+          }
+          
+          .carousel-buttons {
+            bottom: 20px !important;
+            position: fixed !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            width: calc(100% - 2rem) !important;
+            max-width: 300px !important;
+            z-index: 10 !important;
+          }
+          
+          .carousel-buttons a {
+            font-size: 0.75rem !important;
+            padding: 0.5rem 1rem !important;
           }
           
           .carousel-content h1 {
@@ -966,6 +982,7 @@ export default function Home() {
           </p>
         </footer>
       </div>
+      <Analytics />
     </div>
   );
 }
