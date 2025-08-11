@@ -429,7 +429,10 @@ export function DynamicAnnouncements() {
     return true;
   };
 
-  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [announcements, setAnnouncements] = useState<Announcement[]>(() => {
+    // Initialize immediately with fallback if enabled
+    return isFallbackAnnouncementEnabled() ? [fallbackAnnouncement] : [];
+  });
 
   useEffect(() => {
     loadAnnouncements();
@@ -447,7 +450,12 @@ export function DynamicAnnouncements() {
 
   const loadAnnouncements = async () => {
     try {
+      // Quick timeout to avoid blocking
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 500);
+      
       const announcementsData = await fetchAnnouncements();
+      clearTimeout(timeoutId);
       
       if (announcementsData && Array.isArray(announcementsData)) {
         const activeAnnouncements = announcementsData.filter(ann => ann && ann.isActive && ann.text);
@@ -469,22 +477,11 @@ export function DynamicAnnouncements() {
             setAnnouncements([]);
           }
         }
-      } else {
-        // API failed
-        if (isFallbackAnnouncementEnabled()) {
-          setAnnouncements([fallbackAnnouncement]);
-        } else {
-          setAnnouncements([]);
-        }
       }
-      
+      // If API fails, keep existing announcements (fallback is already set in useState)
     } catch (error) {
       console.error('Error loading announcements:', error);
-      if (isFallbackAnnouncementEnabled()) {
-        setAnnouncements([fallbackAnnouncement]);
-      } else {
-        setAnnouncements([]);
-      }
+      // Keep existing announcements, don't reset them
     }
   };
 
@@ -576,7 +573,7 @@ export function DynamicAnnouncements() {
         <div 
           style={{
             display: 'inline-block',
-            animation: 'scroll-announcement 60s linear infinite',
+            animation: 'scroll-announcement 30s linear infinite',
             fontSize: '1rem',
             fontWeight: '500'
           }}
