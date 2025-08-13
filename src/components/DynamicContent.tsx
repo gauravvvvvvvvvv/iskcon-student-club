@@ -576,7 +576,7 @@ export function DynamicAnnouncements() {
         <div 
           style={{
             display: 'inline-block',
-            animation: 'scroll-announcement 60s linear infinite',
+            animation: 'scroll-announcement 10s linear infinite',
             fontSize: '1rem',
             fontWeight: '500'
           }}
