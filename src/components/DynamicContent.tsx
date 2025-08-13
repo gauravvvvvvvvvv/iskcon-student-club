@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { fetchCarouselImages, fetchAnnouncements, type CarouselImage, type Announcement } from '../lib/cms';
 
 declare global {
@@ -9,38 +9,34 @@ declare global {
   }
 }
 
-// Dynamic Carousel Component (unchanged)
+// Dynamic Carousel Component
 export function DynamicCarousel() {
   const [images, setImages] = useState<CarouselImage[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [error, setError] = useState<string | null>(null);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   // Helper to check fallback toggle
-  const isFallbackImageEnabled = useCallback(() => {
-    if (!mounted) return true;
-    const stored = localStorage.getItem('showFallbackImage');
-    return stored !== 'false';
-  }, [mounted]);
+  const isFallbackImageEnabled = () => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('showFallbackImage');
+      return stored !== 'false';
+    }
+    return true;
+  };
 
   useEffect(() => {
-    if (mounted) {
+    loadImages();
+    
+    // Listen for storage changes to update when admin changes settings
+    const handleStorageChange = () => {
       loadImages();
-      
-      const handleStorageChange = () => {
-        loadImages();
-      };
-      window.addEventListener('storage', handleStorageChange);
-      
-      return () => {
-        window.removeEventListener('storage', handleStorageChange);
-      };
-    }
-  }, [mounted]);
+    };
+    window.addEventListener('storage', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -73,6 +69,7 @@ export function DynamicCarousel() {
           setImages(imagesData);
         }
       } else {
+        // No uploaded images
         if (isFallbackImageEnabled()) {
           setImages([jagannathImage]);
         } else {
@@ -94,35 +91,17 @@ export function DynamicCarousel() {
     }
   };
 
-  const handlePrevious = useCallback(() => {
+  const handlePrevious = () => {
     setCurrentSlide(prev => prev === 0 ? images.length - 1 : prev - 1);
-  }, [images.length]);
+  };
 
-  const handleNext = useCallback(() => {
+  const handleNext = () => {
     setCurrentSlide(prev => (prev + 1) % images.length);
-  }, [images.length]);
+  };
 
-  const handleIndicatorClick = useCallback((index: number) => {
+  const handleIndicatorClick = (index: number) => {
     setCurrentSlide(index);
-  }, []);
-
-  if (!mounted) {
-    return (
-      <section style={{
-        position: 'relative',
-        height: 'clamp(600px, 80vh, 900px)',
-        overflow: 'hidden',
-        backgroundColor: '#f3f4f6',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
-        <div style={{ textAlign: 'center', color: '#6b7280' }}>
-          Loading...
-        </div>
-      </section>
-    );
-  }
+  };
 
   if (error) {
     return (
@@ -146,21 +125,15 @@ export function DynamicCarousel() {
   }
 
   return (
-    <section 
-      role="region" 
-      aria-label="Image carousel"
-      aria-live="polite"
-      style={{
-        position: 'relative',
-        height: 'clamp(600px, 80vh, 900px)',
-        overflow: 'hidden',
-        backgroundColor: 'white',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }} 
-      className="carousel-container"
-    >
+    <section style={{
+      position: 'relative',
+      height: 'clamp(600px, 80vh, 900px)',
+      overflow: 'hidden',
+      backgroundColor: 'white',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }} className="carousel-container">
       {/* Background Image Carousel */}
       <div style={{
         position: 'absolute',
@@ -172,7 +145,7 @@ export function DynamicCarousel() {
       }}>
         {images.map((image, index) => (
           <div
-            key={`${image.id}-${index}`}
+            key={`${image.id}-${index}`} // More unique key
             style={{
               position: 'absolute',
               top: 0,
@@ -183,6 +156,7 @@ export function DynamicCarousel() {
               transition: 'opacity 0.8s ease-in-out'
             }}
           >
+            {/* Blurred background version of the same image */}
             <div style={{
               position: 'absolute',
               top: 0,
@@ -194,10 +168,11 @@ export function DynamicCarousel() {
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
               filter: 'blur(20px) brightness(0.3)',
-              transform: 'scale(1.1)',
+              transform: 'scale(1.1)', // Slightly larger to avoid blur edges
               zIndex: 1
             }} />
             
+            {/* Main image on top */}
             <div style={{
               position: 'absolute',
               top: 0,
@@ -213,6 +188,7 @@ export function DynamicCarousel() {
           </div>
         ))}
         
+        {/* Overlay */}
         <div style={{
           position: 'absolute',
           top: 0,
@@ -224,10 +200,10 @@ export function DynamicCarousel() {
         }} />
       </div>
 
-      {/* Content Container */}
+      {/* Content Container - Floating at bottom */}
       <div style={{
         position: 'absolute',
-        bottom: '60px',
+        bottom: '60px', // Moved higher to avoid navigation overlap
         left: '50%',
         transform: 'translateX(-50%)',
         zIndex: 4,
@@ -237,6 +213,7 @@ export function DynamicCarousel() {
         alignItems: 'center',
         padding: '0 1rem'
       }} className="carousel-buttons">
+        {/* Call to Action Buttons */}
         <a 
           href="https://docs.google.com/forms/d/e/1FAIpQLSfm0lqavoKu8r9AEwXYg9hw9FdOJtRpcKN-wm4jYyu843fNog/viewform"
           target="_blank"
@@ -336,10 +313,10 @@ export function DynamicCarousel() {
         maxWidth: '400px',
         padding: '0 1rem'
       }} className="carousel-nav">
+        {/* Previous Button */}
         <button
           onClick={handlePrevious}
           disabled={images.length <= 1}
-          aria-label={`Previous image, ${currentSlide + 1} of ${images.length}`}
           style={{
             backgroundColor: 'transparent',
             border: 'none',
@@ -356,16 +333,28 @@ export function DynamicCarousel() {
             backdropFilter: 'blur(5px)',
             opacity: images.length <= 1 ? 0.3 : 1
           }}
+          onMouseEnter={(e) => {
+            if (images.length > 1) {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+              e.currentTarget.style.color = 'rgba(255, 255, 255, 1)';
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (images.length > 1) {
+              e.currentTarget.style.backgroundColor = 'transparent';
+              e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
+            }
+          }}
         >
           ‹
         </button>
 
+        {/* Indicators */}
         <div style={{ display: 'flex', gap: 'clamp(0.2rem, 1vw, 0.4rem)' }} className="indicators">
           {images.map((_, index) => (
             <button
               key={`indicator-${index}`}
               onClick={() => handleIndicatorClick(index)}
-              aria-label={`Go to slide ${index + 1}`}
               style={{
                 width: 'clamp(8px, 2vw, 10px)',
                 height: 'clamp(8px, 2vw, 10px)',
@@ -380,10 +369,10 @@ export function DynamicCarousel() {
           ))}
         </div>
 
+        {/* Next Button */}
         <button
           onClick={handleNext}
           disabled={images.length <= 1}
-          aria-label={`Next image, ${currentSlide + 1} of ${images.length}`}
           style={{
             backgroundColor: 'transparent',
             border: 'none',
@@ -400,6 +389,18 @@ export function DynamicCarousel() {
             backdropFilter: 'blur(5px)',
             opacity: images.length <= 1 ? 0.3 : 1
           }}
+          onMouseEnter={(e) => {
+            if (images.length > 1) {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+              e.currentTarget.style.color = 'rgba(255, 255, 255, 1)';
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (images.length > 1) {
+              e.currentTarget.style.backgroundColor = 'transparent';
+              e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
+            }
+          }}
         >
           ›
         </button>
@@ -408,8 +409,9 @@ export function DynamicCarousel() {
   );
 }
 
-// IMPROVED Dynamic Announcements Component with Seamless Looping
+// Dynamic Announcements Component - Clean and Fast
 export function DynamicAnnouncements() {
+  // Default fallback announcement
   const fallbackAnnouncement: Announcement = {
     id: 'iskcon-fallback',
     text: 'Welcome to ISKCON Student Center • Join us for daily morning programs at 6:30 AM • Bhagavad Gita classes every Sunday at 5 PM • Free prasadam for all students',
@@ -418,55 +420,55 @@ export function DynamicAnnouncements() {
     updatedAt: '2024-01-01'
   };
 
-  // START WITH FALLBACK IMMEDIATELY - no waiting!
-  const [announcements, setAnnouncements] = useState<Announcement[]>([fallbackAnnouncement]);
-  const [mounted, setMounted] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const [animationDuration, setAnimationDuration] = useState(30);
-
-  useEffect(() => {
-    setMounted(true);
-    // Load announcements immediately when mounted, but don't wait for it
-    loadAnnouncements();
-  }, []);
-
   // Helper to check fallback toggle
-  const isFallbackAnnouncementEnabled = useCallback(() => {
-    if (typeof window === 'undefined') return true;
-    try {
+  const isFallbackAnnouncementEnabled = () => {
+    if (typeof window !== 'undefined') {
       const stored = localStorage.getItem('showFallbackAnnouncement');
       return stored !== 'false';
-    } catch {
-      return true;
     }
-  }, []);
+    return true;
+  };
+
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [currentAnnouncementIndex, setCurrentAnnouncementIndex] = useState(0);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
+    loadAnnouncements();
+    
+    // Listen for storage changes to update when admin changes settings
     const handleStorageChange = () => {
       loadAnnouncements();
     };
     window.addEventListener('storage', handleStorageChange);
     
     return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
       window.removeEventListener('storage', handleStorageChange);
     };
   }, []);
 
-  // Calculate animation duration based on content length
   useEffect(() => {
-    if (contentRef.current && containerRef.current) {
-      const contentWidth = contentRef.current.scrollWidth;
-      const containerWidth = containerRef.current.clientWidth;
-      
-      // Calculate duration: longer content = longer duration
-      // Base speed: 50px per second, with minimum 15s and maximum 60s
-      const totalDistance = contentWidth + containerWidth;
-      const baseDuration = Math.max(15, Math.min(60, totalDistance / 50));
-      
-      setAnimationDuration(baseDuration);
+    // Clear existing timer
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
     }
-  }, [announcements]);
+
+    // Only start rotation if there are multiple announcements
+    if (announcements.length > 1) {
+      timerRef.current = setInterval(() => {
+        setCurrentAnnouncementIndex(prev => (prev + 1) % announcements.length);
+      }, 20000); // 20 seconds per announcement for continuous flow
+    }
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, [announcements.length]);
 
   const loadAnnouncements = async () => {
     try {
@@ -476,12 +478,16 @@ export function DynamicAnnouncements() {
         const activeAnnouncements = announcementsData.filter(ann => ann && ann.isActive && ann.text);
         
         if (activeAnnouncements.length > 0) {
+          // We have user announcements
           if (isFallbackAnnouncementEnabled()) {
+            // Include fallback + user announcements
             setAnnouncements([...activeAnnouncements, fallbackAnnouncement]);
           } else {
+            // Only user announcements
             setAnnouncements(activeAnnouncements);
           }
         } else {
+          // No user announcements
           if (isFallbackAnnouncementEnabled()) {
             setAnnouncements([fallbackAnnouncement]);
           } else {
@@ -489,12 +495,15 @@ export function DynamicAnnouncements() {
           }
         }
       } else {
+        // API failed
         if (isFallbackAnnouncementEnabled()) {
           setAnnouncements([fallbackAnnouncement]);
         } else {
           setAnnouncements([]);
         }
       }
+      
+      setCurrentAnnouncementIndex(0);
     } catch (error) {
       console.error('Error loading announcements:', error);
       if (isFallbackAnnouncementEnabled()) {
@@ -502,99 +511,80 @@ export function DynamicAnnouncements() {
       } else {
         setAnnouncements([]);
       }
+      setCurrentAnnouncementIndex(0);
     }
   };
 
-  if (!mounted || announcements.length === 0) {
+  // Get current announcement with safety checks
+  const currentAnnouncement = announcements.length > 0 ? announcements[currentAnnouncementIndex] : null;
+  
+  // Create announcement content with safety checks
+  const createAnnouncementContent = (announcement: Announcement | null) => {
+    if (!announcement || !announcement.text) {
+      return null;
+    }
+    
+    const baseText = announcement.text;
+    if (announcement.link) {
+      return (
+        <span>
+          {baseText} • <a 
+            href={announcement.link} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            style={{
+              color: '#ea580c',
+              textDecoration: 'underline',
+              fontWeight: 'bold'
+            }}
+          >
+            Click here
+          </a>
+        </span>
+      );
+    }
+    return baseText;
+  };
+
+  // Don't render anything if no announcements
+  if (announcements.length === 0 || !currentAnnouncement) {
     return null;
   }
 
-  // Create seamless announcement content with separators
-  const createAnnouncementContent = () => {
-    return announcements.map((ann, index) => (
-      <span key={`${ann.id}-${index}`} style={{ whiteSpace: 'nowrap' }}>
-        {ann.text}
-        {ann.link && (
-          <>
-            {' '}
-            <a 
-              href={ann.link} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              style={{
-                color: '#ea580c',
-                textDecoration: 'underline',
-                fontWeight: 'bold'
-              }}
-            >
-              Click here
-            </a>
-          </>
-        )}
-        <span style={{ margin: '0 2rem', color: '#ea580c', fontWeight: 'bold' }}>•</span>
-      </span>
-    ));
-  };
-
   return (
     <>
-      <div 
-        ref={containerRef}
-        role="marquee"
-        aria-live="off"
-        aria-label="Announcements"
-        style={{
-          backgroundColor: '#f8f9fa',
-          color: '#1f2937',
-          padding: '0.75rem 0',
-          overflow: 'hidden',
-          position: 'relative',
-          whiteSpace: 'nowrap',
-          marginTop: '70px',
-          borderTop: '3px solid #ea580c',
-          borderBottom: '3px solid #ea580c'
-        }}
-      >
+      <div style={{
+        backgroundColor: '#f8f9fa',
+        color: '#1f2937',
+        padding: '0.75rem 0',
+        overflow: 'hidden',
+        position: 'relative',
+        whiteSpace: 'nowrap',
+        marginTop: '70px',
+        borderTop: '3px solid #ea580c',
+        borderBottom: '3px solid #ea580c'
+      }}>
         <div 
-          ref={contentRef}
+          key={`announcement-${currentAnnouncementIndex}-${currentAnnouncement.id}`} // Force re-render for animation reset
           style={{
             display: 'inline-block',
-            animation: `seamless-scroll ${animationDuration}s linear infinite`,
+            animation: 'scroll-announcement 20s linear infinite',
             fontSize: '1rem',
-            fontWeight: '500',
-            whiteSpace: 'nowrap'
+            fontWeight: '500'
           }}
         >
-          {/* First instance of content */}
-          {createAnnouncementContent()}
-          {/* Second instance for seamless loop */}
-          {createAnnouncementContent()}
+          {createAnnouncementContent(currentAnnouncement)}
         </div>
-
-        {/* Pause animation on hover for better UX */}
-        <style dangerouslySetInnerHTML={{
-          __html: `
-            @keyframes seamless-scroll {
-              0% { 
-                transform: translateX(100%); 
-              }
-              100% { 
-                transform: translateX(-50%); 
-              }
-            }
-            
-            /* Pause animation on hover */
-            div[role="marquee"]:hover div[style*="animation"] {
-              animation-play-state: paused;
-            }
-            
-            /* Smooth transitions */
-            div[role="marquee"] div[style*="animation"] {
-              will-change: transform;
-            }
-          `
-        }} />
       </div>
+      
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          @keyframes scroll-announcement {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+          }
+        `
+      }} />
     </>
   );
 }
