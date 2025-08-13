@@ -418,7 +418,8 @@ export function DynamicAnnouncements() {
     updatedAt: '2024-01-01'
   };
 
-  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  // START WITH FALLBACK IMMEDIATELY - no waiting!
+  const [announcements, setAnnouncements] = useState<Announcement[]>([fallbackAnnouncement]);
   const [mounted, setMounted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -426,29 +427,31 @@ export function DynamicAnnouncements() {
 
   useEffect(() => {
     setMounted(true);
+    // Load announcements immediately when mounted, but don't wait for it
+    loadAnnouncements();
   }, []);
 
   // Helper to check fallback toggle
   const isFallbackAnnouncementEnabled = useCallback(() => {
-    if (!mounted) return true;
-    const stored = localStorage.getItem('showFallbackAnnouncement');
-    return stored !== 'false';
-  }, [mounted]);
+    if (typeof window === 'undefined') return true;
+    try {
+      const stored = localStorage.getItem('showFallbackAnnouncement');
+      return stored !== 'false';
+    } catch {
+      return true;
+    }
+  }, []);
 
   useEffect(() => {
-    if (mounted) {
+    const handleStorageChange = () => {
       loadAnnouncements();
-      
-      const handleStorageChange = () => {
-        loadAnnouncements();
-      };
-      window.addEventListener('storage', handleStorageChange);
-      
-      return () => {
-        window.removeEventListener('storage', handleStorageChange);
-      };
-    }
-  }, [mounted]);
+    };
+    window.addEventListener('storage', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
 
   // Calculate animation duration based on content length
   useEffect(() => {
