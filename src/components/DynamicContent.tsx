@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { fetchCarouselImages, fetchAnnouncements, type CarouselImage, type Announcement } from '../lib/cms';
 
 declare global {
@@ -9,34 +9,38 @@ declare global {
   }
 }
 
-// Dynamic Carousel Component
+// Dynamic Carousel Component (unchanged)
 export function DynamicCarousel() {
   const [images, setImages] = useState<CarouselImage[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [error, setError] = useState<string | null>(null);
-
-  // Helper to check fallback toggle
-  const isFallbackImageEnabled = () => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('showFallbackImage');
-      return stored !== 'false';
-    }
-    return true;
-  };
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    loadImages();
-    
-    // Listen for storage changes to update when admin changes settings
-    const handleStorageChange = () => {
-      loadImages();
-    };
-    window.addEventListener('storage', handleStorageChange);
-    
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
+    setMounted(true);
   }, []);
+
+  // Helper to check fallback toggle
+  const isFallbackImageEnabled = useCallback(() => {
+    if (!mounted) return true;
+    const stored = localStorage.getItem('showFallbackImage');
+    return stored !== 'false';
+  }, [mounted]);
+
+  useEffect(() => {
+    if (mounted) {
+      loadImages();
+      
+      const handleStorageChange = () => {
+        loadImages();
+      };
+      window.addEventListener('storage', handleStorageChange);
+      
+      return () => {
+        window.removeEventListener('storage', handleStorageChange);
+      };
+    }
+  }, [mounted]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -69,7 +73,6 @@ export function DynamicCarousel() {
           setImages(imagesData);
         }
       } else {
-        // No uploaded images
         if (isFallbackImageEnabled()) {
           setImages([jagannathImage]);
         } else {
@@ -91,17 +94,35 @@ export function DynamicCarousel() {
     }
   };
 
-  const handlePrevious = () => {
+  const handlePrevious = useCallback(() => {
     setCurrentSlide(prev => prev === 0 ? images.length - 1 : prev - 1);
-  };
+  }, [images.length]);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     setCurrentSlide(prev => (prev + 1) % images.length);
-  };
+  }, [images.length]);
 
-  const handleIndicatorClick = (index: number) => {
+  const handleIndicatorClick = useCallback((index: number) => {
     setCurrentSlide(index);
-  };
+  }, []);
+
+  if (!mounted) {
+    return (
+      <section style={{
+        position: 'relative',
+        height: 'clamp(600px, 80vh, 900px)',
+        overflow: 'hidden',
+        backgroundColor: '#f3f4f6',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <div style={{ textAlign: 'center', color: '#6b7280' }}>
+          Loading...
+        </div>
+      </section>
+    );
+  }
 
   if (error) {
     return (
@@ -125,15 +146,21 @@ export function DynamicCarousel() {
   }
 
   return (
-    <section style={{
-      position: 'relative',
-      height: 'clamp(600px, 80vh, 900px)',
-      overflow: 'hidden',
-      backgroundColor: 'white',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center'
-    }} className="carousel-container">
+    <section 
+      role="region" 
+      aria-label="Image carousel"
+      aria-live="polite"
+      style={{
+        position: 'relative',
+        height: 'clamp(600px, 80vh, 900px)',
+        overflow: 'hidden',
+        backgroundColor: 'white',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }} 
+      className="carousel-container"
+    >
       {/* Background Image Carousel */}
       <div style={{
         position: 'absolute',
@@ -145,7 +172,7 @@ export function DynamicCarousel() {
       }}>
         {images.map((image, index) => (
           <div
-            key={`${image.id}-${index}`} // More unique key
+            key={`${image.id}-${index}`}
             style={{
               position: 'absolute',
               top: 0,
@@ -156,7 +183,6 @@ export function DynamicCarousel() {
               transition: 'opacity 0.8s ease-in-out'
             }}
           >
-            {/* Blurred background version of the same image */}
             <div style={{
               position: 'absolute',
               top: 0,
@@ -168,11 +194,10 @@ export function DynamicCarousel() {
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
               filter: 'blur(20px) brightness(0.3)',
-              transform: 'scale(1.1)', // Slightly larger to avoid blur edges
+              transform: 'scale(1.1)',
               zIndex: 1
             }} />
             
-            {/* Main image on top */}
             <div style={{
               position: 'absolute',
               top: 0,
@@ -188,7 +213,6 @@ export function DynamicCarousel() {
           </div>
         ))}
         
-        {/* Overlay */}
         <div style={{
           position: 'absolute',
           top: 0,
@@ -200,10 +224,10 @@ export function DynamicCarousel() {
         }} />
       </div>
 
-      {/* Content Container - Floating at bottom */}
+      {/* Content Container */}
       <div style={{
         position: 'absolute',
-        bottom: '60px', // Moved higher to avoid navigation overlap
+        bottom: '60px',
         left: '50%',
         transform: 'translateX(-50%)',
         zIndex: 4,
@@ -213,7 +237,6 @@ export function DynamicCarousel() {
         alignItems: 'center',
         padding: '0 1rem'
       }} className="carousel-buttons">
-        {/* Call to Action Buttons */}
         <a 
           href="https://docs.google.com/forms/d/e/1FAIpQLSfm0lqavoKu8r9AEwXYg9hw9FdOJtRpcKN-wm4jYyu843fNog/viewform"
           target="_blank"
@@ -313,10 +336,10 @@ export function DynamicCarousel() {
         maxWidth: '400px',
         padding: '0 1rem'
       }} className="carousel-nav">
-        {/* Previous Button */}
         <button
           onClick={handlePrevious}
           disabled={images.length <= 1}
+          aria-label={`Previous image, ${currentSlide + 1} of ${images.length}`}
           style={{
             backgroundColor: 'transparent',
             border: 'none',
@@ -333,28 +356,16 @@ export function DynamicCarousel() {
             backdropFilter: 'blur(5px)',
             opacity: images.length <= 1 ? 0.3 : 1
           }}
-          onMouseEnter={(e) => {
-            if (images.length > 1) {
-              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-              e.currentTarget.style.color = 'rgba(255, 255, 255, 1)';
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (images.length > 1) {
-              e.currentTarget.style.backgroundColor = 'transparent';
-              e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
-            }
-          }}
         >
           ‹
         </button>
 
-        {/* Indicators */}
         <div style={{ display: 'flex', gap: 'clamp(0.2rem, 1vw, 0.4rem)' }} className="indicators">
           {images.map((_, index) => (
             <button
               key={`indicator-${index}`}
               onClick={() => handleIndicatorClick(index)}
+              aria-label={`Go to slide ${index + 1}`}
               style={{
                 width: 'clamp(8px, 2vw, 10px)',
                 height: 'clamp(8px, 2vw, 10px)',
@@ -369,10 +380,10 @@ export function DynamicCarousel() {
           ))}
         </div>
 
-        {/* Next Button */}
         <button
           onClick={handleNext}
           disabled={images.length <= 1}
+          aria-label={`Next image, ${currentSlide + 1} of ${images.length}`}
           style={{
             backgroundColor: 'transparent',
             border: 'none',
@@ -389,18 +400,6 @@ export function DynamicCarousel() {
             backdropFilter: 'blur(5px)',
             opacity: images.length <= 1 ? 0.3 : 1
           }}
-          onMouseEnter={(e) => {
-            if (images.length > 1) {
-              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-              e.currentTarget.style.color = 'rgba(255, 255, 255, 1)';
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (images.length > 1) {
-              e.currentTarget.style.backgroundColor = 'transparent';
-              e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
-            }
-          }}
         >
           ›
         </button>
@@ -409,9 +408,8 @@ export function DynamicCarousel() {
   );
 }
 
-// Dynamic Announcements Component - Clean and Fast
+// IMPROVED Dynamic Announcements Component with Seamless Looping
 export function DynamicAnnouncements() {
-  // Default fallback announcement
   const fallbackAnnouncement: Announcement = {
     id: 'iskcon-fallback',
     text: 'Welcome to ISKCON Student Center • Join us for daily morning programs at 6:30 AM • Bhagavad Gita classes every Sunday at 5 PM • Free prasadam for all students',
@@ -420,30 +418,52 @@ export function DynamicAnnouncements() {
     updatedAt: '2024-01-01'
   };
 
-  // Helper to check fallback toggle
-  const isFallbackAnnouncementEnabled = () => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('showFallbackAnnouncement');
-      return stored !== 'false';
-    }
-    return true;
-  };
-
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [mounted, setMounted] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [animationDuration, setAnimationDuration] = useState(30);
 
   useEffect(() => {
-    loadAnnouncements();
-    
-    // Listen for storage changes to update when admin changes settings
-    const handleStorageChange = () => {
-      loadAnnouncements();
-    };
-    window.addEventListener('storage', handleStorageChange);
-    
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
+    setMounted(true);
   }, []);
+
+  // Helper to check fallback toggle
+  const isFallbackAnnouncementEnabled = useCallback(() => {
+    if (!mounted) return true;
+    const stored = localStorage.getItem('showFallbackAnnouncement');
+    return stored !== 'false';
+  }, [mounted]);
+
+  useEffect(() => {
+    if (mounted) {
+      loadAnnouncements();
+      
+      const handleStorageChange = () => {
+        loadAnnouncements();
+      };
+      window.addEventListener('storage', handleStorageChange);
+      
+      return () => {
+        window.removeEventListener('storage', handleStorageChange);
+      };
+    }
+  }, [mounted]);
+
+  // Calculate animation duration based on content length
+  useEffect(() => {
+    if (contentRef.current && containerRef.current) {
+      const contentWidth = contentRef.current.scrollWidth;
+      const containerWidth = containerRef.current.clientWidth;
+      
+      // Calculate duration: longer content = longer duration
+      // Base speed: 50px per second, with minimum 15s and maximum 60s
+      const totalDistance = contentWidth + containerWidth;
+      const baseDuration = Math.max(15, Math.min(60, totalDistance / 50));
+      
+      setAnimationDuration(baseDuration);
+    }
+  }, [announcements]);
 
   const loadAnnouncements = async () => {
     try {
@@ -453,16 +473,12 @@ export function DynamicAnnouncements() {
         const activeAnnouncements = announcementsData.filter(ann => ann && ann.isActive && ann.text);
         
         if (activeAnnouncements.length > 0) {
-          // We have user announcements
           if (isFallbackAnnouncementEnabled()) {
-            // Include fallback + user announcements
             setAnnouncements([...activeAnnouncements, fallbackAnnouncement]);
           } else {
-            // Only user announcements
             setAnnouncements(activeAnnouncements);
           }
         } else {
-          // No user announcements
           if (isFallbackAnnouncementEnabled()) {
             setAnnouncements([fallbackAnnouncement]);
           } else {
@@ -470,14 +486,12 @@ export function DynamicAnnouncements() {
           }
         }
       } else {
-        // API failed
         if (isFallbackAnnouncementEnabled()) {
           setAnnouncements([fallbackAnnouncement]);
         } else {
           setAnnouncements([]);
         }
       }
-      
     } catch (error) {
       console.error('Error loading announcements:', error);
       if (isFallbackAnnouncementEnabled()) {
@@ -488,15 +502,14 @@ export function DynamicAnnouncements() {
     }
   };
 
-  // Don't render anything if no announcements
-  if (announcements.length === 0) {
+  if (!mounted || announcements.length === 0) {
     return null;
   }
 
-  // Create announcement content
+  // Create seamless announcement content with separators
   const createAnnouncementContent = () => {
     return announcements.map((ann, index) => (
-      <span key={ann.id}>
+      <span key={`${ann.id}-${index}`} style={{ whiteSpace: 'nowrap' }}>
         {ann.text}
         {ann.link && (
           <>
@@ -515,44 +528,70 @@ export function DynamicAnnouncements() {
             </a>
           </>
         )}
-        {index < announcements.length - 1 && ' • '}
+        <span style={{ margin: '0 2rem', color: '#ea580c', fontWeight: 'bold' }}>•</span>
       </span>
     ));
   };
 
   return (
     <>
-      <div style={{
-        backgroundColor: '#f8f9fa',
-        color: '#1f2937',
-        padding: '0.75rem 0',
-        overflow: 'hidden',
-        position: 'relative',
-        whiteSpace: 'nowrap',
-        marginTop: '70px',
-        borderTop: '3px solid #ea580c',
-        borderBottom: '3px solid #ea580c'
-      }}>
+      <div 
+        ref={containerRef}
+        role="marquee"
+        aria-live="off"
+        aria-label="Announcements"
+        style={{
+          backgroundColor: '#f8f9fa',
+          color: '#1f2937',
+          padding: '0.75rem 0',
+          overflow: 'hidden',
+          position: 'relative',
+          whiteSpace: 'nowrap',
+          marginTop: '70px',
+          borderTop: '3px solid #ea580c',
+          borderBottom: '3px solid #ea580c'
+        }}
+      >
         <div 
+          ref={contentRef}
           style={{
             display: 'inline-block',
-            animation: 'scroll-announcement 20s linear infinite',
+            animation: `seamless-scroll ${animationDuration}s linear infinite`,
             fontSize: '1rem',
-            fontWeight: '500'
+            fontWeight: '500',
+            whiteSpace: 'nowrap'
           }}
         >
+          {/* First instance of content */}
+          {createAnnouncementContent()}
+          {/* Second instance for seamless loop */}
           {createAnnouncementContent()}
         </div>
+
+        {/* Pause animation on hover for better UX */}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            @keyframes seamless-scroll {
+              0% { 
+                transform: translateX(100%); 
+              }
+              100% { 
+                transform: translateX(-50%); 
+              }
+            }
+            
+            /* Pause animation on hover */
+            div[role="marquee"]:hover div[style*="animation"] {
+              animation-play-state: paused;
+            }
+            
+            /* Smooth transitions */
+            div[role="marquee"] div[style*="animation"] {
+              will-change: transform;
+            }
+          `
+        }} />
       </div>
-      
-      <style dangerouslySetInnerHTML={{
-        __html: `
-          @keyframes scroll-announcement {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-          }
-        `
-      }} />
     </>
   );
 }
