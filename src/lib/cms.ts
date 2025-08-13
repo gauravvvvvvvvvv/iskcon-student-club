@@ -143,15 +143,30 @@ export async function deleteAnnouncement(id: string): Promise<void> {
   }
 }
 
+// Reorder announcements
+export async function reorderAnnouncements(announcements: Announcement[]): Promise<void> {
+  const response = await fetch('/api/announcements', {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ announcements }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to reorder announcements');
+  }
+}
+
 // Authenticate admin
-export async function authenticateAdmin(password: string): Promise<boolean> {
+export async function authenticateAdmin(password: string, deviceFingerprint?: string): Promise<boolean> {
   try {
     const response = await fetch('/api/auth', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ password }),
+      body: JSON.stringify({ password, deviceFingerprint }),
     });
 
     return response.ok;

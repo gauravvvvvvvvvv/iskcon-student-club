@@ -9,6 +9,7 @@ import {
   createAnnouncement,
   updateAnnouncement,
   deleteAnnouncement,
+  reorderAnnouncements,
   authenticateAdmin,
   logoutAdmin,
   type CarouselImage,
@@ -20,6 +21,7 @@ export default function AdminDashboard() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const [activeTab, setActiveTab] = useState<'images' | 'announcements'>('images');
   
   // Images state
@@ -34,6 +36,46 @@ export default function AdminDashboard() {
   // Fallback toggles (persisted in localStorage)
   const [showFallbackImage, setShowFallbackImage] = useState(true);
   const [showFallbackAnnouncement, setShowFallbackAnnouncement] = useState(true);
+
+  // Device fingerprinting function
+  const generateDeviceFingerprint = () => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    ctx!.textBaseline = 'top';
+    ctx!.font = '14px Arial';
+    ctx!.fillText('Device fingerprint', 2, 2);
+    
+    const fingerprint = [
+      navigator.userAgent,
+      navigator.language,
+      screen.width + 'x' + screen.height,
+      new Date().getTimezoneOffset(),
+      canvas.toDataURL()
+    ].join('|');
+    
+    return btoa(fingerprint).substring(0, 32);
+  };
+
+  // Check if device is already trusted on mount
+  useEffect(() => {
+    const checkTrustedDevice = async () => {
+      try {
+        const deviceFingerprint = generateDeviceFingerprint();
+        const response = await fetch(`/api/auth?deviceFingerprint=${encodeURIComponent(deviceFingerprint)}`);
+        const data = await response.json();
+        
+        if (data.authenticated) {
+          setIsAuthenticated(true);
+        }
+      } catch (error) {
+        console.error('Error checking device trust:', error);
+      } finally {
+        setCheckingAuth(false);
+      }
+    };
+
+    checkTrustedDevice();
+  }, []);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -77,7 +119,8 @@ export default function AdminDashboard() {
     setLoading(true);
     
     try {
-      const success = await authenticateAdmin(password);
+      const deviceFingerprint = generateDeviceFingerprint();
+      const success = await authenticateAdmin(password, deviceFingerprint);
       if (success) {
         setIsAuthenticated(true);
         setPassword('');
@@ -142,6 +185,21 @@ export default function AdminDashboard() {
     } catch (error) {
       alert('Failed to reorder images');
       setImages(images); // Revert on error
+    }
+  };
+
+  const handleAnnouncementReorder = async (fromIndex: number, toIndex: number) => {
+    const newAnnouncements = [...announcements];
+    const [movedAnnouncement] = newAnnouncements.splice(fromIndex, 1);
+    newAnnouncements.splice(toIndex, 0, movedAnnouncement);
+    
+    setAnnouncements(newAnnouncements);
+    
+    try {
+      await reorderAnnouncements(newAnnouncements);
+    } catch (error) {
+      alert('Failed to reorder announcements');
+      setAnnouncements(announcements); // Revert on error
     }
   };
 
@@ -253,6 +311,39 @@ export default function AdminDashboard() {
     }
   };
 
+  // Show loading screen while checking authentication
+  if (checkingAuth) {
+    return (
+      <div style={{ 
+        minHeight: '100vh', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        backgroundColor: '#f3f4f6'
+      }}>
+        <div style={{
+          backgroundColor: 'white',
+          padding: '2rem',
+          borderRadius: '8px',
+          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+          textAlign: 'center'
+        }}>
+          <div style={{ 
+            fontSize: '1.5rem', 
+            fontWeight: 'bold', 
+            marginBottom: '1rem',
+            color: '#ea580c'
+          }}>
+            ISKCON CMS Admin
+          </div>
+          <div style={{ color: '#6b7280' }}>
+            Checking authentication...
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (!isAuthenticated) {
     return (
       <div style={{ 
@@ -303,7 +394,7 @@ export default function AdminDashboard() {
                     color: '#111827',
                     backgroundColor: '#ffffff'
                   }}
-                  placeholder="Enter admin password"
+                  placeholder=""
                   required
                 />
                 <button
@@ -345,14 +436,6 @@ export default function AdminDashboard() {
               {loading ? 'Logging in...' : 'Login'}
             </button>
           </form>
-          <p style={{ 
-            marginTop: '1rem', 
-            fontSize: '0.875rem', 
-            color: '#6b7280',
-            textAlign: 'center'
-          }}>
-            Default password: "password"
-          </p>
         </div>
       </div>
     );
@@ -728,7 +811,7 @@ export default function AdminDashboard() {
                 </p>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                  {announcements.map((announcement) => (
+                  {announcements.map((announcement, index) => (
                     <div key={announcement.id} style={{
                       border: '1px solid #e5e7eb',
                       borderRadius: '8px',
@@ -788,6 +871,15 @@ export default function AdminDashboard() {
                               }}>
                                 {announcement.isActive ? 'Active' : 'Inactive'}
                               </span>
+                              <span style={{
+                                padding: '0.25rem 0.5rem',
+                                borderRadius: '4px',
+                                fontSize: '0.75rem',
+                                backgroundColor: '#f3f4f6',
+                                color: '#6b7280'
+                              }}>
+                                Position: {index + 1}
+                              </span>
                             </div>
                           </div>
                           <div style={{
@@ -823,6 +915,38 @@ export default function AdminDashboard() {
                             >
                               {announcement.isActive ? 'Deactivate' : 'Activate'}
                             </button>
+                            {index > 0 && (
+                              <button
+                                onClick={() => handleAnnouncementReorder(index, index - 1)}
+                                style={{
+                                  backgroundColor: '#6b7280',
+                                  color: 'white',
+                                  padding: '0.25rem 0.5rem',
+                                  border: 'none',
+                                  borderRadius: '4px',
+                                  fontSize: '0.75rem',
+                                  cursor: 'pointer'
+                                }}
+                              >
+                                ↑
+                              </button>
+                            )}
+                            {index < announcements.length - 1 && (
+                              <button
+                                onClick={() => handleAnnouncementReorder(index, index + 1)}
+                                style={{
+                                  backgroundColor: '#6b7280',
+                                  color: 'white',
+                                  padding: '0.25rem 0.5rem',
+                                  border: 'none',
+                                  borderRadius: '4px',
+                                  fontSize: '0.75rem',
+                                  cursor: 'pointer'
+                                }}
+                              >
+                                ↓
+                              </button>
+                            )}
                             <button
                               onClick={() => handleAnnouncementDelete(announcement.id)}
                               disabled={announcement.id === 'iskcon-default'}

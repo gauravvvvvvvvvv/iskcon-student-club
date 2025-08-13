@@ -99,3 +99,21 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ error: 'Failed to delete announcement' }, { status: 500 });
   }
 }
+
+export async function PATCH(request: NextRequest) {
+  try {
+    const { announcements } = await request.json();
+
+    if (!Array.isArray(announcements)) {
+      return NextResponse.json({ error: 'Announcements array is required' }, { status: 400 });
+    }
+
+    // Save reordered announcements to KV store
+    await kv.set('announcements', announcements);
+
+    return NextResponse.json({ message: 'Announcements reordered successfully' });
+  } catch (error) {
+    console.error('Error reordering announcements:', error);
+    return NextResponse.json({ error: 'Failed to reorder announcements' }, { status: 500 });
+  }
+}
