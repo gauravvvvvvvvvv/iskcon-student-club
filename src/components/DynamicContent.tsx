@@ -493,71 +493,31 @@ export function DynamicAnnouncements() {
     return null;
   }
 
-  // Create continuous announcement string
-  const createContinuousContent = () => {
-    const allTexts = announcements.map(ann => {
-      if (ann.link) {
-        return `${ann.text} • Click here`;
-      }
-      return ann.text;
-    });
-    
-    // Join all announcements with separator and repeat for seamless loop
-    const separator = ' • ';
-    const continuousText = allTexts.join(separator);
-    
-    return (
-      <span>
-        {announcements.map((ann, index) => (
-          <span key={`ann-${index}`}>
-            {ann.text}
-            {ann.link && (
-              <>
-                {' • '}
-                <a 
-                  href={ann.link} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  style={{
-                    color: '#ea580c',
-                    textDecoration: 'underline',
-                    fontWeight: 'bold'
-                  }}
-                >
-                  Click here
-                </a>
-              </>
-            )}
-            {index < announcements.length - 1 && ' • '}
-          </span>
-        ))}
-        {' • '}
-        {/* Repeat the content for seamless loop */}
-        {announcements.map((ann, index) => (
-          <span key={`ann-repeat-${index}`}>
-            {ann.text}
-            {ann.link && (
-              <>
-                {' • '}
-                <a 
-                  href={ann.link} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  style={{
-                    color: '#ea580c',
-                    textDecoration: 'underline',
-                    fontWeight: 'bold'
-                  }}
-                >
-                  Click here
-                </a>
-              </>
-            )}
-            {index < announcements.length - 1 && ' • '}
-          </span>
-        ))}
+  // Create announcement content
+  const createAnnouncementContent = () => {
+    return announcements.map((ann, index) => (
+      <span key={ann.id}>
+        {ann.text}
+        {ann.link && (
+          <>
+            {' '}
+            <a 
+              href={ann.link} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{
+                color: '#ea580c',
+                textDecoration: 'underline',
+                fontWeight: 'bold'
+              }}
+            >
+              Click here
+            </a>
+          </>
+        )}
+        {index < announcements.length - 1 && ' • '}
       </span>
-    );
+    ));
   };
 
   return (
@@ -581,7 +541,7 @@ export function DynamicAnnouncements() {
             fontWeight: '500'
           }}
         >
-          {createContinuousContent()}
+          {createAnnouncementContent()}
         </div>
       </div>
       
