@@ -106,7 +106,8 @@ export default function Home() {
 
       {/* HERO WITH DYNAMIC IMAGE CAROUSEL */}
       <HeroCarousel>
-        <div className="container" style={{ paddingTop: 140, paddingBottom: 80, minHeight: "100vh", display: "flex", alignItems: "center" }}>
+        <div className="container" style={{ paddingTop: 100, paddingBottom: 60, height: "100%", display: "flex", alignItems: "center" }}>
+
           <div style={{ maxWidth: 640 }}>
             <div style={{ marginBottom: 32, display: "flex", alignItems: "center", gap: 16 }}>
               <img src="/prabhupada.jpg" alt="Srila Prabhupada" style={{ width: 64, height: 64, borderRadius: "50%", objectFit: "cover", border: "2px solid rgba(212,165,116,0.4)" }} />
