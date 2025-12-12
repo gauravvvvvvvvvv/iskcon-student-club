@@ -1,5 +1,6 @@
-"use client";
-import { useState, useEffect, useRef } from 'react';
+'use client';
+
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { fetchCarouselImages, fetchAnnouncements, type CarouselImage, type Announcement } from '../lib/cms';
 
 declare global {
@@ -9,582 +10,264 @@ declare global {
   }
 }
 
-// Dynamic Carousel Component
+const FALLBACK_IMAGE = '/jagannath.jpg';
+
+// Statistics to display
+const stats = [
+  { value: '500+', label: 'Active Students' },
+  { value: '15+', label: 'Weekly Programs' },
+  { value: '10+', label: 'Years Legacy' },
+];
+
 export function DynamicCarousel() {
   const [images, setImages] = useState<CarouselImage[]>([]);
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [error, setError] = useState<string | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [useFallback, setUseFallback] = useState(false);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Helper to check fallback toggle
-  const isFallbackImageEnabled = () => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('showFallbackImage');
-      return stored !== 'false';
-    }
-    return true;
-  };
-
-  useEffect(() => {
-    loadImages();
-    
-    // Listen for storage changes to update when admin changes settings
-    const handleStorageChange = () => {
-      loadImages();
-    };
-    window.addEventListener('storage', handleStorageChange);
-    
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
+  const isFallbackImageEnabled = useCallback(() => {
+    if (typeof window === 'undefined') return false;
+    const stored = localStorage.getItem('iskcon-show-fallback-image');
+    return stored === 'true' || window.__ISKCON_SHOW_FALLBACK_IMAGE__ === true;
   }, []);
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
-    if (images.length > 1) {
-      timer = setInterval(() => {
-        setCurrentSlide(prev => (prev + 1) % images.length);
-      }, 4000);
-    }
-    return () => {
-      if (timer) clearInterval(timer);
+    const handleStorageChange = () => setUseFallback(isFallbackImageEnabled());
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, [isFallbackImageEnabled]);
+
+  useEffect(() => {
+    const loadImages = async () => {
+      try {
+        const fetchedImages = await fetchCarouselImages();
+        if (fetchedImages.length > 0) {
+          setImages(fetchedImages);
+        } else {
+          setUseFallback(true);
+        }
+      } catch {
+        setUseFallback(true);
+      } finally {
+        setLoading(false);
+      }
     };
+    loadImages();
+    setUseFallback(isFallbackImageEnabled());
+  }, [isFallbackImageEnabled]);
+
+  useEffect(() => {
+    if (images.length <= 1) return;
+    intervalRef.current = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % images.length);
+    }, 6000);
+    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
   }, [images.length]);
 
-  const loadImages = async () => {
-    try {
-      setError(null);
-      const jagannathImage: CarouselImage = {
-        id: 'jagannath-default',
-        url: '/jagannath.jpg',
-        filename: 'jagannath.jpg',
-        uploadedAt: '2024-01-01'
-      };
-      
-      const imagesData = await fetchCarouselImages();
-      
-      if (imagesData && imagesData.length > 0) {
-        if (isFallbackImageEnabled()) {
-          setImages([...imagesData, jagannathImage]);
-        } else {
-          setImages(imagesData);
-        }
-      } else {
-        // No uploaded images
-        if (isFallbackImageEnabled()) {
-          setImages([jagannathImage]);
-        } else {
-          setImages([]);
-        }
-      }
-    } catch (error) {
-      setError('Failed to load images');
-      if (isFallbackImageEnabled()) {
-        setImages([{
-          id: 'jagannath-default',
-          url: '/jagannath.jpg',
-          filename: 'jagannath.jpg',
-          uploadedAt: '2024-01-01'
-        }]);
-      } else {
-        setImages([]);
-      }
-    }
-  };
+  const displayImages = useFallback || images.length === 0
+    ? [{ id: 'fallback', url: FALLBACK_IMAGE, filename: 'fallback', uploadedAt: '' }]
+    : images;
 
-  const handlePrevious = () => {
-    setCurrentSlide(prev => prev === 0 ? images.length - 1 : prev - 1);
-  };
-
-  const handleNext = () => {
-    setCurrentSlide(prev => (prev + 1) % images.length);
-  };
-
-  const handleIndicatorClick = (index: number) => {
-    setCurrentSlide(index);
-  };
-
-  if (error) {
+  if (loading) {
     return (
-      <section style={{
-        position: 'relative',
-        height: 'clamp(600px, 80vh, 900px)',
-        overflow: 'hidden',
-        backgroundColor: '#f3f4f6',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
-        <div style={{ textAlign: 'center', color: '#6b7280' }}>
-          <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>
-            {error}
-          </h2>
-          <p>Please upload images via the admin panel.</p>
+      <div className="min-h-screen mesh-gradient flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-16 h-16 border-4 border-indigo-200 border-t-indigo-500 rounded-full animate-spin" />
+          <p className="text-white/70">Loading...</p>
         </div>
-      </section>
+      </div>
     );
   }
 
   return (
-    <section style={{
-      position: 'relative',
-      height: 'clamp(600px, 80vh, 900px)',
-      overflow: 'hidden',
-      backgroundColor: 'white',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center'
-    }} className="carousel-container">
-      {/* Background Image Carousel */}
-      <div style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        zIndex: 1
-      }}>
-        {images.map((image, index) => (
-          <div
-            key={`${image.id}-${index}`} // More unique key
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              opacity: currentSlide === index ? 1 : 0,
-              transition: 'opacity 0.8s ease-in-out'
-            }}
-          >
-            {/* Blurred background version of the same image */}
-            <div style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              backgroundImage: `url('${image.url}')`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              filter: 'blur(20px) brightness(0.3)',
-              transform: 'scale(1.1)', // Slightly larger to avoid blur edges
-              zIndex: 1
-            }} />
-            
-            {/* Main image on top */}
-            <div style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              backgroundImage: `url('${image.url}')`,
-              backgroundSize: 'contain',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              zIndex: 2
-            }} />
+    <section className="relative min-h-screen overflow-hidden">
+      {/* Background Image with Parallax Effect */}
+      {displayImages.map((image, index) => (
+        <div
+          key={image.id}
+          className={`
+            absolute inset-0 transition-all duration-1000 ease-out
+            ${index === currentIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}
+          `}
+        >
+          <img
+            src={image.url}
+            alt={`Slide ${index + 1}`}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      ))}
+
+      {/* Gradient Overlay - New dark gradient with mesh pattern */}
+      <div className="absolute inset-0 bg-gradient-to-b from-gray-900/90 via-gray-900/70 to-gray-900/90" />
+      <div className="absolute inset-0 mesh-gradient opacity-60" />
+
+      {/* Content */}
+      <div className="relative z-10 min-h-screen flex flex-col justify-center px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto text-center">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-8 fade-in-up">
+            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+            <span className="text-sm text-white/90">Now accepting new members</span>
           </div>
-        ))}
-        
-        {/* Overlay */}
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          backgroundColor: 'rgba(0, 0, 0, 0.15)',
-          zIndex: 3
-        }} />
+
+          {/* Main Heading */}
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 fade-in-up delay-100 text-balance">
+            Discover Your
+            <span className="block gradient-text">Spiritual Journey</span>
+          </h1>
+
+          {/* Subtitle */}
+          <p className="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto mb-10 fade-in-up delay-200">
+            Join Delhi University&apos;s vibrant community of seekers. Experience ancient wisdom,
+            build meaningful friendships, and transform your life.
+          </p>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 fade-in-up delay-300">
+            <a
+              href="https://docs.google.com/forms/d/1FVlLR7QJUP-8BedM3oRQYFact6stIYMFFo0OKGzmWvg/viewform?"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary group"
+            >
+              Start Your Journey
+              <svg className="w-5 h-5 inline-block ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
+            <a href="#programs" className="btn-secondary">
+              Explore Programs
+            </a>
+          </div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-3 gap-4 max-w-xl mx-auto fade-in-up delay-400">
+            {stats.map((stat, idx) => (
+              <div key={idx} className="stat-card">
+                <div className="text-2xl sm:text-3xl font-bold gradient-text">{stat.value}</div>
+                <div className="text-xs sm:text-sm text-white/60">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 fade-in delay-500">
+          <a href="#programs" className="flex flex-col items-center gap-2 text-white/50 hover:text-white/80 transition-colors">
+            <span className="text-xs uppercase tracking-widest">Scroll</span>
+            <svg className="w-5 h-5 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+          </a>
+        </div>
       </div>
 
-      {/* Content Container - Floating at bottom */}
-      <div style={{
-        position: 'absolute',
-        bottom: '60px', // Moved higher to avoid navigation overlap
-        left: '50%',
-        transform: 'translateX(-50%)',
-        zIndex: 4,
-        display: 'flex',
-        gap: '0.75rem',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '0 1rem'
-      }} className="carousel-buttons">
-        {/* Call to Action Buttons */}
-        <a 
-          href="https://docs.google.com/forms/d/e/1FAIpQLSfm0lqavoKu8r9AEwXYg9hw9FdOJtRpcKN-wm4jYyu843fNog/viewform"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.95)',
-            color: '#ea580c',
-            padding: 'clamp(0.6rem, 1.5vw, 0.8rem) clamp(1.2rem, 3vw, 1.5rem)',
-            borderRadius: '999px',
-            textDecoration: 'none',
-            fontWeight: '700',
-            fontSize: 'clamp(0.8rem, 2vw, 0.95rem)',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.4rem',
-            backdropFilter: 'blur(10px)',
-            border: '2px solid rgba(0, 0, 0, 0.8)',
-            transition: 'all 0.3s ease',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
-          }}
-          className="card-hover animate-fadeInUp material-btn"
-        >
-          <span style={{ 
-            width: '16px', 
-            height: '16px', 
-            backgroundColor: '#ea580c', 
-            borderRadius: '50%', 
-            display: 'inline-block',
-            position: 'relative'
-          }}>
-            <span style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              color: 'white',
-              fontSize: '9px',
-              fontWeight: 'bold'
-            }}>★</span>
-          </span>
-          Join Now
-        </a>
-        <a 
-          href="#programs"
-          style={{
-            border: '2px solid rgba(0, 0, 0, 0.8)',
-            color: 'white',
-            backgroundColor: 'rgba(0, 0, 0, 0.4)',
-            padding: 'clamp(0.6rem, 1.5vw, 0.8rem) clamp(1.2rem, 3vw, 1.5rem)',
-            borderRadius: '999px',
-            textDecoration: 'none',
-            fontWeight: '700',
-            fontSize: 'clamp(0.8rem, 2vw, 0.95rem)',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.4rem',
-            backdropFilter: 'blur(10px)',
-            transition: 'all 0.3s ease',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
-          }}
-          className="card-hover animate-fadeInUp material-btn"
-        >
-          <span style={{ 
-            width: '16px', 
-            height: '16px', 
-            backgroundColor: 'rgba(255, 255, 255, 0.3)', 
-            borderRadius: '50%', 
-            display: 'inline-block',
-            position: 'relative'
-          }}>
-            <span style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              color: 'white',
-              fontSize: '10px',
-              fontWeight: 'bold'
-            }}>+</span>
-          </span>
-          Explore Programs
-        </a>
-      </div>
-
-      {/* Carousel Navigation */}
-      <div style={{
-        position: 'absolute',
-        bottom: '15px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        zIndex: 4,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: 'clamp(0.5rem, 2vw, 1rem)',
-        width: '100%',
-        maxWidth: '400px',
-        padding: '0 1rem'
-      }} className="carousel-nav">
-        {/* Previous Button */}
-        <button
-          onClick={handlePrevious}
-          disabled={images.length <= 1}
-          style={{
-            backgroundColor: 'transparent',
-            border: 'none',
-            color: 'rgba(255, 255, 255, 0.8)',
-            width: 'clamp(35px, 8vw, 45px)',
-            height: 'clamp(35px, 8vw, 45px)',
-            borderRadius: '50%',
-            cursor: images.length <= 1 ? 'not-allowed' : 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: 'clamp(0.9rem, 3vw, 1.2rem)',
-            transition: 'all 0.3s ease',
-            backdropFilter: 'blur(5px)',
-            opacity: images.length <= 1 ? 0.3 : 1
-          }}
-          onMouseEnter={(e) => {
-            if (images.length > 1) {
-              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-              e.currentTarget.style.color = 'rgba(255, 255, 255, 1)';
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (images.length > 1) {
-              e.currentTarget.style.backgroundColor = 'transparent';
-              e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
-            }
-          }}
-        >
-          ‹
-        </button>
-
-        {/* Indicators */}
-        <div style={{ display: 'flex', gap: 'clamp(0.2rem, 1vw, 0.4rem)' }} className="indicators">
-          {images.map((_, index) => (
+      {/* Image indicators */}
+      {displayImages.length > 1 && (
+        <div className="absolute bottom-8 right-8 flex gap-2 z-20">
+          {displayImages.map((_, index) => (
             <button
-              key={`indicator-${index}`}
-              onClick={() => handleIndicatorClick(index)}
-              style={{
-                width: 'clamp(8px, 2vw, 10px)',
-                height: 'clamp(8px, 2vw, 10px)',
-                borderRadius: '50%',
-                border: 'none',
-                backgroundColor: currentSlide === index ? '#ea580c' : 'rgba(255, 255, 255, 0.5)',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                opacity: currentSlide === index ? 1 : 0.7
+              key={index}
+              onClick={() => {
+                if (intervalRef.current) clearInterval(intervalRef.current);
+                setCurrentIndex(index);
               }}
+              className={`
+                h-1 rounded-full transition-all duration-300
+                ${index === currentIndex ? 'w-8 bg-white' : 'w-2 bg-white/40 hover:bg-white/60'}
+              `}
+              aria-label={`Go to slide ${index + 1}`}
             />
           ))}
         </div>
-
-        {/* Next Button */}
-        <button
-          onClick={handleNext}
-          disabled={images.length <= 1}
-          style={{
-            backgroundColor: 'transparent',
-            border: 'none',
-            color: 'rgba(255, 255, 255, 0.8)',
-            width: 'clamp(35px, 8vw, 45px)',
-            height: 'clamp(35px, 8vw, 45px)',
-            borderRadius: '50%',
-            cursor: images.length <= 1 ? 'not-allowed' : 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: 'clamp(0.9rem, 3vw, 1.2rem)',
-            transition: 'all 0.3s ease',
-            backdropFilter: 'blur(5px)',
-            opacity: images.length <= 1 ? 0.3 : 1
-          }}
-          onMouseEnter={(e) => {
-            if (images.length > 1) {
-              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-              e.currentTarget.style.color = 'rgba(255, 255, 255, 1)';
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (images.length > 1) {
-              e.currentTarget.style.backgroundColor = 'transparent';
-              e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
-            }
-          }}
-        >
-          ›
-        </button>
-      </div>
+      )}
     </section>
   );
 }
 
-// Dynamic Announcements Component - Clean and Fast
+// Announcements Bar
 export function DynamicAnnouncements() {
-  // Default fallback announcement
-  const fallbackAnnouncement: Announcement = {
-    id: 'iskcon-fallback',
-    text: 'Welcome to ISKCON Student Center • Join us for daily morning programs at 6:30 AM • Bhagavad Gita classes every Sunday at 5 PM • Free prasadam for all students',
-    isActive: true,
-    createdAt: '2024-01-01',
-    updatedAt: '2024-01-01'
-  };
-
-  // Helper to check fallback toggle
-  const isFallbackAnnouncementEnabled = () => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('showFallbackAnnouncement');
-      return stored !== 'false';
-    }
-    return true;
-  };
-
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
-  const [currentAnnouncementIndex, setCurrentAnnouncementIndex] = useState(0);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [useFallback, setUseFallback] = useState(false);
 
-  useEffect(() => {
-    loadAnnouncements();
-    
-    // Listen for storage changes to update when admin changes settings
-    const handleStorageChange = () => {
-      loadAnnouncements();
-    };
-    window.addEventListener('storage', handleStorageChange);
-    
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-      window.removeEventListener('storage', handleStorageChange);
-    };
+  const isFallbackEnabled = useCallback(() => {
+    if (typeof window === 'undefined') return false;
+    const stored = localStorage.getItem('iskcon-show-fallback-announcement');
+    return stored === 'true' || window.__ISKCON_SHOW_FALLBACK_ANNOUNCEMENT__ === true;
   }, []);
 
   useEffect(() => {
-    // Clear existing timer
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-    }
+    const handle = () => setUseFallback(isFallbackEnabled());
+    window.addEventListener('storage', handle);
+    return () => window.removeEventListener('storage', handle);
+  }, [isFallbackEnabled]);
 
-    // Only start rotation if there are multiple announcements
-    if (announcements.length > 1) {
-      timerRef.current = setInterval(() => {
-        setCurrentAnnouncementIndex(prev => (prev + 1) % announcements.length);
-      }, 20000); // 20 seconds per announcement for continuous flow
-    }
-
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const fetched = await fetchAnnouncements();
+        if (fetched.length > 0) setAnnouncements(fetched);
+        else setUseFallback(true);
+      } catch {
+        setUseFallback(true);
+      } finally {
+        setLoading(false);
       }
     };
+    load();
+    setUseFallback(isFallbackEnabled());
+  }, [isFallbackEnabled]);
+
+  useEffect(() => {
+    if (announcements.length <= 1) return;
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % announcements.length);
+    }, 4000);
+    return () => clearInterval(interval);
   }, [announcements.length]);
 
-  const loadAnnouncements = async () => {
-    try {
-      const announcementsData = await fetchAnnouncements();
-      
-      if (announcementsData && Array.isArray(announcementsData)) {
-        const activeAnnouncements = announcementsData.filter(ann => ann && ann.isActive && ann.text);
-        
-        if (activeAnnouncements.length > 0) {
-          // We have user announcements
-          if (isFallbackAnnouncementEnabled()) {
-            // Include fallback + user announcements
-            setAnnouncements([...activeAnnouncements, fallbackAnnouncement]);
-          } else {
-            // Only user announcements
-            setAnnouncements(activeAnnouncements);
-          }
-        } else {
-          // No user announcements
-          if (isFallbackAnnouncementEnabled()) {
-            setAnnouncements([fallbackAnnouncement]);
-          } else {
-            setAnnouncements([]);
-          }
-        }
-      } else {
-        // API failed
-        if (isFallbackAnnouncementEnabled()) {
-          setAnnouncements([fallbackAnnouncement]);
-        } else {
-          setAnnouncements([]);
-        }
-      }
-      
-      setCurrentAnnouncementIndex(0);
-    } catch (error) {
-      console.error('Error loading announcements:', error);
-      if (isFallbackAnnouncementEnabled()) {
-        setAnnouncements([fallbackAnnouncement]);
-      } else {
-        setAnnouncements([]);
-      }
-      setCurrentAnnouncementIndex(0);
-    }
+  if (loading) return null;
+
+  const fallback: Announcement = {
+    id: 'fallback',
+    text: '🙏 Welcome to ISKCON Student Center! Join us for transformative spiritual programs.',
+    isActive: true,
+    createdAt: '',
+    updatedAt: '',
   };
 
-  // Get current announcement with safety checks
-  const currentAnnouncement = announcements.length > 0 ? announcements[currentAnnouncementIndex] : null;
-  
-  // Create announcement content with safety checks
-  const createAnnouncementContent = (announcement: Announcement | null) => {
-    if (!announcement || !announcement.text) {
-      return null;
-    }
-    
-    const baseText = announcement.text;
-    if (announcement.link) {
-      return (
-        <span>
-          {baseText} • <a 
-            href={announcement.link} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            style={{
-              color: '#ea580c',
-              textDecoration: 'underline',
-              fontWeight: 'bold'
-            }}
-          >
-            Click here
-          </a>
-        </span>
-      );
-    }
-    return baseText;
-  };
-
-  // Don't render anything if no announcements
-  if (announcements.length === 0 || !currentAnnouncement) {
-    return null;
-  }
+  const display = useFallback || announcements.length === 0 ? [fallback] : announcements;
+  const current = display[currentIndex];
 
   return (
-    <>
-      <div style={{
-        backgroundColor: '#f8f9fa',
-        color: '#1f2937',
-        padding: '0.75rem 0',
-        overflow: 'hidden',
-        position: 'relative',
-        whiteSpace: 'nowrap',
-        marginTop: '70px',
-        borderTop: '3px solid #ea580c',
-        borderBottom: '3px solid #ea580c'
-      }}>
-        <div 
-          key={`announcement-${currentAnnouncementIndex}-${currentAnnouncement.id}`} // Force re-render for animation reset
-          style={{
-            display: 'inline-block',
-            animation: 'scroll-announcement 20s linear infinite',
-            fontSize: '1rem',
-            fontWeight: '500'
-          }}
-        >
-          {createAnnouncementContent(currentAnnouncement)}
-        </div>
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      zIndex: 1001,
+      background: 'linear-gradient(90deg, #1a1a2e, #2d2d44)',
+      padding: '10px 20px',
+    }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+        <span style={{ color: '#d4a574' }}>📢</span>
+        <p style={{ color: '#fff', fontSize: 13, fontWeight: 500, margin: 0 }}>
+          {current.link ? (
+            <a href={current.link} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}>
+              {current.text}
+            </a>
+          ) : (
+            current.text
+          )}
+        </p>
+        {display.length > 1 && (
+          <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11 }}>{currentIndex + 1}/{display.length}</span>
+        )}
       </div>
-      
-      <style dangerouslySetInnerHTML={{
-        __html: `
-          @keyframes scroll-announcement {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-          }
-        `
-      }} />
-    </>
+    </div>
   );
 }
