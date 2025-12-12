@@ -550,69 +550,6 @@ export default function AdminDashboard() {
               (Unchecked = Show only fallback)
             </span>
           </div>
-
-          {/* Fallback Image Section */}
-          <div style={{
-            backgroundColor: 'white',
-            padding: '1rem',
-            borderRadius: '8px',
-            border: '1px solid #e5e7eb',
-            marginTop: '1rem',
-          }}>
-            <h3 style={{ fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.75rem', color: '#111827' }}>
-              Custom Fallback Image
-            </h3>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-              <img
-                src={typeof window !== 'undefined' ? (localStorage.getItem('customFallbackImage') || '/jagannath.jpg') : '/jagannath.jpg'}
-                alt="Fallback"
-                style={{ width: 80, height: 60, objectFit: 'cover', borderRadius: 4, border: '1px solid #e5e7eb' }}
-              />
-              <input
-                type="text"
-                placeholder="Enter image URL (e.g., /jagannath.jpg)"
-                defaultValue={typeof window !== 'undefined' ? localStorage.getItem('customFallbackImage') || '' : ''}
-                onChange={(e) => {
-                  const url = e.target.value.trim();
-                  if (url) {
-                    localStorage.setItem('customFallbackImage', url);
-                  } else {
-                    localStorage.removeItem('customFallbackImage');
-                  }
-                  window.dispatchEvent(new Event('storage'));
-                }}
-                style={{
-                  flex: 1,
-                  minWidth: 200,
-                  padding: '0.5rem',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '4px',
-                  fontSize: '0.875rem',
-                }}
-              />
-              <button
-                onClick={() => {
-                  localStorage.removeItem('customFallbackImage');
-                  window.dispatchEvent(new Event('storage'));
-                  window.location.reload();
-                }}
-                style={{
-                  padding: '0.5rem 1rem',
-                  backgroundColor: '#6b7280',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  fontSize: '0.75rem',
-                }}
-              >
-                Reset to Default
-              </button>
-            </div>
-            <p style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.5rem' }}>
-              This image is shown when carousel is disabled or no images are uploaded.
-            </p>
-          </div>
         </div>
 
         {/* Images Tab */}

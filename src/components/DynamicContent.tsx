@@ -3,13 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { fetchCarouselImages, fetchAnnouncements, type CarouselImage, type Announcement } from '../lib/cms';
 
-// Default fallback - can be overridden via localStorage
-const DEFAULT_FALLBACK = '/jagannath.jpg';
-
-const getFallbackImage = () => {
-  if (typeof window === 'undefined') return DEFAULT_FALLBACK;
-  return localStorage.getItem('customFallbackImage') || DEFAULT_FALLBACK;
-};
+const FALLBACK_IMAGE = '/jagannath.jpg';
 
 // Hero Carousel with dynamic images from CMS
 export function HeroCarousel({ children }: { children: React.ReactNode }) {
@@ -17,19 +11,16 @@ export function HeroCarousel({ children }: { children: React.ReactNode }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [carouselEnabled, setCarouselEnabled] = useState(true);
-  const [fallbackImage, setFallbackImage] = useState(DEFAULT_FALLBACK);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     // Check if carousel is enabled from localStorage
     const enabled = localStorage.getItem('showFallbackImage');
     setCarouselEnabled(enabled !== 'true');
-    setFallbackImage(getFallbackImage());
 
     const loadImages = async () => {
       try {
         const fetchedImages = await fetchCarouselImages();
-        // Filter only active images
         const activeImages = fetchedImages.filter((img: CarouselImage & { isActive?: boolean }) => img.isActive !== false);
         if (activeImages.length > 0) {
           setImages(activeImages);
@@ -42,11 +33,9 @@ export function HeroCarousel({ children }: { children: React.ReactNode }) {
     };
     loadImages();
 
-    // Listen for storage changes (from admin panel)
     const handleStorage = () => {
       const enabled = localStorage.getItem('showFallbackImage');
       setCarouselEnabled(enabled !== 'true');
-      setFallbackImage(getFallbackImage());
     };
     window.addEventListener('storage', handleStorage);
     return () => window.removeEventListener('storage', handleStorage);
@@ -54,7 +43,7 @@ export function HeroCarousel({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const displayImages = (!carouselEnabled || images.length === 0)
-      ? [{ id: 'fallback', url: fallbackImage, filename: 'fallback', uploadedAt: '' }]
+      ? [{ id: 'fallback', url: FALLBACK_IMAGE, filename: 'fallback', uploadedAt: '' }]
       : images;
 
     if (displayImages.length <= 1) return;
@@ -62,10 +51,10 @@ export function HeroCarousel({ children }: { children: React.ReactNode }) {
       setCurrentIndex((prev) => (prev + 1) % displayImages.length);
     }, 6000);
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
-  }, [images.length, carouselEnabled, fallbackImage]);
+  }, [images.length, carouselEnabled]);
 
   const displayImages = (!carouselEnabled || images.length === 0)
-    ? [{ id: 'fallback', url: fallbackImage, filename: 'fallback', uploadedAt: '' }]
+    ? [{ id: 'fallback', url: FALLBACK_IMAGE, filename: 'fallback', uploadedAt: '' }]
     : images;
 
   return (
@@ -73,9 +62,8 @@ export function HeroCarousel({ children }: { children: React.ReactNode }) {
       height: '100vh',
       position: 'relative',
       overflow: 'hidden',
-      backgroundColor: '#1a1a2e', // Dark background for letterboxing
     }}>
-      {/* Background Images - Full image display (no cropping) */}
+      {/* Background Images - Cover mode (cropped for best fit) */}
       {displayImages.map((image, index) => (
         <div
           key={image.id}
@@ -83,21 +71,18 @@ export function HeroCarousel({ children }: { children: React.ReactNode }) {
             position: 'absolute',
             inset: 0,
             opacity: index === currentIndex ? 1 : 0,
-            transition: 'opacity 1.2s ease',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            transform: index === currentIndex ? 'scale(1)' : 'scale(1.05)',
+            transition: 'opacity 1.2s ease, transform 1.2s ease',
           }}
         >
           <img
             src={image.url}
             alt={`Slide ${index + 1}`}
             style={{
-              maxWidth: '100%',
-              maxHeight: '100%',
-              width: 'auto',
-              height: 'auto',
-              objectFit: 'contain',
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              objectPosition: 'center',
             }}
           />
         </div>
@@ -107,15 +92,15 @@ export function HeroCarousel({ children }: { children: React.ReactNode }) {
       <div style={{
         position: 'absolute',
         inset: 0,
-        background: 'linear-gradient(to bottom, rgba(26,26,46,0.6) 0%, rgba(26,26,46,0.8) 100%)',
+        background: 'linear-gradient(to bottom, rgba(26,26,46,0.7) 0%, rgba(26,26,46,0.85) 100%)',
       }} />
 
-      {/* Content passed as children */}
+      {/* Content */}
       <div style={{ position: 'relative', zIndex: 10, height: '100%' }}>
         {children}
       </div>
 
-      {/* Image indicators - Always visible at bottom */}
+      {/* Carousel indicators */}
       {displayImages.length > 1 && (
         <div style={{
           position: 'absolute',
@@ -151,7 +136,7 @@ export function HeroCarousel({ children }: { children: React.ReactNode }) {
   );
 }
 
-// Keep DynamicCarousel for backward compatibility
+// Backward compatibility
 export function DynamicCarousel() {
   return <HeroCarousel><div /></HeroCarousel>;
 }
@@ -186,7 +171,6 @@ export function DynamicAnnouncements() {
   }, [announcements.length]);
 
   if (loading || announcements.length === 0) {
-    // Show default announcement
     return (
       <div style={{
         position: 'fixed',

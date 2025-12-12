@@ -106,20 +106,12 @@ export default function Home() {
 
       {/* HERO WITH DYNAMIC IMAGE CAROUSEL */}
       <HeroCarousel>
-        <div className="container" style={{ paddingTop: 140, paddingBottom: 80, height: "100%", display: "flex", alignItems: "center" }}>
-
+        <div className="container" style={{ paddingTop: 180, paddingBottom: 80, height: "100%", display: "flex", alignItems: "center" }}>
           <div style={{ maxWidth: 640 }}>
-            <div style={{ marginBottom: 32, display: "flex", alignItems: "center", gap: 16 }}>
-              <img src="/prabhupada.jpg" alt="Srila Prabhupada" style={{ width: 64, height: 64, borderRadius: "50%", objectFit: "cover", border: "2px solid rgba(212,165,116,0.4)" }} />
-              <div style={{ color: "rgba(255,255,255,0.75)", fontSize: 13, lineHeight: 1.5 }}>
-                <div style={{ fontWeight: 600, color: "#d4a574", marginBottom: 2 }}>Founder Acharya</div>
-                HDG A.C. Bhaktivedanta Swami Prabhupada
-              </div>
-            </div>
-
             <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(40px, 7vw, 68px)", fontWeight: 500, color: "#fff", lineHeight: 1.1, marginBottom: 24 }}>
               Awaken Your <span style={{ color: "#d4a574" }}>Inner Self</span>
             </h1>
+
 
             <p style={{ fontSize: "clamp(16px, 2vw, 18px)", color: "rgba(255,255,255,0.7)", lineHeight: 1.7, marginBottom: 36, maxWidth: 480 }}>
               Embark on a transformative journey of self-discovery through ancient Vedic wisdom.
