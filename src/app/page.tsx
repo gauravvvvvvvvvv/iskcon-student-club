@@ -106,7 +106,7 @@ export default function Home() {
 
       {/* HERO WITH DYNAMIC IMAGE CAROUSEL */}
       <HeroCarousel>
-        <div className="container" style={{ paddingTop: 100, paddingBottom: 60, height: "100%", display: "flex", alignItems: "center" }}>
+        <div className="container" style={{ paddingTop: 140, paddingBottom: 80, height: "100%", display: "flex", alignItems: "center" }}>
 
           <div style={{ maxWidth: 640 }}>
             <div style={{ marginBottom: 32, display: "flex", alignItems: "center", gap: 16 }}>

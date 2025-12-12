@@ -1,9 +1,15 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { fetchCarouselImages, fetchAnnouncements, type CarouselImage, type Announcement } from '../lib/cms';
 
-const FALLBACK_IMAGE = '/jagannath.jpg';
+// Default fallback - can be overridden via localStorage
+const DEFAULT_FALLBACK = '/jagannath.jpg';
+
+const getFallbackImage = () => {
+  if (typeof window === 'undefined') return DEFAULT_FALLBACK;
+  return localStorage.getItem('customFallbackImage') || DEFAULT_FALLBACK;
+};
 
 // Hero Carousel with dynamic images from CMS
 export function HeroCarousel({ children }: { children: React.ReactNode }) {
@@ -11,14 +17,14 @@ export function HeroCarousel({ children }: { children: React.ReactNode }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [carouselEnabled, setCarouselEnabled] = useState(true);
+  const [fallbackImage, setFallbackImage] = useState(DEFAULT_FALLBACK);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     // Check if carousel is enabled from localStorage
     const enabled = localStorage.getItem('showFallbackImage');
-    // If showFallbackImage is 'false', carousel is enabled (show CMS images)
-    // If showFallbackImage is 'true', show fallback only
     setCarouselEnabled(enabled !== 'true');
+    setFallbackImage(getFallbackImage());
 
     const loadImages = async () => {
       try {
@@ -40,6 +46,7 @@ export function HeroCarousel({ children }: { children: React.ReactNode }) {
     const handleStorage = () => {
       const enabled = localStorage.getItem('showFallbackImage');
       setCarouselEnabled(enabled !== 'true');
+      setFallbackImage(getFallbackImage());
     };
     window.addEventListener('storage', handleStorage);
     return () => window.removeEventListener('storage', handleStorage);
@@ -47,7 +54,7 @@ export function HeroCarousel({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const displayImages = (!carouselEnabled || images.length === 0)
-      ? [{ id: 'fallback', url: FALLBACK_IMAGE, filename: 'fallback', uploadedAt: '' }]
+      ? [{ id: 'fallback', url: fallbackImage, filename: 'fallback', uploadedAt: '' }]
       : images;
 
     if (displayImages.length <= 1) return;
@@ -55,10 +62,10 @@ export function HeroCarousel({ children }: { children: React.ReactNode }) {
       setCurrentIndex((prev) => (prev + 1) % displayImages.length);
     }, 6000);
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
-  }, [images.length, carouselEnabled]);
+  }, [images.length, carouselEnabled, fallbackImage]);
 
   const displayImages = (!carouselEnabled || images.length === 0)
-    ? [{ id: 'fallback', url: FALLBACK_IMAGE, filename: 'fallback', uploadedAt: '' }]
+    ? [{ id: 'fallback', url: fallbackImage, filename: 'fallback', uploadedAt: '' }]
     : images;
 
   return (
@@ -66,8 +73,9 @@ export function HeroCarousel({ children }: { children: React.ReactNode }) {
       height: '100vh',
       position: 'relative',
       overflow: 'hidden',
+      backgroundColor: '#1a1a2e', // Dark background for letterboxing
     }}>
-      {/* Background Images - Full cover */}
+      {/* Background Images - Full image display (no cropping) */}
       {displayImages.map((image, index) => (
         <div
           key={image.id}
@@ -75,18 +83,21 @@ export function HeroCarousel({ children }: { children: React.ReactNode }) {
             position: 'absolute',
             inset: 0,
             opacity: index === currentIndex ? 1 : 0,
-            transform: index === currentIndex ? 'scale(1)' : 'scale(1.05)',
-            transition: 'opacity 1.2s ease, transform 1.2s ease',
+            transition: 'opacity 1.2s ease',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           <img
             src={image.url}
             alt={`Slide ${index + 1}`}
             style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              objectPosition: 'center',
+              maxWidth: '100%',
+              maxHeight: '100%',
+              width: 'auto',
+              height: 'auto',
+              objectFit: 'contain',
             }}
           />
         </div>
@@ -96,7 +107,7 @@ export function HeroCarousel({ children }: { children: React.ReactNode }) {
       <div style={{
         position: 'absolute',
         inset: 0,
-        background: 'linear-gradient(to bottom, rgba(26,26,46,0.7) 0%, rgba(26,26,46,0.85) 100%)',
+        background: 'linear-gradient(to bottom, rgba(26,26,46,0.6) 0%, rgba(26,26,46,0.8) 100%)',
       }} />
 
       {/* Content passed as children */}
