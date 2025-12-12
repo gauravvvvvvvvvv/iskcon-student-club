@@ -182,3 +182,30 @@ export async function logoutAdmin(): Promise<void> {
     method: 'DELETE',
   });
 }
+
+// Global Settings
+export interface SiteSettings {
+  enableCarousel: boolean;
+  enableAnnouncements: boolean;
+}
+
+export async function fetchSettings(): Promise<SiteSettings> {
+  try {
+    const response = await fetch('/api/settings');
+    if (!response.ok) return { enableCarousel: true, enableAnnouncements: true };
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching settings:', error);
+    return { enableCarousel: true, enableAnnouncements: true };
+  }
+}
+
+export async function updateSettings(settings: Partial<SiteSettings>): Promise<SiteSettings> {
+  const response = await fetch('/api/settings', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(settings),
+  });
+  if (!response.ok) throw new Error('Failed to update settings');
+  return await response.json();
+}

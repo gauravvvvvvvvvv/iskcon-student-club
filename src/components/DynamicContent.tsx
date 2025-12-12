@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { fetchCarouselImages, fetchAnnouncements, type CarouselImage, type Announcement } from '../lib/cms';
+import { fetchCarouselImages, fetchAnnouncements, fetchSettings, type CarouselImage, type Announcement, type SiteSettings } from '../lib/cms';
 
 const FALLBACK_IMAGE = '/jagannath.jpg';
 
@@ -10,39 +10,33 @@ export function HeroCarousel({ children }: { children: React.ReactNode }) {
   const [images, setImages] = useState<CarouselImage[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [carouselEnabled, setCarouselEnabled] = useState(true);
+  const [settings, setSettings] = useState<SiteSettings>({ enableCarousel: true, enableAnnouncements: true });
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    // Check if carousel is enabled from localStorage
-    const enabled = localStorage.getItem('showFallbackImage');
-    setCarouselEnabled(enabled !== 'true');
-
-    const loadImages = async () => {
+    const init = async () => {
       try {
-        const fetchedImages = await fetchCarouselImages();
-        const activeImages = fetchedImages.filter((img: CarouselImage & { isActive?: boolean }) => img.isActive !== false);
+        const [imgs, sts] = await Promise.all([
+          fetchCarouselImages(),
+          fetchSettings()
+        ]);
+
+        const activeImages = imgs.filter((img: CarouselImage & { isActive?: boolean }) => img.isActive !== false);
         if (activeImages.length > 0) {
           setImages(activeImages);
         }
+        setSettings(sts);
       } catch (error) {
-        console.error('Failed to load carousel images:', error);
+        console.error('Failed to load carousel data:', error);
       } finally {
         setLoading(false);
       }
     };
-    loadImages();
-
-    const handleStorage = () => {
-      const enabled = localStorage.getItem('showFallbackImage');
-      setCarouselEnabled(enabled !== 'true');
-    };
-    window.addEventListener('storage', handleStorage);
-    return () => window.removeEventListener('storage', handleStorage);
+    init();
   }, []);
 
   useEffect(() => {
-    const displayImages = (!carouselEnabled || images.length === 0)
+    const displayImages = (!settings.enableCarousel || images.length === 0)
       ? [{ id: 'fallback', url: FALLBACK_IMAGE, filename: 'fallback', uploadedAt: '' }]
       : images;
 
@@ -51,9 +45,9 @@ export function HeroCarousel({ children }: { children: React.ReactNode }) {
       setCurrentIndex((prev) => (prev + 1) % displayImages.length);
     }, 6000);
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
-  }, [images.length, carouselEnabled]);
+  }, [images.length, settings.enableCarousel]);
 
-  const displayImages = (!carouselEnabled || images.length === 0)
+  const displayImages = (!settings.enableCarousel || images.length === 0)
     ? [{ id: 'fallback', url: FALLBACK_IMAGE, filename: 'fallback', uploadedAt: '' }]
     : images;
 
@@ -146,13 +140,19 @@ export function DynamicAnnouncements() {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [settings, setSettings] = useState<SiteSettings>({ enableCarousel: true, enableAnnouncements: true });
 
   useEffect(() => {
     const load = async () => {
       try {
-        const fetched = await fetchAnnouncements();
-        const active = fetched.filter(a => a.isActive !== false);
+        const [anns, sts] = await Promise.all([
+          fetchAnnouncements(),
+          fetchSettings()
+        ]);
+
+        const active = anns.filter(a => a.isActive !== false);
         if (active.length > 0) setAnnouncements(active);
+        setSettings(sts);
       } catch (error) {
         console.error('Failed to load announcements:', error);
       } finally {
@@ -188,6 +188,7 @@ export function DynamicAnnouncements() {
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
+    overflow: 'hidden' // Ensure marquee containment
   };
 
   const textStyle: React.CSSProperties = {
@@ -196,38 +197,46 @@ export function DynamicAnnouncements() {
     fontWeight: 500,
     margin: 0,
     lineHeight: 1.4,
-    textAlign: 'center' as const,
+    // textAlign handled by class
   };
 
-  if (loading || announcements.length === 0) {
-    return (
-      <div style={barStyle}>
-        <div style={containerStyle}>
-          <span style={{ color: '#d4a574', fontSize: 14 }}>📢</span>
-          <p style={textStyle}>
-            Welcome to ISKCON Student Center! Join us for spiritual programs.
-          </p>
-        </div>
-      </div>
-    );
-  }
+  const renderContent = () => {
+    if (!settings.enableAnnouncements || announcements.length === 0) {
+      return "Welcome to ISKCON Student Center! Join us for spiritual programs.";
+    }
+    const current = announcements[currentIndex];
+    return current.text;
+  };
 
-  const current = announcements[currentIndex];
+  const renderLink = () => {
+    if (!settings.enableAnnouncements || announcements.length === 0) return null;
+    return announcements[currentIndex].link;
+  };
+
+  const content = renderContent();
+  const link = renderLink();
+  const showCount = settings.enableAnnouncements && announcements.length > 1;
+
+  if (loading) return null; // Or skeleton
 
   return (
     <div style={barStyle}>
       <div style={containerStyle}>
         <span style={{ color: '#d4a574', fontSize: 14, flexShrink: 0 }}>📢</span>
-        <p style={textStyle}>
-          {current.link ? (
-            <a href={current.link} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}>
-              {current.text}
-            </a>
-          ) : (
-            current.text
-          )}
-        </p>
-        {announcements.length > 1 && (
+
+        <div className="mobile-marquee-container">
+          <p className="mobile-marquee" style={textStyle}>
+            {link ? (
+              <a href={link} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}>
+                {content}
+              </a>
+            ) : (
+              content
+            )}
+          </p>
+        </div>
+
+        {showCount && (
           <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10, flexShrink: 0 }}>{currentIndex + 1}/{announcements.length}</span>
         )}
       </div>

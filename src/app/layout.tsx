@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: "ISKCON Student Center - Delhi University",
   description: "Join Delhi University's premier spiritual community. Experience Vedic wisdom, meditation, and personal transformation.",
   icons: {
-    icon: '/favicon.svg',
+    icon: '/image.png',
   },
 };
 

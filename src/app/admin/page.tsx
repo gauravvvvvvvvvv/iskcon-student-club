@@ -12,8 +12,11 @@ import {
   reorderAnnouncements,
   authenticateAdmin,
   logoutAdmin,
+  fetchSettings,
+  updateSettings,
   type CarouselImage,
-  type Announcement
+  type Announcement,
+  type SiteSettings
 } from '../../lib/cms';
 
 export default function AdminDashboard() {
@@ -33,9 +36,11 @@ export default function AdminDashboard() {
   const [newAnnouncement, setNewAnnouncement] = useState({ text: '', link: '' });
   const [editingAnnouncement, setEditingAnnouncement] = useState<string | null>(null);
 
-  // Fallback toggles (persisted in localStorage)
-  const [showFallbackImage, setShowFallbackImage] = useState(true);
-  const [showFallbackAnnouncement, setShowFallbackAnnouncement] = useState(true);
+  // Settings state
+  const [settings, setSettings] = useState<SiteSettings>({
+    enableCarousel: true,
+    enableAnnouncements: true
+  });
 
   // Device fingerprinting function
   const generateDeviceFingerprint = () => {
@@ -83,23 +88,22 @@ export default function AdminDashboard() {
     }
   }, [isAuthenticated]);
 
-  // Load toggles from localStorage on mount
+  // Load settings on mount
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const img = localStorage.getItem('showFallbackImage');
-      const ann = localStorage.getItem('showFallbackAnnouncement');
-      setShowFallbackImage(img !== 'false');
-      setShowFallbackAnnouncement(ann !== 'false');
-    }
+    fetchSettings().then(setSettings);
   }, []);
 
-  // Save toggles to localStorage
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('showFallbackImage', showFallbackImage ? 'true' : 'false');
-      localStorage.setItem('showFallbackAnnouncement', showFallbackAnnouncement ? 'true' : 'false');
+  const handleUpdateSettings = async (key: keyof SiteSettings, value: boolean) => {
+    const newSettings = { ...settings, [key]: value };
+    setSettings(newSettings);
+    try {
+      await updateSettings(newSettings);
+    } catch (error) {
+      console.error('Failed to update settings:', error);
+      // Revert on error
+      fetchSettings().then(setSettings);
     }
-  }, [showFallbackImage, showFallbackAnnouncement]);
+  };
 
   const loadData = async () => {
     try {
@@ -531,8 +535,8 @@ export default function AdminDashboard() {
             <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 500, color: '#856404' }}>
               <input
                 type="checkbox"
-                checked={!showFallbackImage}
-                onChange={e => setShowFallbackImage(!e.target.checked)}
+                checked={settings.enableCarousel}
+                onChange={e => handleUpdateSettings('enableCarousel', e.target.checked)}
                 style={{ accentColor: '#ea580c', width: '1.2em', height: '1.2em' }}
               />
               Enable Image Carousel on Homepage
@@ -540,8 +544,8 @@ export default function AdminDashboard() {
             <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 500, color: '#856404' }}>
               <input
                 type="checkbox"
-                checked={!showFallbackAnnouncement}
-                onChange={e => setShowFallbackAnnouncement(!e.target.checked)}
+                checked={settings.enableAnnouncements}
+                onChange={e => handleUpdateSettings('enableAnnouncements', e.target.checked)}
                 style={{ accentColor: '#ea580c', width: '1.2em', height: '1.2em' }}
               />
               Enable CMS Announcements on Homepage

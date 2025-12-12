@@ -359,3 +359,40 @@ body {
     display: none !important;
   }
 }
+
+/* Marquee for mobile announcements */
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.mobile-marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.mobile-marquee {
+  display: inline-block;
+  padding-left: 100%;
+  animation: marquee 15s linear infinite;
+}
+
+@media (min-width: 769px) {
+  .mobile-marquee {
+    animation: none;
+    padding-left: 0;
+    white-space: normal;
+  }
+
+  .mobile-marquee-container {
+    overflow: visible;
+    white-space: normal;
+    text-align: center;
+  }
+}
