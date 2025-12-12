@@ -252,6 +252,106 @@ body {
   .show-mobile {
     display: flex !important;
   }
+
+  .container {
+    padding: 0 16px;
+  }
+
+  .btn-gold,
+  .btn-outline {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+
+  .section-label {
+    padding: 8px 16px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-size: clamp(28px, 6vw, 36px);
+    margin-bottom: 16px;
+  }
+
+  .section-subtitle {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .program-card {
+    padding: 24px;
+    border-radius: 16px;
+  }
+
+  .icon-wrapper {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+  }
+
+  .schedule-item {
+    padding: 16px 0;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .info-card {
+    padding: 16px 20px;
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .social-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* Hero stats mobile */
+  .hero-stats {
+    gap: 20px !important;
+    margin-top: 32px !important;
+  }
+
+  .hero-stats>div {
+    font-size: 24px !important;
+  }
+
+  /* Footer mobile */
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+
+  .footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 12px;
+  }
+
+  .btn-gold,
+  .btn-outline {
+    padding: 10px 20px;
+    font-size: 13px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .section-title {
+    font-size: 26px;
+  }
+
+  .program-card {
+    padding: 20px;
+  }
 }
 
 @media (min-width: 769px) {

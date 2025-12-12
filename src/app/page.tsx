@@ -106,14 +106,13 @@ export default function Home() {
 
       {/* HERO WITH DYNAMIC IMAGE CAROUSEL */}
       <HeroCarousel>
-        <div className="container" style={{ paddingTop: 180, paddingBottom: 80, height: "100%", display: "flex", alignItems: "center" }}>
-          <div style={{ maxWidth: 640 }}>
-            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(40px, 7vw, 68px)", fontWeight: 500, color: "#fff", lineHeight: 1.1, marginBottom: 24 }}>
+        <div className="container" style={{ paddingTop: "clamp(120px, 20vw, 180px)", paddingBottom: "clamp(40px, 8vw, 80px)", height: "100%", display: "flex", alignItems: "center" }}>
+          <div style={{ maxWidth: 640, width: "100%" }}>
+            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(32px, 8vw, 68px)", fontWeight: 500, color: "#fff", lineHeight: 1.1, marginBottom: "clamp(16px, 3vw, 24px)" }}>
               Awaken Your <span style={{ color: "#d4a574" }}>Inner Self</span>
             </h1>
 
-
-            <p style={{ fontSize: "clamp(16px, 2vw, 18px)", color: "rgba(255,255,255,0.7)", lineHeight: 1.7, marginBottom: 36, maxWidth: 480 }}>
+            <p style={{ fontSize: "clamp(14px, 2.5vw, 18px)", color: "rgba(255,255,255,0.7)", lineHeight: 1.7, marginBottom: "clamp(24px, 5vw, 36px)", maxWidth: 480 }}>
               Embark on a transformative journey of self-discovery through ancient Vedic wisdom.
               Join Delhi University&apos;s premier spiritual community.
             </p>
@@ -128,11 +127,11 @@ export default function Home() {
             </div>
 
             {/* Stats Row */}
-            <div style={{ display: "flex", gap: 40, marginTop: 48 }}>
+            <div className="hero-stats" style={{ display: "flex", gap: "clamp(20px, 5vw, 40px)", marginTop: "clamp(32px, 6vw, 48px)", flexWrap: "wrap" }}>
               {[{ num: "500+", label: "Students" }, { num: "10+", label: "Years" }, { num: "200+", label: "Programs" }].map((s, i) => (
                 <div key={i}>
-                  <div style={{ fontSize: 32, fontWeight: 600, color: "#fff", fontFamily: "'Playfair Display', serif" }}>{s.num}</div>
-                  <div style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", textTransform: "uppercase", letterSpacing: 1 }}>{s.label}</div>
+                  <div style={{ fontSize: "clamp(24px, 5vw, 32px)", fontWeight: 600, color: "#fff", fontFamily: "'Playfair Display', serif" }}>{s.num}</div>
+                  <div style={{ fontSize: "clamp(10px, 2vw, 12px)", color: "rgba(255,255,255,0.5)", textTransform: "uppercase", letterSpacing: 1 }}>{s.label}</div>
                 </div>
               ))}
             </div>
@@ -288,7 +287,8 @@ export default function Home() {
       {/* FOOTER */}
       <footer style={{ padding: "48px 0 32px", background: "#0f0f1a" }}>
         <div className="container">
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 40, marginBottom: 40 }}>
+          <div className="footer-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "clamp(24px, 5vw, 40px)", marginBottom: 40 }}>
+
             {/* Brand */}
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
