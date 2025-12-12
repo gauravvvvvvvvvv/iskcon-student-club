@@ -3,40 +3,14 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { fetchCarouselImages, fetchAnnouncements, type CarouselImage, type Announcement } from '../lib/cms';
 
-declare global {
-  interface Window {
-    __ISKCON_SHOW_FALLBACK_IMAGE__?: boolean;
-    __ISKCON_SHOW_FALLBACK_ANNOUNCEMENT__?: boolean;
-  }
-}
-
 const FALLBACK_IMAGE = '/jagannath.jpg';
 
-// Statistics to display
-const stats = [
-  { value: '500+', label: 'Active Students' },
-  { value: '15+', label: 'Weekly Programs' },
-  { value: '10+', label: 'Years Legacy' },
-];
-
-export function DynamicCarousel() {
+// Hero Carousel with dynamic images from CMS
+export function HeroCarousel({ children }: { children: React.ReactNode }) {
   const [images, setImages] = useState<CarouselImage[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [useFallback, setUseFallback] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  const isFallbackImageEnabled = useCallback(() => {
-    if (typeof window === 'undefined') return false;
-    const stored = localStorage.getItem('iskcon-show-fallback-image');
-    return stored === 'true' || window.__ISKCON_SHOW_FALLBACK_IMAGE__ === true;
-  }, []);
-
-  useEffect(() => {
-    const handleStorageChange = () => setUseFallback(isFallbackImageEnabled());
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, [isFallbackImageEnabled]);
 
   useEffect(() => {
     const loadImages = async () => {
@@ -44,18 +18,15 @@ export function DynamicCarousel() {
         const fetchedImages = await fetchCarouselImages();
         if (fetchedImages.length > 0) {
           setImages(fetchedImages);
-        } else {
-          setUseFallback(true);
         }
-      } catch {
-        setUseFallback(true);
+      } catch (error) {
+        console.error('Failed to load carousel images:', error);
       } finally {
         setLoading(false);
       }
     };
     loadImages();
-    setUseFallback(isFallbackImageEnabled());
-  }, [isFallbackImageEnabled]);
+  }, []);
 
   useEffect(() => {
     if (images.length <= 1) return;
@@ -65,108 +36,47 @@ export function DynamicCarousel() {
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
   }, [images.length]);
 
-  const displayImages = useFallback || images.length === 0
+  const displayImages = images.length === 0
     ? [{ id: 'fallback', url: FALLBACK_IMAGE, filename: 'fallback', uploadedAt: '' }]
     : images;
 
-  if (loading) {
-    return (
-      <div className="min-h-screen mesh-gradient flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-16 h-16 border-4 border-indigo-200 border-t-indigo-500 rounded-full animate-spin" />
-          <p className="text-white/70">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <section className="relative min-h-screen overflow-hidden">
-      {/* Background Image with Parallax Effect */}
+    <section style={{ minHeight: '100vh', position: 'relative', overflow: 'hidden' }}>
+      {/* Background Images */}
       {displayImages.map((image, index) => (
         <div
           key={image.id}
-          className={`
-            absolute inset-0 transition-all duration-1000 ease-out
-            ${index === currentIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}
-          `}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            opacity: index === currentIndex ? 1 : 0,
+            transform: index === currentIndex ? 'scale(1)' : 'scale(1.1)',
+            transition: 'opacity 1s ease, transform 1s ease',
+          }}
         >
           <img
             src={image.url}
             alt={`Slide ${index + 1}`}
-            className="w-full h-full object-cover"
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
         </div>
       ))}
 
-      {/* Gradient Overlay - New dark gradient with mesh pattern */}
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-900/90 via-gray-900/70 to-gray-900/90" />
-      <div className="absolute inset-0 mesh-gradient opacity-60" />
+      {/* Gradient Overlay */}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        background: 'linear-gradient(to bottom, rgba(26,26,46,0.75) 0%, rgba(26,26,46,0.88) 100%)',
+      }} />
 
-      {/* Content */}
-      <div className="relative z-10 min-h-screen flex flex-col justify-center px-4 sm:px-6 lg:px-8">
-        <div className="max-w-5xl mx-auto text-center">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-8 fade-in-up">
-            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-            <span className="text-sm text-white/90">Now accepting new members</span>
-          </div>
-
-          {/* Main Heading */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 fade-in-up delay-100 text-balance">
-            Discover Your
-            <span className="block gradient-text">Spiritual Journey</span>
-          </h1>
-
-          {/* Subtitle */}
-          <p className="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto mb-10 fade-in-up delay-200">
-            Join Delhi University&apos;s vibrant community of seekers. Experience ancient wisdom,
-            build meaningful friendships, and transform your life.
-          </p>
-
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 fade-in-up delay-300">
-            <a
-              href="https://docs.google.com/forms/d/1FVlLR7QJUP-8BedM3oRQYFact6stIYMFFo0OKGzmWvg/viewform?"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-primary group"
-            >
-              Start Your Journey
-              <svg className="w-5 h-5 inline-block ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </a>
-            <a href="#programs" className="btn-secondary">
-              Explore Programs
-            </a>
-          </div>
-
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-4 max-w-xl mx-auto fade-in-up delay-400">
-            {stats.map((stat, idx) => (
-              <div key={idx} className="stat-card">
-                <div className="text-2xl sm:text-3xl font-bold gradient-text">{stat.value}</div>
-                <div className="text-xs sm:text-sm text-white/60">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 fade-in delay-500">
-          <a href="#programs" className="flex flex-col items-center gap-2 text-white/50 hover:text-white/80 transition-colors">
-            <span className="text-xs uppercase tracking-widest">Scroll</span>
-            <svg className="w-5 h-5 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
-          </a>
-        </div>
+      {/* Content passed as children */}
+      <div style={{ position: 'relative', zIndex: 10 }}>
+        {children}
       </div>
 
       {/* Image indicators */}
       {displayImages.length > 1 && (
-        <div className="absolute bottom-8 right-8 flex gap-2 z-20">
+        <div style={{ position: 'absolute', bottom: 24, right: 24, display: 'flex', gap: 8, zIndex: 20 }}>
           {displayImages.map((_, index) => (
             <button
               key={index}
@@ -174,10 +84,15 @@ export function DynamicCarousel() {
                 if (intervalRef.current) clearInterval(intervalRef.current);
                 setCurrentIndex(index);
               }}
-              className={`
-                h-1 rounded-full transition-all duration-300
-                ${index === currentIndex ? 'w-8 bg-white' : 'w-2 bg-white/40 hover:bg-white/60'}
-              `}
+              style={{
+                width: index === currentIndex ? 32 : 8,
+                height: 8,
+                borderRadius: 4,
+                background: index === currentIndex ? '#d4a574' : 'rgba(255,255,255,0.4)',
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'all 0.3s',
+              }}
               aria-label={`Go to slide ${index + 1}`}
             />
           ))}
@@ -187,40 +102,31 @@ export function DynamicCarousel() {
   );
 }
 
+// Keep DynamicCarousel for backward compatibility
+export function DynamicCarousel() {
+  return <HeroCarousel><div /></HeroCarousel>;
+}
+
 // Announcements Bar
 export function DynamicAnnouncements() {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [useFallback, setUseFallback] = useState(false);
-
-  const isFallbackEnabled = useCallback(() => {
-    if (typeof window === 'undefined') return false;
-    const stored = localStorage.getItem('iskcon-show-fallback-announcement');
-    return stored === 'true' || window.__ISKCON_SHOW_FALLBACK_ANNOUNCEMENT__ === true;
-  }, []);
-
-  useEffect(() => {
-    const handle = () => setUseFallback(isFallbackEnabled());
-    window.addEventListener('storage', handle);
-    return () => window.removeEventListener('storage', handle);
-  }, [isFallbackEnabled]);
 
   useEffect(() => {
     const load = async () => {
       try {
         const fetched = await fetchAnnouncements();
-        if (fetched.length > 0) setAnnouncements(fetched);
-        else setUseFallback(true);
-      } catch {
-        setUseFallback(true);
+        const active = fetched.filter(a => a.isActive !== false);
+        if (active.length > 0) setAnnouncements(active);
+      } catch (error) {
+        console.error('Failed to load announcements:', error);
       } finally {
         setLoading(false);
       }
     };
     load();
-    setUseFallback(isFallbackEnabled());
-  }, [isFallbackEnabled]);
+  }, []);
 
   useEffect(() => {
     if (announcements.length <= 1) return;
@@ -230,18 +136,29 @@ export function DynamicAnnouncements() {
     return () => clearInterval(interval);
   }, [announcements.length]);
 
-  if (loading) return null;
+  if (loading || announcements.length === 0) {
+    // Show default announcement
+    return (
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1001,
+        background: 'linear-gradient(90deg, #1a1a2e, #2d2d44)',
+        padding: '10px 20px',
+      }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+          <span style={{ color: '#d4a574' }}>📢</span>
+          <p style={{ color: '#fff', fontSize: 13, fontWeight: 500, margin: 0 }}>
+            Welcome to ISKCON Student Center! Join us for transformative spiritual programs.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
-  const fallback: Announcement = {
-    id: 'fallback',
-    text: '🙏 Welcome to ISKCON Student Center! Join us for transformative spiritual programs.',
-    isActive: true,
-    createdAt: '',
-    updatedAt: '',
-  };
-
-  const display = useFallback || announcements.length === 0 ? [fallback] : announcements;
-  const current = display[currentIndex];
+  const current = announcements[currentIndex];
 
   return (
     <div style={{
@@ -264,8 +181,8 @@ export function DynamicAnnouncements() {
             current.text
           )}
         </p>
-        {display.length > 1 && (
-          <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11 }}>{currentIndex + 1}/{display.length}</span>
+        {announcements.length > 1 && (
+          <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11 }}>{currentIndex + 1}/{announcements.length}</span>
         )}
       </div>
     </div>

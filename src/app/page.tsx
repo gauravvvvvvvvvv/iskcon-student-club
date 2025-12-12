@@ -2,7 +2,8 @@
 
 import { Analytics } from "@vercel/analytics/next";
 import { useState, useEffect } from "react";
-import { DynamicAnnouncements } from "../components/DynamicContent";
+import { DynamicAnnouncements, HeroCarousel } from "../components/DynamicContent";
+
 
 // SVG Icons
 const InstagramIcon = () => (
@@ -103,15 +104,9 @@ export default function Home() {
         )}
       </nav>
 
-      {/* HERO */}
-      <section style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        background: "linear-gradient(to bottom, rgba(26,26,46,0.75) 0%, rgba(26,26,46,0.88) 100%), url('/jagannath.jpg') center/cover fixed",
-        paddingTop: 80,
-      }}>
-        <div className="container" style={{ paddingTop: 60, paddingBottom: 80 }}>
+      {/* HERO WITH DYNAMIC IMAGE CAROUSEL */}
+      <HeroCarousel>
+        <div className="container" style={{ paddingTop: 140, paddingBottom: 80, minHeight: "100vh", display: "flex", alignItems: "center" }}>
           <div style={{ maxWidth: 640 }}>
             <div style={{ marginBottom: 32, display: "flex", alignItems: "center", gap: 16 }}>
               <img src="/prabhupada.jpg" alt="Srila Prabhupada" style={{ width: 64, height: 64, borderRadius: "50%", objectFit: "cover", border: "2px solid rgba(212,165,116,0.4)" }} />
@@ -150,7 +145,8 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </HeroCarousel>
+
 
       {/* ABOUT */}
       <section id="about" style={{ padding: "100px 0", background: "#faf8f5" }}>
