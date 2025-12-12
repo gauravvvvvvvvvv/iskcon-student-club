@@ -51,7 +51,8 @@ export default function Home() {
       {/* NAVIGATION */}
       <nav style={{
         position: "fixed",
-        top: 38,
+        top: 34,
+
         left: 0,
         right: 0,
         zIndex: 1000,
@@ -106,11 +107,22 @@ export default function Home() {
 
       {/* HERO WITH DYNAMIC IMAGE CAROUSEL */}
       <HeroCarousel>
-        <div className="container" style={{ paddingTop: "clamp(120px, 20vw, 180px)", paddingBottom: "clamp(40px, 8vw, 80px)", height: "100%", display: "flex", alignItems: "center" }}>
+        <div className="container" style={{ paddingTop: "clamp(140px, 25vw, 180px)", paddingBottom: "clamp(40px, 8vw, 80px)", height: "100%", display: "flex", alignItems: "center" }}>
           <div style={{ maxWidth: 640, width: "100%" }}>
+
+            {/* Founder Acharya Section */}
+            <div style={{ marginBottom: "clamp(20px, 4vw, 32px)", display: "flex", alignItems: "center", gap: "clamp(10px, 2vw, 16px)" }}>
+              <img src="/prabhupada.jpg" alt="Srila Prabhupada" style={{ width: "clamp(48px, 10vw, 64px)", height: "clamp(48px, 10vw, 64px)", borderRadius: "50%", objectFit: "cover", border: "2px solid rgba(212,165,116,0.4)" }} />
+              <div style={{ color: "rgba(255,255,255,0.75)", fontSize: "clamp(11px, 2vw, 13px)", lineHeight: 1.5 }}>
+                <div style={{ fontWeight: 600, color: "#d4a574", marginBottom: 2 }}>Founder Acharya</div>
+                HDG A.C. Bhaktivedanta Swami Prabhupada
+              </div>
+            </div>
+
             <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(32px, 8vw, 68px)", fontWeight: 500, color: "#fff", lineHeight: 1.1, marginBottom: "clamp(16px, 3vw, 24px)" }}>
               Awaken Your <span style={{ color: "#d4a574" }}>Inner Self</span>
             </h1>
+
 
             <p style={{ fontSize: "clamp(14px, 2.5vw, 18px)", color: "rgba(255,255,255,0.7)", lineHeight: 1.7, marginBottom: "clamp(24px, 5vw, 36px)", maxWidth: 480 }}>
               Embark on a transformative journey of self-discovery through ancient Vedic wisdom.

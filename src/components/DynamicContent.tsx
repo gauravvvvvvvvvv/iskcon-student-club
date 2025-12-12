@@ -170,21 +170,42 @@ export function DynamicAnnouncements() {
     return () => clearInterval(interval);
   }, [announcements.length]);
 
+  // Common styles for announcement bar - compact on mobile
+  const barStyle: React.CSSProperties = {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1001,
+    background: 'linear-gradient(90deg, #1a1a2e, #2d2d44)',
+    padding: '8px 12px',  // Reduced padding
+  };
+
+  const containerStyle: React.CSSProperties = {
+    maxWidth: 1200,
+    margin: '0 auto',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+  };
+
+  const textStyle: React.CSSProperties = {
+    color: '#fff',
+    fontSize: 12,  // Smaller font
+    fontWeight: 500,
+    margin: 0,
+    lineHeight: 1.4,
+    textAlign: 'center' as const,
+  };
+
   if (loading || announcements.length === 0) {
     return (
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 1001,
-        background: 'linear-gradient(90deg, #1a1a2e, #2d2d44)',
-        padding: '10px 20px',
-      }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
-          <span style={{ color: '#d4a574' }}>📢</span>
-          <p style={{ color: '#fff', fontSize: 13, fontWeight: 500, margin: 0 }}>
-            Welcome to ISKCON Student Center! Join us for transformative spiritual programs.
+      <div style={barStyle}>
+        <div style={containerStyle}>
+          <span style={{ color: '#d4a574', fontSize: 14 }}>📢</span>
+          <p style={textStyle}>
+            Welcome to ISKCON Student Center! Join us for spiritual programs.
           </p>
         </div>
       </div>
@@ -194,18 +215,10 @@ export function DynamicAnnouncements() {
   const current = announcements[currentIndex];
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      zIndex: 1001,
-      background: 'linear-gradient(90deg, #1a1a2e, #2d2d44)',
-      padding: '10px 20px',
-    }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
-        <span style={{ color: '#d4a574' }}>📢</span>
-        <p style={{ color: '#fff', fontSize: 13, fontWeight: 500, margin: 0 }}>
+    <div style={barStyle}>
+      <div style={containerStyle}>
+        <span style={{ color: '#d4a574', fontSize: 14, flexShrink: 0 }}>📢</span>
+        <p style={textStyle}>
           {current.link ? (
             <a href={current.link} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}>
               {current.text}
@@ -215,7 +228,7 @@ export function DynamicAnnouncements() {
           )}
         </p>
         {announcements.length > 1 && (
-          <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11 }}>{currentIndex + 1}/{announcements.length}</span>
+          <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10, flexShrink: 0 }}>{currentIndex + 1}/{announcements.length}</span>
         )}
       </div>
     </div>
