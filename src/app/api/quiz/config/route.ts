@@ -23,6 +23,28 @@ async function isQuizAdmin(request: NextRequest): Promise<boolean> {
   return true;
 }
 
+// Helper: Check if schedules overlap
+function checkOverlap(quizList: QuizMeta[], newQuiz: Partial<QuizMeta>, excludeId?: string): string | null {
+  const nStart = newQuiz.launchTime ? new Date(newQuiz.launchTime).getTime() : 0;
+  const nEnd = newQuiz.endTime ? new Date(newQuiz.endTime).getTime() : Infinity;
+
+  // manual start (no launchTime) = now (0 for math purposes)
+  // manual end (no endTime) = forever (Infinity)
+
+  for (const q of quizList) {
+    if (q.status === 'ended') continue;
+    if (excludeId && q.id === excludeId) continue;
+
+    const eStart = q.launchTime ? new Date(q.launchTime).getTime() : 0;
+    const eEnd = q.endTime ? new Date(q.endTime).getTime() : Infinity;
+
+    if (nStart < eEnd && nEnd > eStart) {
+      return `Time slot overlaps with an existing quiz: "${q.title}" (${q.status}). Please choose a different time.`;
+    }
+  }
+  return null;
+}
+
 // GET: Fetch quiz list + active quiz ID
 // ?id=xyz → fetch single quiz meta
 export async function GET(request: NextRequest) {
@@ -79,12 +101,10 @@ export async function POST(request: NextRequest) {
     const { title, timerMinutes, launchTime, endTime } = await request.json();
     const quizList = (await kvGet('quiz:list') as QuizMeta[]) || [];
 
-    // Check no active/draft quiz
-    const blocker = quizList.find(q => q.status === 'active' || q.status === 'draft');
-    if (blocker) {
-      return NextResponse.json({
-        error: `Cannot create a new quiz while "${blocker.title}" is ${blocker.status}. End it first.`
-      }, { status: 400 });
+    // Check for schedule overlap
+    const overlapError = checkOverlap(quizList, { launchTime, endTime });
+    if (overlapError) {
+      return NextResponse.json({ error: overlapError }, { status: 400 });
     }
 
     const newQuiz: QuizMeta = {
@@ -122,9 +142,16 @@ export async function PUT(request: NextRequest) {
     const idx = quizList.findIndex(q => q.id === id);
     if (idx === -1) return NextResponse.json({ error: 'Quiz not found' }, { status: 404 });
 
+    const proposed = { ...quizList[idx], ...updates };
+    
+    // Check for overlap if still draft/active
+    if (proposed.status !== 'ended') {
+      const overlapError = checkOverlap(quizList, proposed, id);
+      if (overlapError) return NextResponse.json({ error: overlapError }, { status: 400 });
+    }
+
     quizList[idx] = {
-      ...quizList[idx],
-      ...updates,
+      ...proposed,
       updatedAt: new Date().toISOString(),
     };
 

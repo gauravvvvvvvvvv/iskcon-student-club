@@ -48,9 +48,15 @@ export default function WeeklyQuizPage() {
       setConfig(activeQuiz);
       setPageState('register');
     } else {
-      // Show latest quiz info for the "coming soon" screen
-      const latestQuiz = data.quizzes[0] || null;
-      setConfig(latestQuiz);
+      // Find the next upcoming scheduled quiz
+      const now = new Date().getTime();
+      const upcomingQuizzes = data.quizzes
+        .filter(q => q.status === 'draft' && q.launchTime && new Date(q.launchTime).getTime() > now)
+        .sort((a, b) => new Date(a.launchTime as string).getTime() - new Date(b.launchTime as string).getTime());
+
+      // Show next upcoming quiz, or fallback to the latest quiz if none are scheduled
+      const nextQuiz = upcomingQuizzes.length > 0 ? upcomingQuizzes[0] : (data.quizzes[0] || null);
+      setConfig(nextQuiz);
       setPageState('not-active');
     }
   };

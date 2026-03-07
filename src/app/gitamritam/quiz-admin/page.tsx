@@ -248,8 +248,6 @@ export default function QuizAdminPage() {
     } as React.CSSProperties),
   };
 
-  const hasActiveOrDraft = quizzes.some(q => q.status === 'active' || q.status === 'draft');
-
   // ============ LOADING / LOGIN ============
   if (checkingAuth) {
     return (
@@ -317,9 +315,7 @@ export default function QuizAdminPage() {
             {!showCreateForm ? (
               <button
                 onClick={() => setShowCreateForm(true)}
-                disabled={hasActiveOrDraft}
-                style={{ ...s.btnPrimary, marginBottom: '1.5rem', opacity: hasActiveOrDraft ? 0.5 : 1 }}
-                title={hasActiveOrDraft ? 'End the current quiz before creating a new one' : ''}
+                style={{ ...s.btnPrimary, marginBottom: '1.5rem' }}
               >
                 + Create New Quiz
               </button>
@@ -359,12 +355,6 @@ export default function QuizAdminPage() {
                   </div>
                 </form>
               </div>
-            )}
-
-            {hasActiveOrDraft && !showCreateForm && (
-              <p style={{ color: '#d97706', fontSize: '13px', marginBottom: '16px', background: '#fef3c7', padding: '10px 16px', borderRadius: '8px' }}>
-                ⚠️ You have an active/draft quiz. End it before creating a new one.
-              </p>
             )}
 
             {/* Quiz List */}
