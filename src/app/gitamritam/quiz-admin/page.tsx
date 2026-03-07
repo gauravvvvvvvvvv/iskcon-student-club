@@ -1,0 +1,698 @@
+"use client";
+import { useState, useEffect } from 'react';
+import {
+  authenticateQuizAdmin,
+  checkQuizAdminAuth,
+  logoutQuizAdmin,
+  fetchQuizList,
+  createQuiz,
+  updateQuiz,
+  deleteQuiz,
+  fetchQuizQuestions,
+  addQuizQuestion,
+  deleteQuizQuestion,
+  fetchQuizResults,
+  clearQuizResults,
+  exportQuizResultsCSV,
+  type QuizMeta,
+  type QuizQuestion,
+  type QuizResults,
+} from '../../../lib/quiz';
+
+type View = 'list' | 'edit' | 'results';
+
+export default function QuizAdminPage() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [loginLoading, setLoginLoading] = useState(false);
+
+  // Quiz list
+  const [quizzes, setQuizzes] = useState<QuizMeta[]>([]);
+  const [activeQuizId, setActiveQuizId] = useState<string | null>(null);
+  const [view, setView] = useState<View>('list');
+
+  // Selected quiz for editing
+  const [selectedQuiz, setSelectedQuiz] = useState<QuizMeta | null>(null);
+  const [questions, setQuestions] = useState<QuizQuestion[]>([]);
+  const [activeTab, setActiveTab] = useState<'setup' | 'questions'>('setup');
+
+  // New quiz form
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [newTitle, setNewTitle] = useState('');
+  const [newTimer, setNewTimer] = useState(10);
+  const [newLaunchTime, setNewLaunchTime] = useState('');
+  const [newEndTime, setNewEndTime] = useState('');
+  const [creating, setCreating] = useState(false);
+
+  // Add question form
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [newQuestion, setNewQuestion] = useState({
+    question: '', options: ['', '', '', ''], correctIndex: 0, points: 1,
+  });
+  const [addingQuestion, setAddingQuestion] = useState(false);
+
+  // Config save
+  const [configSaving, setConfigSaving] = useState(false);
+
+  // Results view
+  const [resultsQuizId, setResultsQuizId] = useState<string | null>(null);
+  const [results, setResults] = useState<QuizResults | null>(null);
+  const [resultsLoading, setResultsLoading] = useState(false);
+
+  // ============ AUTH ============
+  useEffect(() => {
+    checkQuizAdminAuth().then(auth => {
+      setIsAuthenticated(auth);
+      setCheckingAuth(false);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (isAuthenticated) loadQuizList();
+  }, [isAuthenticated]);
+
+  const loadQuizList = async () => {
+    const data = await fetchQuizList();
+    setQuizzes(data.quizzes);
+    setActiveQuizId(data.activeQuizId);
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginLoading(true);
+    try {
+      const success = await authenticateQuizAdmin(password);
+      if (success) { setIsAuthenticated(true); setPassword(''); }
+      else alert('Invalid password');
+    } catch { alert('Login failed'); }
+    finally { setLoginLoading(false); }
+  };
+
+  // ============ QUIZ CRUD ============
+  const handleCreateQuiz = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newTitle.trim()) { alert('Title is required'); return; }
+    setCreating(true);
+    try {
+      const quiz = await createQuiz({
+        title: newTitle.trim(),
+        timerMinutes: newTimer,
+        launchTime: newLaunchTime ? new Date(newLaunchTime).toISOString() : '',
+        endTime: newEndTime ? new Date(newEndTime).toISOString() : '',
+      });
+      setQuizzes(prev => [quiz, ...prev]);
+      setShowCreateForm(false);
+      setNewTitle(''); setNewTimer(10); setNewLaunchTime(''); setNewEndTime('');
+      openQuizEditor(quiz);
+    } catch (error: any) {
+      alert(error.message || 'Failed to create quiz');
+    } finally { setCreating(false); }
+  };
+
+  const openQuizEditor = async (quiz: QuizMeta) => {
+    setSelectedQuiz(quiz);
+    setActiveTab('setup');
+    const qs = await fetchQuizQuestions(quiz.id);
+    setQuestions(qs);
+    setView('edit');
+  };
+
+  const handleSaveConfig = async () => {
+    if (!selectedQuiz) return;
+    setConfigSaving(true);
+    try {
+      const updated = await updateQuiz(selectedQuiz.id, {
+        title: selectedQuiz.title,
+        timerMinutes: selectedQuiz.timerMinutes,
+        launchTime: selectedQuiz.launchTime,
+        endTime: selectedQuiz.endTime,
+      });
+      setSelectedQuiz(updated);
+      setQuizzes(prev => prev.map(q => q.id === updated.id ? updated : q));
+    } catch { alert('Failed to save'); }
+    finally { setConfigSaving(false); }
+  };
+
+  const handleStatusChange = async (status: 'draft' | 'active' | 'ended') => {
+    if (!selectedQuiz) return;
+    const msgs: Record<string, string> = {
+      active: 'Start the quiz? Students can take it immediately.',
+      ended: 'End the quiz? No more submissions.',
+      draft: 'Reset to draft?',
+    };
+    if (!confirm(msgs[status])) return;
+    try {
+      const updated = await updateQuiz(selectedQuiz.id, { status });
+      setSelectedQuiz(updated);
+      setQuizzes(prev => prev.map(q => q.id === updated.id ? updated : q));
+      await loadQuizList();
+    } catch { alert('Failed to change status'); }
+  };
+
+  const handleDeleteQuiz = async (id: string) => {
+    const quiz = quizzes.find(q => q.id === id);
+    if (!confirm(`Delete "${quiz?.title}"? This removes all questions and results permanently.`)) return;
+    try {
+      await deleteQuiz(id);
+      setQuizzes(prev => prev.filter(q => q.id !== id));
+      if (selectedQuiz?.id === id) { setSelectedQuiz(null); setView('list'); }
+      if (resultsQuizId === id) { setResultsQuizId(null); setResults(null); }
+    } catch (error: any) {
+      alert(error.message || 'Failed to delete');
+    }
+  };
+
+  // ============ QUESTIONS ============
+  const handleAddQuestion = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedQuiz) return;
+    if (!newQuestion.question.trim() || newQuestion.options.some(o => !o.trim())) {
+      alert('Please fill all fields'); return;
+    }
+    setAddingQuestion(true);
+    try {
+      const q = await addQuizQuestion(selectedQuiz.id, newQuestion);
+      setQuestions(prev => [...prev, q]);
+      setNewQuestion({ question: '', options: ['', '', '', ''], correctIndex: 0, points: 1 });
+      setShowAddForm(false);
+    } catch { alert('Failed to add question'); }
+    finally { setAddingQuestion(false); }
+  };
+
+  const handleDeleteQuestion = async (id: string) => {
+    if (!selectedQuiz || !confirm('Delete this question?')) return;
+    try {
+      await deleteQuizQuestion(selectedQuiz.id, id);
+      setQuestions(prev => prev.filter(q => q.id !== id));
+    } catch { alert('Failed to delete question'); }
+  };
+
+  // ============ RESULTS ============
+  const openResults = async (quizId: string) => {
+    setResultsQuizId(quizId);
+    setResultsLoading(true);
+    setView('results');
+    try {
+      const r = await fetchQuizResults(quizId);
+      setResults(r);
+    } catch { setResults(null); }
+    finally { setResultsLoading(false); }
+  };
+
+  const handleClearResults = async () => {
+    if (!resultsQuizId) return;
+    if (!confirm('Clear ALL results? This cannot be undone!')) return;
+    if (!confirm('Are you absolutely sure?')) return;
+    try {
+      await clearQuizResults(resultsQuizId);
+      setResults({ submissions: [], stats: { totalSubmissions: 0, avgScore: 0, highestScore: 0, lowestScore: 0 } });
+    } catch { alert('Failed to clear results'); }
+  };
+
+  const handleExportCSV = async () => {
+    if (!resultsQuizId) return;
+    try { await exportQuizResultsCSV(resultsQuizId); }
+    catch { alert('Failed to export'); }
+  };
+
+  // ============ STYLES ============
+  const s = {
+    page: { minHeight: '100vh', backgroundColor: '#f3f4f6', fontFamily: "'Inter', sans-serif" } as React.CSSProperties,
+    loginContainer: { minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f3f4f6' } as React.CSSProperties,
+    loginCard: { backgroundColor: '#fff', padding: '2rem', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)', minWidth: '320px', maxWidth: '400px', width: '100%', margin: '0 16px' } as React.CSSProperties,
+    header: { backgroundColor: '#fff', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', padding: '1rem 1.5rem' } as React.CSSProperties,
+    headerInner: { maxWidth: '1100px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' as const, gap: '12px' } as React.CSSProperties,
+    main: { maxWidth: '1100px', margin: '0 auto', padding: '1.5rem 1rem' } as React.CSSProperties,
+    card: { backgroundColor: '#fff', padding: '1.5rem', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)', marginBottom: '1rem' } as React.CSSProperties,
+    sectionTitle: { fontSize: '1.1rem', fontWeight: 600, marginBottom: '1rem', color: '#111827' } as React.CSSProperties,
+    label: { display: 'block', marginBottom: '6px', fontWeight: 500, color: '#374151', fontSize: '14px' } as React.CSSProperties,
+    input: { width: '100%', padding: '10px 14px', border: '1px solid #d1d5db', borderRadius: '8px', fontSize: '15px', color: '#111827', backgroundColor: '#fff', fontFamily: "'Inter', sans-serif" } as React.CSSProperties,
+    btnPrimary: { backgroundColor: '#d4a574', color: '#fff', padding: '10px 20px', border: 'none', borderRadius: '8px', fontWeight: 600, cursor: 'pointer', fontSize: '14px', fontFamily: "'Inter', sans-serif" } as React.CSSProperties,
+    btnDanger: { backgroundColor: '#ef4444', color: '#fff', padding: '10px 20px', border: 'none', borderRadius: '8px', fontWeight: 600, cursor: 'pointer', fontSize: '14px', fontFamily: "'Inter', sans-serif" } as React.CSSProperties,
+    btnSecondary: { backgroundColor: '#f3f4f6', color: '#374151', padding: '10px 20px', border: '1px solid #d1d5db', borderRadius: '8px', fontWeight: 500, cursor: 'pointer', fontSize: '14px', fontFamily: "'Inter', sans-serif" } as React.CSSProperties,
+    statusBadge: (status: string) => ({
+      display: 'inline-block', padding: '4px 14px', borderRadius: '20px', fontSize: '13px', fontWeight: 600,
+      background: status === 'active' ? '#dcfce7' : status === 'ended' ? '#fee2e2' : '#fef3c7',
+      color: status === 'active' ? '#16a34a' : status === 'ended' ? '#dc2626' : '#d97706',
+    } as React.CSSProperties),
+    table: { width: '100%', borderCollapse: 'collapse' as const, fontSize: '14px' } as React.CSSProperties,
+    th: { textAlign: 'left' as const, padding: '10px 12px', borderBottom: '2px solid #e5e7eb', color: '#6b7280', fontWeight: 600, fontSize: '13px', whiteSpace: 'nowrap' as const } as React.CSSProperties,
+    td: { padding: '10px 12px', borderBottom: '1px solid #f3f4f6', color: '#111827' } as React.CSSProperties,
+    tab: (active: boolean) => ({
+      padding: '0.75rem 1.25rem', border: 'none', backgroundColor: 'transparent',
+      borderBottom: active ? '2px solid #d4a574' : 'none',
+      color: active ? '#d4a574' : '#6b7280', fontWeight: active ? 600 : 400,
+      cursor: 'pointer', fontSize: '14px', fontFamily: "'Inter', sans-serif",
+    } as React.CSSProperties),
+  };
+
+  const hasActiveOrDraft = quizzes.some(q => q.status === 'active' || q.status === 'draft');
+
+  // ============ LOADING / LOGIN ============
+  if (checkingAuth) {
+    return (
+      <div style={s.loginContainer}>
+        <div style={{ ...s.loginCard, textAlign: 'center' }}>
+          <div style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1rem', color: '#d4a574' }}>Quiz Admin</div>
+          <div style={{ color: '#6b7280' }}>Checking authentication...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div style={s.loginContainer}>
+        <div style={s.loginCard}>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1.5rem', textAlign: 'center', color: '#d4a574' }}>Quiz Admin Panel</h1>
+          <form onSubmit={handleLogin}>
+            <div style={{ marginBottom: '1rem' }}>
+              <label style={s.label}>Password</label>
+              <div style={{ position: 'relative' }}>
+                <input type={showPassword ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)}
+                  style={{ ...s.input, paddingRight: '3rem' }} required />
+                <button type="button" onClick={() => setShowPassword(!showPassword)}
+                  style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px', color: '#6b7280' }}>
+                  {showPassword ? '👁️‍🗨️' : '👁️'}
+                </button>
+              </div>
+            </div>
+            <button type="submit" disabled={loginLoading} style={{ ...s.btnPrimary, width: '100%', opacity: loginLoading ? 0.6 : 1 }}>
+              {loginLoading ? 'Logging in...' : 'Login'}
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
+  // ============ DASHBOARD ============
+  return (
+    <div style={s.page}>
+      <header style={s.header}>
+        <div style={s.headerInner}>
+          <div>
+            <h1 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#d4a574', margin: 0 }}>Quiz Admin Dashboard</h1>
+            <span style={{ color: '#9ca3af', fontSize: '13px' }}>{quizzes.length} quiz{quizzes.length !== 1 ? 'zes' : ''}</span>
+          </div>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            {view !== 'list' && (
+              <button onClick={() => { setView('list'); setSelectedQuiz(null); }} style={s.btnSecondary}>
+                ← All Quizzes
+              </button>
+            )}
+            <button onClick={async () => { await logoutQuizAdmin(); setIsAuthenticated(false); }} style={s.btnDanger}>Logout</button>
+          </div>
+        </div>
+      </header>
+
+      <main style={s.main}>
+
+        {/* ============ QUIZ LIST VIEW ============ */}
+        {view === 'list' && (
+          <div>
+            {/* Create New Quiz */}
+            {!showCreateForm ? (
+              <button
+                onClick={() => setShowCreateForm(true)}
+                disabled={hasActiveOrDraft}
+                style={{ ...s.btnPrimary, marginBottom: '1.5rem', opacity: hasActiveOrDraft ? 0.5 : 1 }}
+                title={hasActiveOrDraft ? 'End the current quiz before creating a new one' : ''}
+              >
+                + Create New Quiz
+              </button>
+            ) : (
+              <div style={{ ...s.card, border: '2px solid #d4a574' }}>
+                <h2 style={s.sectionTitle}>New Quiz</h2>
+                <form onSubmit={handleCreateQuiz}>
+                  <div style={{ marginBottom: '16px' }}>
+                    <label style={s.label}>Quiz Title *</label>
+                    <input type="text" value={newTitle} onChange={e => setNewTitle(e.target.value)}
+                      style={s.input} placeholder="e.g., Bhagavad Gita Chapter 2 Quiz" required />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+                    <div>
+                      <label style={s.label}>Timer (minutes)</label>
+                      <input type="number" min="1" max="120" value={newTimer}
+                        onChange={e => setNewTimer(Number(e.target.value))} style={s.input} />
+                    </div>
+                    <div>
+                      <label style={s.label}>Start Time (optional)</label>
+                      <input type="datetime-local" value={newLaunchTime}
+                        onChange={e => setNewLaunchTime(e.target.value)} style={s.input} />
+                    </div>
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '16px', marginBottom: '20px' }}>
+                    <div>
+                      <label style={s.label}>End Time (optional — quiz auto-ends at this time)</label>
+                      <input type="datetime-local" value={newEndTime}
+                        onChange={e => setNewEndTime(e.target.value)} style={s.input} />
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <button type="submit" disabled={creating} style={{ ...s.btnPrimary, opacity: creating ? 0.6 : 1 }}>
+                      {creating ? 'Creating...' : 'Create Quiz'}
+                    </button>
+                    <button type="button" onClick={() => setShowCreateForm(false)} style={s.btnSecondary}>Cancel</button>
+                  </div>
+                </form>
+              </div>
+            )}
+
+            {hasActiveOrDraft && !showCreateForm && (
+              <p style={{ color: '#d97706', fontSize: '13px', marginBottom: '16px', background: '#fef3c7', padding: '10px 16px', borderRadius: '8px' }}>
+                ⚠️ You have an active/draft quiz. End it before creating a new one.
+              </p>
+            )}
+
+            {/* Quiz List */}
+            {quizzes.length === 0 ? (
+              <div style={{ ...s.card, textAlign: 'center', padding: '3rem', color: '#9ca3af' }}>
+                <p style={{ fontSize: '48px', marginBottom: '12px' }}>📝</p>
+                <p>No quizzes yet. Create your first quiz!</p>
+              </div>
+            ) : (
+              quizzes.map(quiz => (
+                <div key={quiz.id} style={{ ...s.card, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+                  <div style={{ flex: 1, minWidth: '200px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
+                      <h3 style={{ fontSize: '16px', fontWeight: 600, color: '#111827', margin: 0 }}>{quiz.title}</h3>
+                      <span style={s.statusBadge(quiz.status)}>{quiz.status.toUpperCase()}</span>
+                    </div>
+                    <div style={{ color: '#9ca3af', fontSize: '13px' }}>
+                      {quiz.timerMinutes} min • Created {new Date(quiz.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                    {quiz.status !== 'ended' && (
+                      <button onClick={() => openQuizEditor(quiz)} style={{ ...s.btnPrimary, padding: '8px 16px', fontSize: '13px' }}>
+                        ✏️ Edit
+                      </button>
+                    )}
+                    <button onClick={() => openResults(quiz.id)} style={{ ...s.btnSecondary, padding: '8px 16px', fontSize: '13px' }}>
+                      📊 Results
+                    </button>
+                    {quiz.status !== 'active' && (
+                      <button onClick={() => handleDeleteQuiz(quiz.id)} style={{ ...s.btnDanger, padding: '8px 16px', fontSize: '13px' }}>
+                        🗑️
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+
+        {/* ============ QUIZ EDITOR VIEW ============ */}
+        {view === 'edit' && selectedQuiz && (
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', margin: 0 }}>{selectedQuiz.title}</h2>
+              <span style={s.statusBadge(selectedQuiz.status)}>{selectedQuiz.status.toUpperCase()}</span>
+              <span style={{ color: '#9ca3af', fontSize: '13px' }}>{questions.length} question{questions.length !== 1 ? 's' : ''}</span>
+            </div>
+
+            <div style={{ display: 'flex', borderBottom: '1px solid #d1d5db', marginBottom: '1.5rem' }}>
+              <button onClick={() => setActiveTab('setup')} style={s.tab(activeTab === 'setup')}>⚙️ Setup</button>
+              <button onClick={() => setActiveTab('questions')} style={s.tab(activeTab === 'questions')}>📝 Questions ({questions.length})</button>
+            </div>
+
+            {/* Setup Tab */}
+            {activeTab === 'setup' && (
+              <div>
+                <div style={s.card}>
+                  <h2 style={s.sectionTitle}>Quiz Configuration</h2>
+                  <div style={{ marginBottom: '16px' }}>
+                    <label style={s.label}>Quiz Title</label>
+                    <input type="text" value={selectedQuiz.title}
+                      onChange={e => setSelectedQuiz(prev => prev ? { ...prev, title: e.target.value } : prev)}
+                      style={s.input} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                    <div>
+                      <label style={s.label}>Timer (minutes)</label>
+                      <input type="number" min="1" max="120" value={selectedQuiz.timerMinutes}
+                        onChange={e => setSelectedQuiz(prev => prev ? { ...prev, timerMinutes: Number(e.target.value) } : prev)}
+                        style={s.input} />
+                    </div>
+                    <div>
+                      <label style={s.label}>Scheduled Launch Time</label>
+                      <input type="datetime-local"
+                        value={selectedQuiz.launchTime ? (() => {
+                          try {
+                            const d = new Date(selectedQuiz.launchTime);
+                            if (isNaN(d.getTime())) return '';
+                            const pad = (n: number) => n.toString().padStart(2, '0');
+                            return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+                          } catch { return ''; }
+                        })() : ''}
+                        onChange={e => {
+                          const val = e.target.value;
+                          const iso = val ? new Date(val).toISOString() : '';
+                          setSelectedQuiz(prev => prev ? { ...prev, launchTime: iso } : prev);
+                        }}
+                        style={s.input} />
+                    </div>
+                    <div>
+                      <label style={s.label}>End Time (auto-end)</label>
+                      <input type="datetime-local"
+                        value={selectedQuiz.endTime ? (() => {
+                          try {
+                            const d = new Date(selectedQuiz.endTime);
+                            if (isNaN(d.getTime())) return '';
+                            const pad = (n: number) => n.toString().padStart(2, '0');
+                            return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+                          } catch { return ''; }
+                        })() : ''}
+                        onChange={e => {
+                          const val = e.target.value;
+                          const iso = val ? new Date(val).toISOString() : '';
+                          setSelectedQuiz(prev => prev ? { ...prev, endTime: iso } : prev);
+                        }}
+                        style={s.input} />
+                    </div>
+                  </div>
+                  <button onClick={handleSaveConfig} disabled={configSaving}
+                    style={{ ...s.btnPrimary, opacity: configSaving ? 0.6 : 1 }}>
+                    {configSaving ? 'Saving...' : 'Save Configuration'}
+                  </button>
+                </div>
+
+                {/* Status Controls */}
+                <div style={s.card}>
+                  <h2 style={s.sectionTitle}>Quiz Status</h2>
+                  <p style={{ color: '#6b7280', fontSize: '14px', marginBottom: '16px' }}>
+                    Current: <span style={s.statusBadge(selectedQuiz.status)}>{selectedQuiz.status.toUpperCase()}</span>
+                  </p>
+                  <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                    {selectedQuiz.status !== 'active' && (
+                      <button onClick={() => handleStatusChange('active')}
+                        style={{ ...s.btnPrimary, backgroundColor: '#16a34a' }}>🚀 Start Quiz</button>
+                    )}
+                    {selectedQuiz.status === 'active' && (
+                      <button onClick={() => handleStatusChange('ended')} style={s.btnDanger}>🛑 End Quiz</button>
+                    )}
+                    {selectedQuiz.status !== 'draft' && (
+                      <button onClick={() => handleStatusChange('draft')} style={s.btnSecondary}>↩️ Reset to Draft</button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Quiz Link */}
+                <div style={s.card}>
+                  <h2 style={s.sectionTitle}>Quiz Page Link</h2>
+                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center', padding: '10px 14px', background: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
+                    <code style={{ flex: 1, fontSize: '13px', color: '#374151', wordBreak: 'break-all' }}>
+                      {typeof window !== 'undefined' ? `${window.location.origin}/gitamritam/weekly-quiz` : '/gitamritam/weekly-quiz'}
+                    </code>
+                    <button onClick={() => { navigator.clipboard.writeText(`${window.location.origin}/gitamritam/weekly-quiz`); alert('Copied!'); }}
+                      style={{ ...s.btnSecondary, padding: '6px 14px', fontSize: '13px' }}>Copy</button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Questions Tab */}
+            {activeTab === 'questions' && (
+              <div>
+                {!showAddForm && (
+                  <button onClick={() => setShowAddForm(true)} style={{ ...s.btnPrimary, marginBottom: '1.5rem' }}>+ Add Question</button>
+                )}
+
+                {showAddForm && (
+                  <div style={{ ...s.card, border: '2px solid #d4a574' }}>
+                    <h2 style={s.sectionTitle}>New Question</h2>
+                    <form onSubmit={handleAddQuestion}>
+                      <div style={{ marginBottom: '16px' }}>
+                        <label style={s.label}>Question *</label>
+                        <textarea value={newQuestion.question}
+                          onChange={e => setNewQuestion(prev => ({ ...prev, question: e.target.value }))}
+                          style={{ ...s.input, minHeight: '70px', resize: 'vertical' }}
+                          placeholder="Enter the question..." required />
+                      </div>
+                      <div style={{ marginBottom: '16px' }}>
+                        <label style={s.label}>Options (select correct answer) *</label>
+                        {newQuestion.options.map((opt, i) => (
+                          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                            <input type="radio" name="correctAnswer" checked={newQuestion.correctIndex === i}
+                              onChange={() => setNewQuestion(prev => ({ ...prev, correctIndex: i }))}
+                              style={{ accentColor: '#d4a574', width: '18px', height: '18px' }} />
+                            <input type="text" value={opt}
+                              onChange={e => { const opts = [...newQuestion.options]; opts[i] = e.target.value; setNewQuestion(prev => ({ ...prev, options: opts })); }}
+                              style={{ ...s.input, flex: 1 }} placeholder={`Option ${String.fromCharCode(65 + i)}`} required />
+                          </div>
+                        ))}
+                        <p style={{ fontSize: '12px', color: '#9ca3af', marginTop: '4px' }}>🔘 Selected = correct answer</p>
+                      </div>
+                      <div style={{ marginBottom: '20px' }}>
+                        <label style={s.label}>Points</label>
+                        <input type="number" min="1" max="100" value={newQuestion.points}
+                          onChange={e => setNewQuestion(prev => ({ ...prev, points: Number(e.target.value) }))}
+                          style={{ ...s.input, maxWidth: '120px' }} />
+                      </div>
+                      <div style={{ display: 'flex', gap: '10px' }}>
+                        <button type="submit" disabled={addingQuestion} style={{ ...s.btnPrimary, opacity: addingQuestion ? 0.6 : 1 }}>
+                          {addingQuestion ? 'Adding...' : 'Add Question'}
+                        </button>
+                        <button type="button" onClick={() => setShowAddForm(false)} style={s.btnSecondary}>Cancel</button>
+                      </div>
+                    </form>
+                  </div>
+                )}
+
+                {questions.length === 0 ? (
+                  <div style={{ ...s.card, textAlign: 'center', padding: '3rem', color: '#9ca3af' }}>
+                    <p style={{ fontSize: '48px', marginBottom: '12px' }}>📝</p>
+                    <p>No questions yet. Add your first question!</p>
+                  </div>
+                ) : (
+                  questions.map((q, i) => (
+                    <div key={q.id} style={s.card}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                        <h3 style={{ fontSize: '15px', fontWeight: 600, color: '#111827', flex: 1 }}>
+                          <span style={{ color: '#d4a574' }}>Q{i + 1}.</span> {q.question}
+                        </h3>
+                        <div style={{ display: 'flex', gap: '8px', marginLeft: '12px', flexShrink: 0 }}>
+                          <span style={{ padding: '2px 10px', borderRadius: '12px', fontSize: '12px', fontWeight: 600, background: '#fef3c7', color: '#d97706' }}>
+                            {q.points} pt{q.points !== 1 ? 's' : ''}
+                          </span>
+                          <button onClick={() => handleDeleteQuestion(q.id)}
+                            style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '14px', padding: '2px 6px' }}>🗑️</button>
+                        </div>
+                      </div>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                        {q.options.map((opt, oi) => (
+                          <div key={oi} style={{
+                            padding: '8px 12px', borderRadius: '8px', fontSize: '14px',
+                            background: q.correctIndex === oi ? '#dcfce7' : '#f9fafb',
+                            border: `1px solid ${q.correctIndex === oi ? '#86efac' : '#e5e7eb'}`,
+                            color: q.correctIndex === oi ? '#16a34a' : '#374151',
+                            fontWeight: q.correctIndex === oi ? 600 : 400,
+                          }}>
+                            {String.fromCharCode(65 + oi)}. {opt}{q.correctIndex === oi && ' ✓'}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))
+                )}
+
+                {questions.length > 0 && (
+                  <div style={{ textAlign: 'center', padding: '12px', color: '#6b7280', fontSize: '14px', background: '#f9fafb', borderRadius: '8px' }}>
+                    Total: {questions.length} questions • {questions.reduce((sum, q) => sum + q.points, 0)} points
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ============ RESULTS VIEW ============ */}
+        {view === 'results' && resultsQuizId && (
+          <div>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '20px' }}>
+              📊 Results — {quizzes.find(q => q.id === resultsQuizId)?.title || 'Quiz'}
+            </h2>
+
+            {resultsLoading ? (
+              <div style={{ ...s.card, textAlign: 'center', padding: '3rem', color: '#9ca3af' }}>Loading results...</div>
+            ) : !results || results.stats.totalSubmissions === 0 ? (
+              <div style={{ ...s.card, textAlign: 'center', padding: '3rem', color: '#9ca3af' }}>
+                <p style={{ fontSize: '48px', marginBottom: '12px' }}>📊</p>
+                <p>No submissions yet.</p>
+              </div>
+            ) : (
+              <>
+                {/* Stats */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '12px', marginBottom: '1.5rem' }}>
+                  {[
+                    { label: 'Submissions', value: results.stats.totalSubmissions, color: '#3b82f6' },
+                    { label: 'Avg Score', value: `${results.stats.avgScore}%`, color: '#d4a574' },
+                    { label: 'Highest', value: results.stats.highestScore, color: '#16a34a' },
+                    { label: 'Lowest', value: results.stats.lowestScore, color: '#ef4444' },
+                  ].map(stat => (
+                    <div key={stat.label} style={{ ...s.card, textAlign: 'center', padding: '16px', marginBottom: 0 }}>
+                      <div style={{ fontSize: '24px', fontWeight: 700, color: stat.color }}>{stat.value}</div>
+                      <div style={{ fontSize: '12px', color: '#9ca3af', marginTop: '4px' }}>{stat.label}</div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Actions */}
+                <div style={{ display: 'flex', gap: '10px', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+                  <button onClick={handleExportCSV} style={s.btnPrimary}>📥 Download CSV</button>
+                  <button onClick={() => openResults(resultsQuizId)} style={s.btnSecondary}>🔄 Refresh</button>
+                  <button onClick={handleClearResults} style={{ ...s.btnDanger, marginLeft: 'auto' }}>🗑️ Clear All</button>
+                </div>
+
+                {/* Table */}
+                <div style={{ ...s.card, overflowX: 'auto', padding: '0' }}>
+                  <table style={s.table}>
+                    <thead>
+                      <tr>
+                        <th style={s.th}>#</th><th style={s.th}>Name</th><th style={s.th}>Phone</th>
+                        <th style={s.th}>Score</th><th style={s.th}>%</th><th style={s.th}>Submitted</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {results.submissions.map((sub, i) => (
+                        <tr key={sub.phone} style={{ background: i % 2 === 0 ? '#fff' : '#f9fafb' }}>
+                          <td style={s.td}>
+                            <span style={{
+                              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                              width: '24px', height: '24px', borderRadius: '50%', fontSize: '12px', fontWeight: 600,
+                              background: i === 0 ? '#fef3c7' : i === 1 ? '#f3f4f6' : i === 2 ? '#fff7ed' : 'transparent',
+                              color: i === 0 ? '#d97706' : i === 1 ? '#6b7280' : i === 2 ? '#ea580c' : '#9ca3af',
+                            }}>{i + 1}</span>
+                          </td>
+                          <td style={{ ...s.td, fontWeight: 500 }}>{sub.name}</td>
+                          <td style={{ ...s.td, fontVariantNumeric: 'tabular-nums', color: '#6b7280' }}>{sub.phone}</td>
+                          <td style={s.td}>{sub.score}/{sub.totalPossible}</td>
+                          <td style={s.td}>
+                            <span style={{
+                              padding: '2px 8px', borderRadius: '10px', fontSize: '12px', fontWeight: 600,
+                              background: sub.percentage >= 70 ? '#dcfce7' : sub.percentage >= 40 ? '#fef3c7' : '#fee2e2',
+                              color: sub.percentage >= 70 ? '#16a34a' : sub.percentage >= 40 ? '#d97706' : '#dc2626',
+                            }}>{sub.percentage}%</span>
+                          </td>
+                          <td style={{ ...s.td, color: '#9ca3af', fontSize: '13px' }}>
+                            {new Date(sub.submittedAt).toLocaleString('en-IN', {
+                              timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short',
+                            })}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            )}
+          </div>
+        )}
+      </main>
+    </div>
+  );
+}
