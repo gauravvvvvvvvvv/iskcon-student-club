@@ -343,8 +343,8 @@ export default function WeeklyQuizPage() {
         <div style={styles.container}>
           <div style={styles.header}>
             <div style={styles.logo}>ISKCON Delhi University</div>
-            <h1 style={styles.title}>Gita Amritam</h1>
-            <p style={styles.subtitle}>Weekly Quiz</p>
+            <h1 style={styles.title}>Gitamritam</h1>
+            <p style={styles.subtitle}>For issues: <a href="mailto:admin@iskcondelhiuniversity.com">admin@iskcondelhiuniversity.com</a></p>
           </div>
           <div style={{ ...styles.card, textAlign: 'center', padding: '48px 32px' }}>
             <div style={{ fontSize: '64px', marginBottom: '20px' }}>📖</div>
@@ -589,7 +589,7 @@ export default function WeeklyQuizPage() {
                             fontSize: '12px', fontWeight: 700,
                             background: isCorrect ? 'rgba(34,197,94,0.2)'
                               : isWrongPick ? 'rgba(239,68,68,0.2)'
-                              : 'rgba(255,255,255,0.08)',
+                                : 'rgba(255,255,255,0.08)',
                             color: isCorrect ? '#4ade80' : isWrongPick ? '#f87171' : 'rgba(255,255,255,0.5)',
                           }}>
                             {String.fromCharCode(65 + oi)}
@@ -674,7 +674,7 @@ export default function WeeklyQuizPage() {
 
       <div style={styles.container}>
         <div style={{ padding: '8px 0 16px' }}>
-          <h2 style={{ color: '#ffffff', fontSize: '20px', fontWeight: 600  }}>
+          <h2 style={{ color: '#ffffff', fontSize: '20px', fontWeight: 600 }}>
             {config?.title || 'Weekly Quiz'}
           </h2>
           <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px', marginTop: '4px' }}>
