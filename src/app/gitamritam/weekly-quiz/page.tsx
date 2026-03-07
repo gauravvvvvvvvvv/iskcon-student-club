@@ -12,6 +12,99 @@ import {
 
 type PageState = 'loading' | 'not-active' | 'register' | 'quiz' | 'submitting' | 'results';
 
+const COUNTRY_CODES = [
+  { code: '+91', country: 'IN', name: 'India', maxLen: 10 },
+  { code: '+1', country: 'US', name: 'United States', maxLen: 10 },
+  { code: '+1', country: 'CA', name: 'Canada', maxLen: 10 },
+  { code: '+44', country: 'GB', name: 'United Kingdom', maxLen: 10 },
+  { code: '+61', country: 'AU', name: 'Australia', maxLen: 9 },
+  { code: '+64', country: 'NZ', name: 'New Zealand', maxLen: 10 },
+  { code: '+27', country: 'ZA', name: 'South Africa', maxLen: 9 },
+  { code: '+49', country: 'DE', name: 'Germany', maxLen: 11 },
+  { code: '+33', country: 'FR', name: 'France', maxLen: 9 },
+  { code: '+39', country: 'IT', name: 'Italy', maxLen: 10 },
+  { code: '+34', country: 'ES', name: 'Spain', maxLen: 9 },
+  { code: '+351', country: 'PT', name: 'Portugal', maxLen: 9 },
+  { code: '+31', country: 'NL', name: 'Netherlands', maxLen: 9 },
+  { code: '+32', country: 'BE', name: 'Belgium', maxLen: 9 },
+  { code: '+41', country: 'CH', name: 'Switzerland', maxLen: 9 },
+  { code: '+43', country: 'AT', name: 'Austria', maxLen: 10 },
+  { code: '+46', country: 'SE', name: 'Sweden', maxLen: 9 },
+  { code: '+47', country: 'NO', name: 'Norway', maxLen: 8 },
+  { code: '+45', country: 'DK', name: 'Denmark', maxLen: 8 },
+  { code: '+358', country: 'FI', name: 'Finland', maxLen: 10 },
+  { code: '+48', country: 'PL', name: 'Poland', maxLen: 9 },
+  { code: '+420', country: 'CZ', name: 'Czech Republic', maxLen: 9 },
+  { code: '+36', country: 'HU', name: 'Hungary', maxLen: 9 },
+  { code: '+40', country: 'RO', name: 'Romania', maxLen: 9 },
+  { code: '+30', country: 'GR', name: 'Greece', maxLen: 10 },
+  { code: '+353', country: 'IE', name: 'Ireland', maxLen: 9 },
+  { code: '+354', country: 'IS', name: 'Iceland', maxLen: 7 },
+  { code: '+7', country: 'RU', name: 'Russia', maxLen: 10 },
+  { code: '+380', country: 'UA', name: 'Ukraine', maxLen: 9 },
+  { code: '+90', country: 'TR', name: 'Turkey', maxLen: 10 },
+  { code: '+972', country: 'IL', name: 'Israel', maxLen: 9 },
+  { code: '+966', country: 'SA', name: 'Saudi Arabia', maxLen: 9 },
+  { code: '+971', country: 'AE', name: 'UAE', maxLen: 9 },
+  { code: '+974', country: 'QA', name: 'Qatar', maxLen: 8 },
+  { code: '+968', country: 'OM', name: 'Oman', maxLen: 8 },
+  { code: '+973', country: 'BH', name: 'Bahrain', maxLen: 8 },
+  { code: '+965', country: 'KW', name: 'Kuwait', maxLen: 8 },
+  { code: '+962', country: 'JO', name: 'Jordan', maxLen: 9 },
+  { code: '+961', country: 'LB', name: 'Lebanon', maxLen: 8 },
+  { code: '+964', country: 'IQ', name: 'Iraq', maxLen: 10 },
+  { code: '+98', country: 'IR', name: 'Iran', maxLen: 10 },
+  { code: '+92', country: 'PK', name: 'Pakistan', maxLen: 10 },
+  { code: '+93', country: 'AF', name: 'Afghanistan', maxLen: 9 },
+  { code: '+880', country: 'BD', name: 'Bangladesh', maxLen: 10 },
+  { code: '+94', country: 'LK', name: 'Sri Lanka', maxLen: 9 },
+  { code: '+977', country: 'NP', name: 'Nepal', maxLen: 10 },
+  { code: '+95', country: 'MM', name: 'Myanmar', maxLen: 9 },
+  { code: '+66', country: 'TH', name: 'Thailand', maxLen: 9 },
+  { code: '+84', country: 'VN', name: 'Vietnam', maxLen: 9 },
+  { code: '+62', country: 'ID', name: 'Indonesia', maxLen: 11 },
+  { code: '+60', country: 'MY', name: 'Malaysia', maxLen: 10 },
+  { code: '+65', country: 'SG', name: 'Singapore', maxLen: 8 },
+  { code: '+63', country: 'PH', name: 'Philippines', maxLen: 10 },
+  { code: '+855', country: 'KH', name: 'Cambodia', maxLen: 9 },
+  { code: '+856', country: 'LA', name: 'Laos', maxLen: 10 },
+  { code: '+86', country: 'CN', name: 'China', maxLen: 11 },
+  { code: '+81', country: 'JP', name: 'Japan', maxLen: 10 },
+  { code: '+82', country: 'KR', name: 'South Korea', maxLen: 10 },
+  { code: '+852', country: 'HK', name: 'Hong Kong', maxLen: 8 },
+  { code: '+886', country: 'TW', name: 'Taiwan', maxLen: 9 },
+  { code: '+976', country: 'MN', name: 'Mongolia', maxLen: 8 },
+  { code: '+55', country: 'BR', name: 'Brazil', maxLen: 11 },
+  { code: '+54', country: 'AR', name: 'Argentina', maxLen: 10 },
+  { code: '+56', country: 'CL', name: 'Chile', maxLen: 9 },
+  { code: '+57', country: 'CO', name: 'Colombia', maxLen: 10 },
+  { code: '+58', country: 'VE', name: 'Venezuela', maxLen: 10 },
+  { code: '+51', country: 'PE', name: 'Peru', maxLen: 9 },
+  { code: '+593', country: 'EC', name: 'Ecuador', maxLen: 9 },
+  { code: '+591', country: 'BO', name: 'Bolivia', maxLen: 8 },
+  { code: '+595', country: 'PY', name: 'Paraguay', maxLen: 9 },
+  { code: '+598', country: 'UY', name: 'Uruguay', maxLen: 8 },
+  { code: '+52', country: 'MX', name: 'Mexico', maxLen: 10 },
+  { code: '+506', country: 'CR', name: 'Costa Rica', maxLen: 8 },
+  { code: '+507', country: 'PA', name: 'Panama', maxLen: 8 },
+  { code: '+20', country: 'EG', name: 'Egypt', maxLen: 10 },
+  { code: '+234', country: 'NG', name: 'Nigeria', maxLen: 10 },
+  { code: '+254', country: 'KE', name: 'Kenya', maxLen: 9 },
+  { code: '+255', country: 'TZ', name: 'Tanzania', maxLen: 9 },
+  { code: '+256', country: 'UG', name: 'Uganda', maxLen: 9 },
+  { code: '+233', country: 'GH', name: 'Ghana', maxLen: 9 },
+  { code: '+237', country: 'CM', name: 'Cameroon', maxLen: 9 },
+  { code: '+251', country: 'ET', name: 'Ethiopia', maxLen: 9 },
+  { code: '+212', country: 'MA', name: 'Morocco', maxLen: 9 },
+  { code: '+216', country: 'TN', name: 'Tunisia', maxLen: 8 },
+  { code: '+213', country: 'DZ', name: 'Algeria', maxLen: 9 },
+  { code: '+263', country: 'ZW', name: 'Zimbabwe', maxLen: 9 },
+  { code: '+260', country: 'ZM', name: 'Zambia', maxLen: 9 },
+  { code: '+230', country: 'MU', name: 'Mauritius', maxLen: 8 },
+  { code: '+679', country: 'FJ', name: 'Fiji', maxLen: 7 },
+  { code: '+675', country: 'PG', name: 'Papua New Guinea', maxLen: 8 },
+];
+
 export default function WeeklyQuizPage() {
   const [pageState, setPageState] = useState<PageState>('loading');
   const [config, setConfig] = useState<QuizMeta | null>(null);
@@ -19,6 +112,7 @@ export default function WeeklyQuizPage() {
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [countryCode, setCountryCode] = useState('+91');
   const [phoneError, setPhoneError] = useState('');
   const [timeLeft, setTimeLeft] = useState(0);
   const [result, setResult] = useState<{ score: number; totalPossible: number; percentage: number } | null>(null);
@@ -90,14 +184,17 @@ export default function WeeklyQuizPage() {
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
+  const getSelectedCountry = () => COUNTRY_CODES.find(c => c.code === countryCode) || COUNTRY_CODES[0];
+
   const validatePhone = (value: string) => {
     const clean = value.replace(/\D/g, '');
+    const selected = getSelectedCountry();
     if (clean.length === 0) {
       setPhoneError('');
       return false;
     }
-    if (clean.length !== 10) {
-      setPhoneError('Please enter a valid 10-digit phone number');
+    if (clean.length < 7 || clean.length > selected.maxLen) {
+      setPhoneError(`Please enter a valid phone number (${selected.maxLen} digits for ${selected.name})`);
       return false;
     }
     setPhoneError('');
@@ -109,7 +206,7 @@ export default function WeeklyQuizPage() {
     if (!name.trim()) return;
     if (!validatePhone(phone)) return;
 
-    const cleanPhone = phone.replace(/\D/g, '');
+    const cleanPhone = countryCode + phone.replace(/\D/g, '');
 
     // Check if already submitted
     const check = await checkExistingSubmission(cleanPhone);
@@ -159,7 +256,7 @@ export default function WeeklyQuizPage() {
     if (timerRef.current) clearInterval(timerRef.current);
 
     try {
-      const cleanPhone = phone.replace(/\D/g, '');
+      const cleanPhone = countryCode + phone.replace(/\D/g, '');
       const data = await submitQuizAnswers(name.trim(), cleanPhone, answers);
       setResult({
         score: data.score,
@@ -173,7 +270,7 @@ export default function WeeklyQuizPage() {
       alert('Failed to submit quiz. Retrying...');
       // Retry once
       try {
-        const cleanPhone = phone.replace(/\D/g, '');
+        const cleanPhone = countryCode + phone.replace(/\D/g, '');
         const data = await submitQuizAnswers(name.trim(), cleanPhone, answers);
         setResult({
           score: data.score,
@@ -187,7 +284,7 @@ export default function WeeklyQuizPage() {
         setPageState('quiz');
       }
     }
-  }, [answers, name, phone, questions, pageState]);
+  }, [answers, name, phone, countryCode, questions, pageState]);
 
   const answeredCount = Object.keys(answers).length;
   const timerPercentage = config ? (timeLeft / (config.timerMinutes * 60)) * 100 : 100;
@@ -408,20 +505,49 @@ export default function WeeklyQuizPage() {
               </div>
               <div style={{ marginBottom: '24px' }}>
                 <label style={styles.label}>Phone Number *</label>
-                <input
-                  type="tel"
-                  value={phone}
-                  onChange={e => {
-                    const val = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
-                    setPhone(val);
-                    if (val.length === 10) validatePhone(val);
-                    else if (val.length > 0) setPhoneError('');
-                  }}
-                  placeholder="10-digit mobile number"
-                  required
-                  maxLength={10}
-                  style={styles.input}
-                />
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <select
+                    value={countryCode}
+                    onChange={e => {
+                      setCountryCode(e.target.value);
+                      setPhone('');
+                      setPhoneError('');
+                    }}
+                    style={{
+                      ...styles.input,
+                      width: '140px',
+                      flexShrink: 0,
+                      cursor: 'pointer',
+                      appearance: 'none' as const,
+                      WebkitAppearance: 'none' as const,
+                      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 8L1 3h10z'/%3E%3C/svg%3E")`,
+                      backgroundRepeat: 'no-repeat',
+                      backgroundPosition: 'right 12px center',
+                      paddingRight: '30px',
+                    }}
+                  >
+                    {COUNTRY_CODES.map((c, i) => (
+                      <option key={`${c.country}-${i}`} value={c.code} style={{ background: '#1a1a2e', color: '#fff' }}>
+                        {c.country} {c.code}
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={e => {
+                      const maxLen = getSelectedCountry().maxLen;
+                      const val = e.target.value.replace(/[^0-9]/g, '').slice(0, maxLen);
+                      setPhone(val);
+                      if (val.length === maxLen) validatePhone(val);
+                      else if (val.length > 0) setPhoneError('');
+                    }}
+                    placeholder={`${getSelectedCountry().maxLen}-digit number`}
+                    required
+                    maxLength={getSelectedCountry().maxLen}
+                    style={{ ...styles.input, flex: 1 }}
+                  />
+                </div>
                 {phoneError && (
                   <p style={{ color: '#ef4444', fontSize: '13px', marginTop: '6px' }}>{phoneError}</p>
                 )}
