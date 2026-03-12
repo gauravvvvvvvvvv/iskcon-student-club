@@ -153,6 +153,28 @@ export async function addQuizQuestion(quizId: string, question: {
   return data.question;
 }
 
+export async function bulkAddQuizQuestions(quizId: string, questions: Omit<QuizQuestion, 'id'>[]): Promise<{ message: string, addedCount: number }> {
+  const response = await fetch('/api/quiz/questions/bulk', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ quizId, questions }),
+  });
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error || 'Failed to bulk add questions');
+  return data;
+}
+
+export async function updateQuizQuestion(quizId: string, id: string, updates: Partial<Omit<QuizQuestion, 'id' | 'createdAt'>>): Promise<QuizQuestion> {
+  const response = await fetch('/api/quiz/questions', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ quizId, id, ...updates }),
+  });
+  if (!response.ok) throw new Error('Failed to update question');
+  const data = await response.json();
+  return data.question;
+}
+
 export async function deleteQuizQuestion(quizId: string, id: string): Promise<void> {
   const response = await fetch('/api/quiz/questions', {
     method: 'DELETE',

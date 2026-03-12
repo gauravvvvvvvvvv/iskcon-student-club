@@ -1,0 +1,112 @@
+[
+  {
+    "question": "Where did the Kauravas and the Pandavas assemble to fight?",
+    "options": [
+      "Hastinapura",
+      "Delhi",
+      "Kurukshetra",
+      "Vrindavan"
+    ],
+    "correctIndex": 2,
+    "points": 10
+  },
+  {
+    "question": "Bhagavad-gita is the widely read",
+    "options": [
+      "Gita-mahatmya",
+      "theistic science",
+      "religious book",
+      "All of the above"
+    ],
+    "correctIndex": 1,
+    "points": 10
+  },
+  {
+    "question": "Duryodhana was confident of his victory on account of the presence of ......",
+    "options": [
+      "Bhishma",
+      "Karna",
+      "Bhima",
+      "All of the above"
+    ],
+    "correctIndex": 0,
+    "points": 10
+  },
+  {
+    "question": "Victory is always with persons like the sons of Pándu because ......",
+    "options": [
+      "they were pious",
+      "Krona is on their side",
+      "they were powerful",
+      "a, b & c"
+    ],
+    "correctIndex": 1,
+    "points": 10
+  },
+  {
+    "question": "The chariot on which Krsna and Aruna were seated had been donated by ......to Arjuna",
+    "options": [
+      "Bhishma",
+      "Krsna",
+      "Yudhisthira",
+      "Agnideva"
+    ],
+    "correctIndex": 3,
+    "points": 10
+  },
+  {
+    "question": "What is the meaning of the name - Gudakesh?",
+    "options": [
+      "who conquers sleep",
+      "the husband of the goddess of fortune",
+      "who conquers ignorance",
+      "the owner of all senses"
+    ],
+    "correctIndex": 0,
+    "points": 10
+  },
+  {
+    "question": "What is the meaning of the name - Hrsikesa?",
+    "options": [
+      "who conquers sleep",
+      "the husband of the goddess of fortune",
+      "who conquers ignorance",
+      "the owner of all senses"
+    ],
+    "correctIndex": 3,
+    "points": 10
+  },
+  {
+    "question": "Who were present on Arjuna's chariot to help him?",
+    "options": [
+      "Râma and Sita",
+      "Krishna and Hanuman",
+      "All his weapons",
+      "a & b"
+    ],
+    "correctIndex": 1,
+    "points": 10
+  },
+  {
+    "question": "Those six symptoms in Arjuna were due to his ......",
+    "options": [
+      "weakness",
+      "softheartedness",
+      "cowardly nature",
+      "manliness"
+    ],
+    "correctIndex": 1,
+    "points": 10
+  },
+  {
+    "question": "When one tries to satisfy the senses of Govinda without desiring to satisfy one's own senses-then by the grace of Govinda......",
+    "options": [
+      "his desires become zero",
+      "all his desires are satisfied",
+      "he becomes rich",
+      "a & c"
+    ],
+    "correctIndex": 1,
+    "points": 10
+  }
+]

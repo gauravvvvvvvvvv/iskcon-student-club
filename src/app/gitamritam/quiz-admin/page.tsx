@@ -10,10 +10,12 @@ import {
   deleteQuiz,
   fetchQuizQuestions,
   addQuizQuestion,
+  updateQuizQuestion,
   deleteQuizQuestion,
   fetchQuizResults,
   clearQuizResults,
   exportQuizResultsCSV,
+  bulkAddQuizQuestions, // Added this import
   type QuizMeta,
   type QuizQuestion,
   type QuizResults,
@@ -48,6 +50,7 @@ export default function QuizAdminPage() {
 
   // Add question form
   const [showAddForm, setShowAddForm] = useState(false);
+  const [editingQuestionId, setEditingQuestionId] = useState<string | null>(null);
   const [newQuestion, setNewQuestion] = useState({
     question: '', options: ['', '', '', ''], correctIndex: 0, points: 1,
   });
@@ -165,7 +168,7 @@ export default function QuizAdminPage() {
   };
 
   // ============ QUESTIONS ============
-  const handleAddQuestion = async (e: React.FormEvent) => {
+  const handleSaveQuestion = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedQuiz) return;
     if (!newQuestion.question.trim() || newQuestion.options.some(o => !o.trim())) {
@@ -173,12 +176,38 @@ export default function QuizAdminPage() {
     }
     setAddingQuestion(true);
     try {
-      const q = await addQuizQuestion(selectedQuiz.id, newQuestion);
-      setQuestions(prev => [...prev, q]);
+      if (editingQuestionId) {
+        // Edit existing question
+        const updatedQ = await updateQuizQuestion(selectedQuiz.id, editingQuestionId, newQuestion);
+        setQuestions(prev => prev.map(q => q.id === editingQuestionId ? updatedQ : q));
+      } else {
+        // Add new question
+        const newQ = await addQuizQuestion(selectedQuiz.id, newQuestion);
+        setQuestions(prev => [...prev, newQ]);
+      }
       setNewQuestion({ question: '', options: ['', '', '', ''], correctIndex: 0, points: 1 });
+      setEditingQuestionId(null);
       setShowAddForm(false);
-    } catch { alert('Failed to add question'); }
+    } catch { alert(`Failed to ${editingQuestionId ? 'update' : 'add'} question`); }
     finally { setAddingQuestion(false); }
+  };
+
+  const handleEditQuestion = (q: QuizQuestion) => {
+    setEditingQuestionId(q.id);
+    setNewQuestion({
+      question: q.question,
+      options: [...q.options],
+      correctIndex: q.correctIndex,
+      points: q.points || 10
+    });
+    setShowAddForm(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const cancelEditQuestion = () => {
+    setNewQuestion({ question: '', options: ['', '', '', ''], correctIndex: 0, points: 1 });
+    setEditingQuestionId(null);
+    setShowAddForm(false);
   };
 
   const handleDeleteQuestion = async (id: string) => {
@@ -187,6 +216,42 @@ export default function QuizAdminPage() {
       await deleteQuizQuestion(selectedQuiz.id, id);
       setQuestions(prev => prev.filter(q => q.id !== id));
     } catch { alert('Failed to delete question'); }
+  };
+
+  const handleBulkUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!selectedQuiz) return;
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // reset input
+    e.target.value = '';
+
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      try {
+        const text = event.target?.result as string;
+        const json = JSON.parse(text);
+
+        if (!Array.isArray(json)) {
+          alert('Invalid format: JSON file must contain an array of questions.');
+          return;
+        }
+
+        setAddingQuestion(true);
+        const res = await bulkAddQuizQuestions(selectedQuiz.id, json);
+        alert(res.message);
+        
+        // Refresh questions
+        const qs = await fetchQuizQuestions(selectedQuiz.id);
+        setQuestions(qs);
+        
+      } catch (err: any) {
+        alert('Failed to process JSON file: ' + (err.message || String(err)));
+      } finally {
+        setAddingQuestion(false);
+      }
+    };
+    reader.readAsText(file);
   };
 
   // ============ RESULTS ============
@@ -509,13 +574,31 @@ export default function QuizAdminPage() {
             {activeTab === 'questions' && (
               <div>
                 {!showAddForm && (
-                  <button onClick={() => setShowAddForm(true)} style={{ ...s.btnPrimary, marginBottom: '1.5rem' }}>+ Add Question</button>
+                  <div style={{ display: 'flex', gap: '12px', marginBottom: '1.5rem', alignItems: 'center' }}>
+                    <button onClick={() => setShowAddForm(true)} style={s.btnPrimary}>+ Add Question</button>
+                    <div>
+                      <input 
+                        type="file" 
+                        accept=".json" 
+                        style={{ display: 'none' }} 
+                        id="bulk-upload-json"
+                        onChange={handleBulkUpload}
+                        disabled={addingQuestion}
+                      />
+                      <label 
+                        htmlFor="bulk-upload-json" 
+                        style={{ ...s.btnSecondary, cursor: addingQuestion ? 'not-allowed' : 'pointer', opacity: addingQuestion ? 0.6 : 1, display: 'inline-block' }}
+                      >
+                        {addingQuestion ? 'Uploading...' : '📁 Upload JSON'}
+                      </label>
+                    </div>
+                  </div>
                 )}
 
                 {showAddForm && (
                   <div style={{ ...s.card, border: '2px solid #d4a574' }}>
-                    <h2 style={s.sectionTitle}>New Question</h2>
-                    <form onSubmit={handleAddQuestion}>
+                    <h2 style={s.sectionTitle}>{editingQuestionId ? 'Edit Question' : 'New Question'}</h2>
+                    <form onSubmit={handleSaveQuestion}>
                       <div style={{ marginBottom: '16px' }}>
                         <label style={s.label}>Question *</label>
                         <textarea value={newQuestion.question}
@@ -545,9 +628,9 @@ export default function QuizAdminPage() {
                       </div>
                       <div style={{ display: 'flex', gap: '10px' }}>
                         <button type="submit" disabled={addingQuestion} style={{ ...s.btnPrimary, opacity: addingQuestion ? 0.6 : 1 }}>
-                          {addingQuestion ? 'Adding...' : 'Add Question'}
+                          {addingQuestion ? 'Saving...' : (editingQuestionId ? 'Update Question' : 'Add Question')}
                         </button>
-                        <button type="button" onClick={() => setShowAddForm(false)} style={s.btnSecondary}>Cancel</button>
+                        <button type="button" onClick={cancelEditQuestion} style={s.btnSecondary}>Cancel</button>
                       </div>
                     </form>
                   </div>
@@ -569,8 +652,10 @@ export default function QuizAdminPage() {
                           <span style={{ padding: '2px 10px', borderRadius: '12px', fontSize: '12px', fontWeight: 600, background: '#fef3c7', color: '#d97706' }}>
                             {q.points} pt{q.points !== 1 ? 's' : ''}
                           </span>
+                          <button onClick={() => handleEditQuestion(q)}
+                            style={{ background: 'none', border: 'none', color: '#6366f1', cursor: 'pointer', fontSize: '14px', padding: '2px 6px' }} title="Edit Question">✏️</button>
                           <button onClick={() => handleDeleteQuestion(q.id)}
-                            style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '14px', padding: '2px 6px' }}>🗑️</button>
+                            style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '14px', padding: '2px 6px' }} title="Delete Question">🗑️</button>
                         </div>
                       </div>
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
