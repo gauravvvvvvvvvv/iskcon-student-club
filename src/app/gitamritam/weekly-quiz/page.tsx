@@ -227,7 +227,17 @@ export default function WeeklyQuizPage() {
     // Shuffle questions
     const shuffled = [...qs].sort(() => Math.random() - 0.5);
     setQuestions(shuffled);
-    setTimeLeft((config?.timerMinutes || 10) * 60);
+    // Cap timer if hitting the ultimate endTime
+    let timeLimitSeconds = (config?.timerMinutes || 10) * 60;
+    if (config?.endTime) {
+      const msUntilEnd = new Date(config.endTime).getTime() - new Date().getTime();
+      const secondsUntilEnd = Math.max(0, Math.floor(msUntilEnd / 1000));
+      if (secondsUntilEnd < timeLimitSeconds) {
+        timeLimitSeconds = secondsUntilEnd;
+      }
+    }
+
+    setTimeLeft(timeLimitSeconds);
     hasAutoSubmitted.current = false;
     setPageState('quiz');
   };
@@ -279,8 +289,8 @@ export default function WeeklyQuizPage() {
         });
         if ((data as any).answerKey) setAnswerKey((data as any).answerKey);
         setPageState('results');
-      } catch (retryError) {
-        alert('Failed to submit. Please check your internet connection.');
+      } catch (retryError: any) {
+        alert(retryError?.message || 'Failed to submit. Please check your internet connection.');
         setPageState('quiz');
       }
     }

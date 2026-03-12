@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
     }
 
     const cleanPhone = phone.replace(/\D/g, '');
-    if (cleanPhone.length !== 10) {
+    if (cleanPhone.length < 7 || cleanPhone.length > 15) {
       return NextResponse.json({ error: 'Invalid phone number' }, { status: 400 });
     }
 
@@ -62,8 +62,16 @@ export async function POST(request: NextRequest) {
     }
     if (modified) await kvSet('quiz:list', quizList);
 
-    // Find active quiz
-    const activeQuiz = quizList.find(q => q.status === 'active');
+    // Find active quiz, or a quiz that ended within the last 5 minutes (grace period)
+    const activeQuiz = quizList.find(q => {
+      if (q.status === 'active') return true;
+      if (q.status === 'ended' && q.endTime) {
+        const diffMs = now.getTime() - new Date(q.endTime).getTime();
+        return diffMs <= 5 * 60000; // 5 minute grace period for submissions
+      }
+      return false;
+    });
+
     if (!activeQuiz) {
       return NextResponse.json({ error: 'No active quiz right now' }, { status: 403 });
     }
