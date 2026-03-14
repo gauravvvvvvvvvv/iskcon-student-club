@@ -3,6 +3,17 @@
 
 // ==================== Types ====================
 
+export type FormFieldType = 'text' | 'email' | 'phone' | 'select' | 'radio';
+
+export interface FormField {
+  id: string;
+  type: FormFieldType;
+  label: string;
+  required: boolean;
+  options?: string[];
+  isPrimaryId?: boolean;
+}
+
 export interface QuizMeta {
   id: string;
   title: string;
@@ -10,6 +21,7 @@ export interface QuizMeta {
   launchTime: string;
   endTime: string;
   status: 'draft' | 'active' | 'ended';
+  registrationFields?: FormField[];
   createdAt: string;
   updatedAt: string;
 }
@@ -24,8 +36,9 @@ export interface QuizQuestion {
 }
 
 export interface QuizSubmission {
-  name: string;
-  phone: string;
+  name?: string; // Legacy
+  phone?: string; // Legacy
+  responses?: Record<string, string>; // Maps Field ID -> User's Answer
   answers: Record<string, number>;
   score: number;
   totalPossible: number;
@@ -186,7 +199,7 @@ export async function deleteQuizQuestion(quizId: string, id: string): Promise<vo
 
 // ==================== Submissions ====================
 
-export async function submitQuizAnswers(name: string, phone: string, answers: Record<string, number>): Promise<{
+export async function submitQuizAnswers(responses: Record<string, string>, answers: Record<string, number>): Promise<{
   score: number;
   totalPossible: number;
   percentage: number;
@@ -196,7 +209,7 @@ export async function submitQuizAnswers(name: string, phone: string, answers: Re
   const response = await fetch('/api/quiz/submit', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, phone, answers }),
+    body: JSON.stringify({ responses, answers }),
   });
 
   const data = await response.json();
@@ -214,9 +227,9 @@ export async function submitQuizAnswers(name: string, phone: string, answers: Re
   return data;
 }
 
-export async function checkExistingSubmission(phone: string): Promise<{ submitted: boolean; submission?: QuizSubmission }> {
+export async function checkExistingSubmission(primaryIdValue: string): Promise<{ submitted: boolean; submission?: QuizSubmission }> {
   try {
-    const response = await fetch(`/api/quiz/submit?phone=${encodeURIComponent(phone)}`, { cache: 'no-store' });
+    const response = await fetch(`/api/quiz/submit?primaryIdValue=${encodeURIComponent(primaryIdValue)}`, { cache: 'no-store' });
     return await response.json();
   } catch (error) {
     console.error('Error checking submission:', error);

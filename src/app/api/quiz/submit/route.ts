@@ -12,18 +12,31 @@ interface QuizQuestion {
   points: number;
 }
 
+export type FormFieldType = 'text' | 'email' | 'phone' | 'select' | 'radio';
+
+interface FormField {
+  id: string;
+  type: FormFieldType;
+  label: string;
+  required: boolean;
+  options?: string[];
+  isPrimaryId?: boolean;
+}
+
 interface QuizMeta {
   id: string;
   status: 'draft' | 'active' | 'ended';
   timerMinutes: number;
   launchTime: string;
   endTime: string;
+  registrationFields?: FormField[]; // Added
   updatedAt: string;
 }
 
 interface QuizSubmission {
-  name: string;
-  phone: string;
+  name?: string; // Legacy
+  phone?: string; // Legacy
+  responses?: Record<string, string>; // Maps Field ID -> User's Answer
   answers: Record<string, number>;
   score: number;
   totalPossible: number;
@@ -34,15 +47,10 @@ interface QuizSubmission {
 // POST: Submit quiz answers (auto-detects active quiz)
 export async function POST(request: NextRequest) {
   try {
-    const { name, phone, answers } = await request.json();
+    const { responses, answers } = await request.json();
 
-    if (!name || !phone || !answers) {
-      return NextResponse.json({ error: 'Name, phone, and answers are required' }, { status: 400 });
-    }
-
-    const cleanPhone = phone.replace(/\D/g, '');
-    if (cleanPhone.length < 7 || cleanPhone.length > 15) {
-      return NextResponse.json({ error: 'Invalid phone number' }, { status: 400 });
+    if (!responses || !answers) {
+      return NextResponse.json({ error: 'Responses and answers are required' }, { status: 400 });
     }
 
     // Auto-update statuses based on time
@@ -78,8 +86,30 @@ export async function POST(request: NextRequest) {
 
     const quizId = activeQuiz.id;
 
+    // Determine the Primary ID value
+    const regFields = activeQuiz.registrationFields || [
+      { id: 'f_name', type: 'text', label: 'Name', required: true, isPrimaryId: false },
+      { id: 'f_phone', type: 'phone', label: 'Phone Number', required: true, isPrimaryId: true }
+    ];
+
+    const primaryField = regFields.find((f: any) => f.isPrimaryId) || regFields[0];
+    let primaryIdValue = responses[primaryField.id];
+
+    if (!primaryIdValue) {
+      return NextResponse.json({ error: `Missing primary identifier: ${primaryField.label}` }, { status: 400 });
+    }
+
+    if (primaryField.type === 'phone') {
+      primaryIdValue = primaryIdValue.replace(/\D/g, '');
+      if (primaryIdValue.length < 7 || primaryIdValue.length > 15) {
+        return NextResponse.json({ error: 'Invalid phone number' }, { status: 400 });
+      }
+    } else if (primaryField.type === 'email') {
+      primaryIdValue = primaryIdValue.toLowerCase().trim();
+    }
+
     // Check if already submitted for this quiz
-    const existing = await kvGet(`quiz:${quizId}:submissions:${cleanPhone}`);
+    const existing = await kvGet(`quiz:${quizId}:submissions:${primaryIdValue}`);
     if (existing) {
       return NextResponse.json({ error: 'Already submitted', submission: existing }, { status: 409 });
     }
@@ -99,8 +129,7 @@ export async function POST(request: NextRequest) {
     const percentage = totalPossible > 0 ? Math.round((score / totalPossible) * 100) : 0;
 
     const submission: QuizSubmission = {
-      name: name.trim(),
-      phone: cleanPhone,
+      responses,
       answers,
       score,
       totalPossible,
@@ -108,11 +137,15 @@ export async function POST(request: NextRequest) {
       submittedAt: new Date().toISOString()
     };
 
-    await kvSet(`quiz:${quizId}:submissions:${cleanPhone}`, submission);
+    // Keep backwards compatibility for results view that checks for name/phone explicitly
+    if (responses['f_name']) submission.name = responses['f_name'].trim();
+    if (responses['f_phone']) submission.phone = responses['f_phone'].replace(/\D/g, '');
+
+    await kvSet(`quiz:${quizId}:submissions:${primaryIdValue}`, submission);
 
     const index = (await kvGet(`quiz:${quizId}:submissions_index`) as string[]) || [];
-    if (!index.includes(cleanPhone)) {
-      index.push(cleanPhone);
+    if (!index.includes(primaryIdValue)) {
+      index.push(primaryIdValue);
       await kvSet(`quiz:${quizId}:submissions_index`, index);
     }
 
@@ -134,18 +167,24 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// GET: Check if phone already submitted for active quiz
+// GET: Check if primary ID already submitted for active quiz
 export async function GET(request: NextRequest) {
   try {
-    const phone = request.nextUrl.searchParams.get('phone');
-    if (!phone) return NextResponse.json({ error: 'Phone required' }, { status: 400 });
+    const primaryIdValueRaw = request.nextUrl.searchParams.get('primaryIdValue');
+    let phone = request.nextUrl.searchParams.get('phone'); // legacy fallback
+    
+    let primaryIdValue = primaryIdValueRaw || phone;
+    
+    if (!primaryIdValue) return NextResponse.json({ error: 'Primary ID value required' }, { status: 400 });
 
     const quizList = (await kvGet('quiz:list') as any[]) || [];
     const activeQuiz = quizList.find((q: any) => q.status === 'active');
     if (!activeQuiz) return NextResponse.json({ submitted: false });
 
-    const cleanPhone = phone.replace(/\D/g, '');
-    const submission = await kvGet(`quiz:${activeQuiz.id}:submissions:${cleanPhone}`);
+    // Clean if it seems like a phone number (legacy mode)
+    if (phone) primaryIdValue = primaryIdValue.replace(/\D/g, '');
+
+    const submission = await kvGet(`quiz:${activeQuiz.id}:submissions:${primaryIdValue}`);
 
     if (submission) {
       return NextResponse.json({ submitted: true, submission });

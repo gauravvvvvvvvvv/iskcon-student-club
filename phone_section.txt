@@ -1,0 +1,53 @@
+514:                 />
+515:               </div>
+516:               <div style={{ marginBottom: '24px' }}>
+517:                 <label style={styles.label}>Phone Number *</label>
+518:                 <div style={{ display: 'flex', gap: '8px' }}>
+519:                   <select
+520:                     value={countryCode}
+521:                     onChange={e => {
+522:                       setCountryCode(e.target.value);
+523:                       setPhone('');
+524:                       setPhoneError('');
+525:                     }}
+526:                     style={{
+527:                       ...styles.input,
+528:                       width: '140px',
+529:                       flexShrink: 0,
+530:                       cursor: 'pointer',
+531:                       appearance: 'none' as const,
+532:                       WebkitAppearance: 'none' as const,
+533:                       backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 8L1 3h10z'/%3E%3C/svg%3E")`,
+534:                       backgroundRepeat: 'no-repeat',
+535:                       backgroundPosition: 'right 12px center',
+536:                       paddingRight: '30px',
+537:                     }}
+538:                   >
+539:                     {COUNTRY_CODES.map((c, i) => (
+540:                       <option key={`${c.country}-${i}`} value={c.code} style={{ background: '#1a1a2e', color: '#fff' }}>
+541:                         {c.country} {c.code}
+542:                       </option>
+543:                     ))}
+544:                   </select>
+545:                   <input
+546:                     type="tel"
+547:                     value={phone}
+548:                     onChange={e => {
+549:                       const maxLen = getSelectedCountry().maxLen;
+550:                       const val = e.target.value.replace(/[^0-9]/g, '').slice(0, maxLen);
+551:                       setPhone(val);
+552:                       if (val.length === maxLen) validatePhone(val);
+553:                       else if (val.length > 0) setPhoneError('');
+554:                     }}
+555:                     placeholder={`${getSelectedCountry().maxLen}-digit number`}
+556:                     required
+557:                     maxLength={getSelectedCountry().maxLen}
+558:                     style={{ ...styles.input, flex: 1 }}
+559:                   />
+560:                 </div>
+561:                 {phoneError && (
+562:                   <p style={{ color: '#ef4444', fontSize: '13px', marginTop: '6px' }}>{phoneError}</p>
+563:                 )}
+564:               </div>
+565:               <button type="submit" style={styles.primaryBtn}>
+566:                 Start Quiz ΓåÆ

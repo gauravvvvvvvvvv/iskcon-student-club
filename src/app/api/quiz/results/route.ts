@@ -5,8 +5,9 @@ import { kvGet, kvSet, kvDel } from '../../../../lib/kv-store';
 export const dynamic = 'force-dynamic';
 
 interface QuizSubmission {
-  name: string;
-  phone: string;
+  name?: string;
+  phone?: string;
+  responses?: Record<string, string>;
   answers: Record<string, number>;
   score: number;
   totalPossible: number;

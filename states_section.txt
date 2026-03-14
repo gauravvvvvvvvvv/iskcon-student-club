@@ -1,0 +1,12 @@
+  const [pageState, setPageState] = useState<PageState>('loading');
+  const [config, setConfig] = useState<QuizMeta | null>(null);
+  const [questions, setQuestions] = useState<QuizQuestion[]>([]);
+  const [answers, setAnswers] = useState<Record<string, number>>({});
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [countryCode, setCountryCode] = useState('+91');
+  const [phoneError, setPhoneError] = useState('');
+  const [timeLeft, setTimeLeft] = useState(0);
+  const [result, setResult] = useState<{ score: number; totalPossible: number; percentage: number } | null>(null);
+  const [answerKey, setAnswerKey] = useState<Array<{
+    id: string;

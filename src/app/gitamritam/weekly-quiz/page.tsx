@@ -110,10 +110,10 @@ export default function WeeklyQuizPage() {
   const [config, setConfig] = useState<QuizMeta | null>(null);
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [answers, setAnswers] = useState<Record<string, number>>({});
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [countryCode, setCountryCode] = useState('+91');
-  const [phoneError, setPhoneError] = useState('');
+  const [responses, setResponses] = useState<Record<string, string>>({});
+  const [finalResponsesPayload, setFinalResponsesPayload] = useState<Record<string, string>>({});
+  const [phoneCodes, setPhoneCodes] = useState<Record<string, string>>({});
+  const [openSelectId, setOpenSelectId] = useState<string | null>(null);
   const [timeLeft, setTimeLeft] = useState(0);
   const [result, setResult] = useState<{ score: number; totalPossible: number; percentage: number } | null>(null);
   const [answerKey, setAnswerKey] = useState<Array<{
@@ -184,32 +184,57 @@ export default function WeeklyQuizPage() {
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
-  const getSelectedCountry = () => COUNTRY_CODES.find(c => c.code === countryCode) || COUNTRY_CODES[0];
-
-  const validatePhone = (value: string) => {
-    const clean = value.replace(/\D/g, '');
-    const selected = getSelectedCountry();
-    if (clean.length === 0) {
-      setPhoneError('');
-      return false;
-    }
-    if (clean.length < 7 || clean.length > selected.maxLen) {
-      setPhoneError(`Please enter a valid phone number (${selected.maxLen} digits for ${selected.name})`);
-      return false;
-    }
-    setPhoneError('');
-    return true;
-  };
-
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim()) return;
-    if (!validatePhone(phone)) return;
+    if (!config) return;
 
-    const cleanPhone = countryCode + phone.replace(/\D/g, '');
+    const regFields = config.registrationFields || [
+      { id: 'f_name', type: 'text', label: 'Name', required: true, isPrimaryId: false },
+      { id: 'f_phone', type: 'phone', label: 'Phone Number', required: true, isPrimaryId: true }
+    ];
+
+    // Validate and build final formatted responses
+    const finalResponses: Record<string, string> = { ...responses };
+
+    for (const field of regFields) {
+      const val = responses[field.id] || '';
+      
+      if (field.required && !val.trim()) {
+        alert(`${field.label} is required.`);
+        return;
+      }
+      
+      if (field.type === 'phone' && val.trim()) {
+        const clean = val.replace(/[^0-9+]/g, '');
+        if (clean.length < 7 || clean.length > 20) {
+          alert(`Please enter a valid phone number for ${field.label}.`);
+          return;
+        }
+        // Save the compounded value into the final payload
+        const cc = phoneCodes[field.id] || '+91';
+        finalResponses[field.id] = `${cc} ${clean}`;
+      } else {
+        finalResponses[field.id] = val;
+      }
+    }
+
+    const primaryField = regFields.find((f: any) => f.isPrimaryId) || regFields[0];
+    let primaryIdValue = finalResponses[primaryField.id];
+    
+    if (primaryField.type === 'phone') {
+      // For duplicate checking, only use the raw digits to prevent +91 formatting variations from bypassing checks.
+      primaryIdValue = primaryIdValue.replace(/\D/g, '');
+    } else if (primaryField.type === 'email') {
+      primaryIdValue = primaryIdValue.toLowerCase().trim();
+    }
+
+    if (!primaryIdValue) {
+      alert(`Please provide a valid ${primaryField.label}.`);
+      return;
+    }
 
     // Check if already submitted
-    const check = await checkExistingSubmission(cleanPhone);
+    const check = await checkExistingSubmission(primaryIdValue);
     if (check.submitted && check.submission) {
       setExistingSubmission(check.submission);
       setResult({
@@ -239,6 +264,7 @@ export default function WeeklyQuizPage() {
 
     setTimeLeft(timeLimitSeconds);
     hasAutoSubmitted.current = false;
+    setFinalResponsesPayload(finalResponses);
     setPageState('quiz');
   };
 
@@ -266,8 +292,7 @@ export default function WeeklyQuizPage() {
     if (timerRef.current) clearInterval(timerRef.current);
 
     try {
-      const cleanPhone = countryCode + phone.replace(/\D/g, '');
-      const data = await submitQuizAnswers(name.trim(), cleanPhone, answers);
+      const data = await submitQuizAnswers(finalResponsesPayload, answers);
       setResult({
         score: data.score,
         totalPossible: data.totalPossible,
@@ -280,8 +305,7 @@ export default function WeeklyQuizPage() {
       alert('Failed to submit quiz. Retrying...');
       // Retry once
       try {
-        const cleanPhone = countryCode + phone.replace(/\D/g, '');
-        const data = await submitQuizAnswers(name.trim(), cleanPhone, answers);
+        const data = await submitQuizAnswers(finalResponsesPayload, answers);
         setResult({
           score: data.score,
           totalPossible: data.totalPossible,
@@ -294,7 +318,7 @@ export default function WeeklyQuizPage() {
         setPageState('quiz');
       }
     }
-  }, [answers, name, phone, countryCode, questions, pageState]);
+  }, [answers, finalResponsesPayload, questions, pageState]);
 
   const answeredCount = Object.keys(answers).length;
   const timerPercentage = config ? (timeLeft / (config.timerMinutes * 60)) * 100 : 100;
@@ -502,66 +526,155 @@ export default function WeeklyQuizPage() {
               Enter Your Details
             </h2>
             <form onSubmit={handleRegister}>
-              <div style={{ marginBottom: '20px' }}>
-                <label style={styles.label}>Full Name *</label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={e => setName(e.target.value)}
-                  placeholder="Enter your full name"
-                  required
-                  style={styles.input}
-                />
-              </div>
-              <div style={{ marginBottom: '24px' }}>
-                <label style={styles.label}>Phone Number *</label>
-                <div style={{ display: 'flex', gap: '8px' }}>
-                  <select
-                    value={countryCode}
-                    onChange={e => {
-                      setCountryCode(e.target.value);
-                      setPhone('');
-                      setPhoneError('');
-                    }}
-                    style={{
-                      ...styles.input,
-                      width: '140px',
-                      flexShrink: 0,
-                      cursor: 'pointer',
-                      appearance: 'none' as const,
-                      WebkitAppearance: 'none' as const,
-                      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 8L1 3h10z'/%3E%3C/svg%3E")`,
-                      backgroundRepeat: 'no-repeat',
-                      backgroundPosition: 'right 12px center',
-                      paddingRight: '30px',
-                    }}
-                  >
-                    {COUNTRY_CODES.map((c, i) => (
-                      <option key={`${c.country}-${i}`} value={c.code} style={{ background: '#1a1a2e', color: '#fff' }}>
-                        {c.country} {c.code}
-                      </option>
-                    ))}
-                  </select>
-                  <input
-                    type="tel"
-                    value={phone}
-                    onChange={e => {
-                      const maxLen = getSelectedCountry().maxLen;
-                      const val = e.target.value.replace(/[^0-9]/g, '').slice(0, maxLen);
-                      setPhone(val);
-                      if (val.length === maxLen) validatePhone(val);
-                      else if (val.length > 0) setPhoneError('');
-                    }}
-                    placeholder={`${getSelectedCountry().maxLen}-digit number`}
-                    required
-                    maxLength={getSelectedCountry().maxLen}
-                    style={{ ...styles.input, flex: 1 }}
-                  />
+              {(config?.registrationFields || [
+                { id: 'f_name', type: 'text', label: 'Name', required: true, isPrimaryId: false },
+                { id: 'f_phone', type: 'phone', label: 'Phone Number', required: true, isPrimaryId: true }
+              ]).map((field: any) => (
+                <div key={field.id} style={{ marginBottom: '20px', position: 'relative' }}>
+                  <label style={styles.label}>{field.label} {field.required && '*'}</label>
+                  
+                  {field.type === 'select' ? (
+                    <>
+                      {/* Invisible overlay to close dropdown */}
+                      {openSelectId === field.id && (
+                        <div 
+                          onClick={() => setOpenSelectId(null)}
+                          style={{ position: 'fixed', inset: 0, zIndex: 9 }}
+                        />
+                      )}
+                      <div
+                        onClick={() => setOpenSelectId(openSelectId === field.id ? null : field.id)}
+                        style={{
+                          ...styles.input,
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          color: responses[field.id] ? '#fff' : '#9ca3af',
+                          position: 'relative',
+                          zIndex: 10
+                        }}
+                      >
+                        {responses[field.id] || `Select ${field.label}`}
+                        <svg width="12" height="12" viewBox="0 0 12 12" style={{ transform: openSelectId === field.id ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
+                          <path fill="#ffffff" d="M6 8L1 3h10z"/>
+                        </svg>
+                      </div>
+                      
+                      {openSelectId === field.id && (
+                        <div style={{
+                          position: 'absolute',
+                          top: '100%',
+                          left: 0,
+                          right: 0,
+                          marginTop: '4px',
+                          background: '#1a1a2e',
+                          border: '1px solid rgba(255,255,255,0.15)',
+                          borderRadius: '12px',
+                          overflow: 'hidden',
+                          zIndex: 20,
+                          boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
+                          maxHeight: '200px',
+                          overflowY: 'auto'
+                        }}>
+                          {(field.options || []).map((opt: string, i: number) => (
+                            <div 
+                              key={i}
+                              onClick={() => {
+                                setResponses(prev => ({ ...prev, [field.id]: opt }));
+                                setOpenSelectId(null);
+                              }}
+                              style={{ 
+                                padding: '12px 16px', 
+                                color: responses[field.id] === opt ? '#d4a574' : '#fff',
+                                background: responses[field.id] === opt ? 'rgba(212,165,116,0.1)' : 'transparent',
+                                cursor: 'pointer',
+                                transition: 'background 0.2s'
+                              }}
+                              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.05)')}
+                              onMouseLeave={(e) => (e.currentTarget.style.background = responses[field.id] === opt ? 'rgba(212,165,116,0.1)' : 'transparent')}
+                            >
+                              {opt}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      {/* Hidden input for HTML validation if required */}
+                      {field.required && !responses[field.id] && (
+                        <input type="text" required style={{ opacity: 0, position: 'absolute', height: 0, width: 0, padding: 0, margin: 0, pointerEvents: 'none' }} />
+                      )}
+                    </>
+                  ) : field.type === 'radio' ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      {(field.options || []).map((opt: string, i: number) => (
+                        <label key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#fff', cursor: 'pointer', padding: '8px 12px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px' }}>
+                          <input
+                            type="radio"
+                            name={`form_${field.id}`}
+                            value={opt}
+                            checked={responses[field.id] === opt}
+                            onChange={e => setResponses(prev => ({ ...prev, [field.id]: e.target.value }))}
+                            required={field.required}
+                            style={{ accentColor: '#d4a574', width: '18px', height: '18px' }}
+                          />
+                          {opt}
+                        </label>
+                      ))}
+                    </div>
+                  ) : field.type === 'phone' ? (
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <select
+                        value={phoneCodes[field.id] || '+91'}
+                        onChange={e => {
+                          setPhoneCodes(prev => ({ ...prev, [field.id]: e.target.value }));
+                          setResponses(prev => ({ ...prev, [field.id]: '' }));
+                        }}
+                        style={{
+                          ...styles.input,
+                          width: '140px',
+                          flexShrink: 0,
+                          cursor: 'pointer',
+                          appearance: 'none' as const,
+                          WebkitAppearance: 'none' as const,
+                          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 8L1 3h10z'/%3E%3C/svg%3E")`,
+                          backgroundRepeat: 'no-repeat',
+                          backgroundPosition: 'right 12px center',
+                          paddingRight: '30px',
+                        }}
+                      >
+                        {COUNTRY_CODES.map((c, i) => (
+                          <option key={`${c.country}-${i}`} value={c.code} style={{ background: '#1a1a2e', color: '#fff' }}>
+                            {c.country} {c.code}
+                          </option>
+                        ))}
+                      </select>
+                      <input
+                        type="tel"
+                        value={responses[field.id] || ''}
+                        onChange={e => {
+                          const cc = phoneCodes[field.id] || '+91';
+                          const maxLen = (COUNTRY_CODES.find(c => c.code === cc) || COUNTRY_CODES[0]).maxLen;
+                          const val = e.target.value.replace(/[^0-9]/g, '').slice(0, maxLen);
+                          setResponses(prev => ({ ...prev, [field.id]: val }));
+                        }}
+                        placeholder={`${(COUNTRY_CODES.find(c => c.code === (phoneCodes[field.id] || '+91')) || COUNTRY_CODES[0]).maxLen}-digit number`}
+                        required={field.required}
+                        maxLength={(COUNTRY_CODES.find(c => c.code === (phoneCodes[field.id] || '+91')) || COUNTRY_CODES[0]).maxLen}
+                        style={{ ...styles.input, flex: 1 }}
+                      />
+                    </div>
+                  ) : (
+                    <input
+                      type={field.type === 'email' ? 'email' : 'text'}
+                      value={responses[field.id] || ''}
+                      onChange={e => setResponses(prev => ({ ...prev, [field.id]: e.target.value }))}
+                      placeholder={`Enter your ${field.label.toLowerCase()}`}
+                      required={field.required}
+                      style={styles.input}
+                    />
+                  )}
                 </div>
-                {phoneError && (
-                  <p style={{ color: '#ef4444', fontSize: '13px', marginTop: '6px' }}>{phoneError}</p>
-                )}
-              </div>
+              ))}
               <button type="submit" style={styles.primaryBtn}>
                 Start Quiz →
               </button>

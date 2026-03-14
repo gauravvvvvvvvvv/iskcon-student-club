@@ -1,0 +1,44 @@
+187:   const getSelectedCountry = () => COUNTRY_CODES.find(c => c.code === countryCode) || COUNTRY_CODES[0];
+188: 
+189:   const validatePhone = (value: string) => {
+190:     const clean = value.replace(/\D/g, '');
+191:     const selected = getSelectedCountry();
+192:     if (clean.length === 0) {
+193:       setPhoneError('');
+194:       return false;
+195:     }
+196:     if (clean.length < 7 || clean.length > selected.maxLen) {
+---
+207:     if (!validatePhone(phone)) return;
+208: 
+209:     const cleanPhone = countryCode + phone.replace(/\D/g, '');
+210: 
+211:     // Check if already submitted
+212:     const check = await checkExistingSubmission(cleanPhone);
+213:     if (check.submitted && check.submission) {
+214:       setExistingSubmission(check.submission);
+215:       setResult({
+216:         score: check.submission.score,
+---
+549:                       const maxLen = getSelectedCountry().maxLen;
+550:                       const val = e.target.value.replace(/[^0-9]/g, '').slice(0, maxLen);
+551:                       setPhone(val);
+552:                       if (val.length === maxLen) validatePhone(val);
+553:                       else if (val.length > 0) setPhoneError('');
+554:                     }}
+555:                     placeholder={`${getSelectedCountry().maxLen}-digit number`}
+556:                     required
+557:                     maxLength={getSelectedCountry().maxLen}
+558:                     style={{ ...styles.input, flex: 1 }}
+---
+555:                     placeholder={`${getSelectedCountry().maxLen}-digit number`}
+556:                     required
+557:                     maxLength={getSelectedCountry().maxLen}
+558:                     style={{ ...styles.input, flex: 1 }}
+559:                   />
+560:                 </div>
+561:                 {phoneError && (
+562:                   <p style={{ color: '#ef4444', fontSize: '13px', marginTop: '6px' }}>{phoneError}</p>
+563:                 )}
+564:               </div>
+---

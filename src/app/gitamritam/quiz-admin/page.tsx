@@ -15,10 +15,12 @@ import {
   fetchQuizResults,
   clearQuizResults,
   exportQuizResultsCSV,
-  bulkAddQuizQuestions, // Added this import
+  bulkAddQuizQuestions,
   type QuizMeta,
   type QuizQuestion,
   type QuizResults,
+  type FormField,
+  type FormFieldType,
 } from '../../../lib/quiz';
 
 type View = 'list' | 'edit' | 'results';
@@ -58,6 +60,10 @@ export default function QuizAdminPage() {
 
   // Config save
   const [configSaving, setConfigSaving] = useState(false);
+
+  // Form Builder Drag and Drop
+  const [draggedFieldIndex, setDraggedFieldIndex] = useState<number | null>(null);
+  const [openSelectId, setOpenSelectId] = useState<string | null>(null);
 
   // Results view
   const [resultsQuizId, setResultsQuizId] = useState<string | null>(null);
@@ -131,6 +137,7 @@ export default function QuizAdminPage() {
         timerMinutes: selectedQuiz.timerMinutes,
         launchTime: selectedQuiz.launchTime,
         endTime: selectedQuiz.endTime,
+        registrationFields: selectedQuiz.registrationFields,
       });
       setSelectedQuiz(updated);
       setQuizzes(prev => prev.map(q => q.id === updated.id ? updated : q));
@@ -165,6 +172,59 @@ export default function QuizAdminPage() {
     } catch (error: any) {
       alert(error.message || 'Failed to delete');
     }
+  };
+
+  // ============ FORM BUILDER ============
+  const handleAddField = () => {
+    if (!selectedQuiz) return;
+    const newField: FormField = {
+      id: `f_${Date.now()}`,
+      type: 'text',
+      label: 'New Field',
+      required: false,
+      isPrimaryId: false
+    };
+    setSelectedQuiz(prev => prev ? {
+      ...prev,
+      registrationFields: [...(prev.registrationFields || []), newField]
+    } : prev);
+  };
+
+  const handleUpdateField = (index: number, updates: Partial<FormField>) => {
+    if (!selectedQuiz) return;
+    const fields = [...(selectedQuiz.registrationFields || [])];
+    fields[index] = { ...fields[index], ...updates };
+    setSelectedQuiz(prev => prev ? { ...prev, registrationFields: fields } : prev);
+  };
+
+  const handleRemoveField = (index: number) => {
+    if (!selectedQuiz) return;
+    const fields = [...(selectedQuiz.registrationFields || [])];
+    
+    if (fields[index].isPrimaryId) {
+      alert("You cannot delete the Primary Identifier field. Please assign Primary ID to another field first.");
+      return;
+    }
+    
+    fields.splice(index, 1);
+    setSelectedQuiz(prev => prev ? { ...prev, registrationFields: fields } : prev);
+  };
+
+  const handleSetPrimaryId = (index: number) => {
+    if (!selectedQuiz) return;
+    const fields = [...(selectedQuiz.registrationFields || [])];
+    fields.forEach(f => f.isPrimaryId = false);
+    fields[index].isPrimaryId = true;
+    setSelectedQuiz(prev => prev ? { ...prev, registrationFields: fields } : prev);
+  };
+
+  const handleMoveField = (dragIndex: number, hoverIndex: number) => {
+    if (!selectedQuiz) return;
+    const fields = [...(selectedQuiz.registrationFields || [])];
+    const dragItem = fields[dragIndex];
+    fields.splice(dragIndex, 1);
+    fields.splice(hoverIndex, 0, dragItem);
+    setSelectedQuiz(prev => prev ? { ...prev, registrationFields: fields } : prev);
   };
 
   // ============ QUESTIONS ============
@@ -512,7 +572,6 @@ export default function QuizAdminPage() {
                         style={s.input} />
                     </div>
                     <div>
-                      <label style={s.label}>End Time (auto-end)</label>
                       <input type="datetime-local"
                         value={selectedQuiz.endTime ? (() => {
                           try {
@@ -530,6 +589,185 @@ export default function QuizAdminPage() {
                         style={s.input} />
                     </div>
                   </div>
+
+                  {/* Form Builder Section */}
+                  <div style={{ marginTop: '24px', borderTop: '1px solid #e5e7eb', paddingTop: '20px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                      <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#111827', margin: 0 }}>Registration Form</h3>
+                      <button onClick={handleAddField} style={{ ...s.btnSecondary, padding: '4px 12px', fontSize: '13px' }}>+ Add Field</button>
+                    </div>
+                    
+                    <p style={{ color: '#6b7280', fontSize: '13px', marginBottom: '16px' }}>
+                      Design the form students must submit before taking the quiz. Exactly one field must be marked as the <b>Primary ID</b> (used to block duplicate attempts).
+                    </p>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
+                      {(selectedQuiz.registrationFields || []).map((field, index) => (
+                        <div 
+                          key={field.id}
+                          draggable
+                          onDragStart={() => setDraggedFieldIndex(index)}
+                          onDragOver={(e) => e.preventDefault()}
+                          onDrop={(e) => {
+                            e.preventDefault();
+                            if (draggedFieldIndex !== null && draggedFieldIndex !== index) {
+                              handleMoveField(draggedFieldIndex, index);
+                            }
+                            setDraggedFieldIndex(null);
+                          }}
+                          style={{
+                            background: '#f9fafb',
+                            border: '1px solid #e5e7eb',
+                            borderRadius: '8px',
+                            padding: '12px',
+                            display: 'flex',
+                            gap: '12px',
+                            opacity: draggedFieldIndex === index ? 0.5 : 1,
+                            cursor: 'grab'
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', color: '#9ca3af', cursor: 'grab' }}>
+                            ☰
+                          </div>
+                          <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'minmax(150px, 2fr) minmax(120px, 1fr) auto', gap: '12px', alignItems: 'flex-start' }}>
+                            {/* Label */}
+                            <div>
+                              <input 
+                                type="text"
+                                value={field.label}
+                                onChange={(e) => handleUpdateField(index, { label: e.target.value })}
+                                placeholder="Field Label (e.g. Area, Email)"
+                                style={{ ...s.input, padding: '6px 10px', fontSize: '14px', marginBottom: '8px' }}
+                              />
+                              {(field.type === 'select' || field.type === 'radio') && (
+                                <input 
+                                  type="text"
+                                  value={(field as any)._rawOptions !== undefined ? (field as any)._rawOptions : (field.options || []).join(', ')}
+                                  onChange={(e) => {
+                                    const val = e.target.value;
+                                    handleUpdateField(index, { 
+                                      options: val.split(',').map(o => o.trim()).filter(Boolean),
+                                      _rawOptions: val
+                                    } as any);
+                                  }}
+                                  onBlur={() => handleUpdateField(index, { _rawOptions: undefined } as any)}
+                                  placeholder="Options separated by comma"
+                                  style={{ ...s.input, padding: '6px 10px', fontSize: '13px', borderColor: '#d1d5db' }}
+                                />
+                              )}
+                            </div>
+                            
+                            {/* Type */}
+                            <div style={{ position: 'relative' }}>
+                              {openSelectId === field.id && (
+                                <div onClick={() => setOpenSelectId(null)} style={{ position: 'fixed', inset: 0, zIndex: 9 }} />
+                              )}
+                              <div
+                                onClick={() => setOpenSelectId(openSelectId === field.id ? null : field.id)}
+                                style={{
+                                  ...s.input,
+                                  cursor: 'pointer',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'space-between',
+                                  padding: '6px 10px',
+                                  fontSize: '14px',
+                                  position: 'relative',
+                                  zIndex: 10,
+                                  minWidth: '155px'
+                                }}
+                              >
+                                {{
+                                  'text': 'Short Text',
+                                  'phone': 'Phone Number',
+                                  'email': 'Email',
+                                  'select': 'Dropdown (Select)',
+                                  'radio': 'Multiple Choice'
+                                }[field.type] || 'Select...'}
+                                <svg width="10" height="10" viewBox="0 0 12 12" style={{ transform: openSelectId === field.id ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
+                                  <path fill="#6b7280" d="M6 8L1 3h10z"/>
+                                </svg>
+                              </div>
+                              {openSelectId === field.id && (
+                                <div style={{
+                                  position: 'absolute',
+                                  top: '100%',
+                                  left: 0,
+                                  right: 0,
+                                  marginTop: '4px',
+                                  background: '#ffffff',
+                                  border: '1px solid #d1d5db',
+                                  borderRadius: '6px',
+                                  overflow: 'hidden',
+                                  zIndex: 20,
+                                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                                }}>
+                                  {[
+                                    { value: 'text', label: 'Short Text' },
+                                    { value: 'phone', label: 'Phone Number' },
+                                    { value: 'email', label: 'Email' },
+                                    { value: 'select', label: 'Dropdown (Select)' },
+                                    { value: 'radio', label: 'Multiple Choice' }
+                                  ].map((opt) => (
+                                    <div
+                                      key={opt.value}
+                                      onClick={() => {
+                                        handleUpdateField(index, { type: opt.value as FormFieldType });
+                                        setOpenSelectId(null);
+                                      }}
+                                      style={{
+                                        padding: '8px 10px',
+                                        fontSize: '13px',
+                                        cursor: 'pointer',
+                                        background: field.type === opt.value ? '#f3f4f6' : 'transparent',
+                                        color: field.type === opt.value ? '#111827' : '#4b5563',
+                                        transition: 'background 0.2s',
+                                        fontWeight: field.type === opt.value ? 500 : 400
+                                      }}
+                                      onMouseEnter={(e) => (e.currentTarget.style.background = '#f9fafb')}
+                                      onMouseLeave={(e) => (e.currentTarget.style.background = field.type === opt.value ? '#f3f4f6' : 'transparent')}
+                                    >
+                                      {opt.label}
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Controls */}
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px' }}>
+                              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
+                                <input 
+                                  type="checkbox" 
+                                  checked={field.required}
+                                  onChange={(e) => handleUpdateField(index, { required: e.target.checked })}
+                                  style={{ accentColor: '#d4a574' }}
+                                /> Required 
+                              </label>
+                              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
+                                <input 
+                                  type="radio" 
+                                  name="primaryId"
+                                  checked={field.isPrimaryId || false}
+                                  onChange={() => handleSetPrimaryId(index)}
+                                  style={{ accentColor: '#d4a574' }}
+                                /> Primary ID
+                              </label>
+                            </div>
+                          </div>
+                          
+                          <button 
+                            onClick={() => handleRemoveField(index)}
+                            style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                            title="Remove Field"
+                          >
+                            🗑️
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
                   <button onClick={handleSaveConfig} disabled={configSaving}
                     style={{ ...s.btnPrimary, opacity: configSaving ? 0.6 : 1 }}>
                     {configSaving ? 'Saving...' : 'Save Configuration'}
@@ -686,10 +924,17 @@ export default function QuizAdminPage() {
         )}
 
         {/* ============ RESULTS VIEW ============ */}
-        {view === 'results' && resultsQuizId && (
+        {view === 'results' && resultsQuizId && (() => {
+        const resultsQuiz = quizzes.find(q => q.id === resultsQuizId);
+        const regFields = resultsQuiz?.registrationFields || [
+          { id: 'f_name', type: 'text', label: 'Name', required: true, isPrimaryId: false },
+          { id: 'f_phone', type: 'phone', label: 'Phone', required: true, isPrimaryId: true }
+        ];
+
+        return (
           <div>
             <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '20px' }}>
-              📊 Results — {quizzes.find(q => q.id === resultsQuizId)?.title || 'Quiz'}
+              📊 Results — {resultsQuiz?.title || 'Quiz'}
             </h2>
 
             {resultsLoading ? (
@@ -728,13 +973,18 @@ export default function QuizAdminPage() {
                   <table style={s.table}>
                     <thead>
                       <tr>
-                        <th style={s.th}>#</th><th style={s.th}>Name</th><th style={s.th}>Phone</th>
-                        <th style={s.th}>Score</th><th style={s.th}>%</th><th style={s.th}>Submitted</th>
+                        <th style={s.th}>#</th>
+                        {regFields.map((f: any) => (
+                          <th key={f.id} style={s.th}>{f.label}</th>
+                        ))}
+                        <th style={s.th}>Score</th>
+                        <th style={s.th}>%</th>
+                        <th style={s.th}>Submitted</th>
                       </tr>
                     </thead>
                     <tbody>
                       {results.submissions.map((sub, i) => (
-                        <tr key={sub.phone} style={{ background: i % 2 === 0 ? '#fff' : '#f9fafb' }}>
+                        <tr key={i} style={{ background: i % 2 === 0 ? '#fff' : '#f9fafb' }}>
                           <td style={s.td}>
                             <span style={{
                               display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
@@ -743,8 +993,16 @@ export default function QuizAdminPage() {
                               color: i === 0 ? '#d97706' : i === 1 ? '#6b7280' : i === 2 ? '#ea580c' : '#9ca3af',
                             }}>{i + 1}</span>
                           </td>
-                          <td style={{ ...s.td, fontWeight: 500 }}>{sub.name}</td>
-                          <td style={{ ...s.td, fontVariantNumeric: 'tabular-nums', color: '#6b7280' }}>{sub.phone}</td>
+                          {regFields.map((f: any) => {
+                            const val = (sub.responses && sub.responses[f.id])
+                              ? sub.responses[f.id]
+                              : (f.id === 'f_name' ? sub.name : (f.id === 'f_phone' ? sub.phone : ''));
+                            return (
+                              <td key={f.id} style={{ ...s.td, fontWeight: f.id === 'f_name' ? 500 : 400, color: f.id === 'f_phone' ? '#6b7280' : 'inherit' }}>
+                                {val}
+                              </td>
+                            );
+                          })}
                           <td style={s.td}>{sub.score}/{sub.totalPossible}</td>
                           <td style={s.td}>
                             <span style={{
@@ -766,7 +1024,8 @@ export default function QuizAdminPage() {
               </>
             )}
           </div>
-        )}
+        );
+      })()}
       </main>
     </div>
   );

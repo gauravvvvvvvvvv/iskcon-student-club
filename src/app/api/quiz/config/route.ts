@@ -11,6 +11,7 @@ interface QuizMeta {
   launchTime: string;
   endTime: string;
   status: 'draft' | 'active' | 'ended';
+  registrationFields?: any[]; // Array of FormFields
   createdAt: string;
   updatedAt: string;
 }
@@ -98,7 +99,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { title, timerMinutes, launchTime, endTime } = await request.json();
+    const { title, timerMinutes, launchTime, endTime, registrationFields } = await request.json();
     const quizList = (await kvGet('quiz:list') as QuizMeta[]) || [];
 
     // Check for schedule overlap
@@ -107,6 +108,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: overlapError }, { status: 400 });
     }
 
+    // Default to Name and Phone if no registration fields are provided
+    const defaultFields = [
+      { id: 'f_name', type: 'text', label: 'Name', required: true, isPrimaryId: false },
+      { id: 'f_phone', type: 'phone', label: 'Phone Number', required: true, isPrimaryId: true }
+    ];
+
     const newQuiz: QuizMeta = {
       id: `quiz_${Date.now()}`,
       title: title || 'Untitled Quiz',
@@ -114,6 +121,7 @@ export async function POST(request: NextRequest) {
       launchTime: launchTime || '',
       endTime: endTime || '',
       status: 'draft',
+      registrationFields: registrationFields || defaultFields,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };

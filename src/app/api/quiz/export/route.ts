@@ -5,8 +5,9 @@ import { kvGet } from '../../../../lib/kv-store';
 export const dynamic = 'force-dynamic';
 
 interface QuizSubmission {
-  name: string;
-  phone: string;
+  name?: string;
+  phone?: string;
+  responses?: Record<string, string>;
   score: number;
   totalPossible: number;
   percentage: number;
@@ -47,16 +48,32 @@ export async function GET(request: NextRequest) {
 
     submissions.sort((a, b) => b.score - a.score || a.submittedAt.localeCompare(b.submittedAt));
 
-    const headers = ['Rank', 'Name', 'Phone', 'Score', 'Total Possible', 'Percentage', 'Submitted At'];
-    const rows = submissions.map((s, i) => [
-      i + 1,
-      `"${s.name.replace(/"/g, '""')}"`,
-      s.phone,
-      s.score,
-      s.totalPossible,
-      `${s.percentage}%`,
-      new Date(s.submittedAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
-    ]);
+    const regFields = quiz?.registrationFields || [
+      { id: 'f_name', label: 'Name' },
+      { id: 'f_phone', label: 'Phone Number' }
+    ];
+
+    const staticHeaders = ['Rank', 'Score', 'Total Possible', 'Percentage', 'Submitted At'];
+    const dynamicHeaders = regFields.map((f: any) => f.label);
+    const headers = ['Rank', ...dynamicHeaders, 'Score', 'Total Possible', 'Percentage', 'Submitted At'];
+
+    const rows = submissions.map((s, i) => {
+      const dynamicRowData = regFields.map((f: any) => {
+        const val = (s.responses && s.responses[f.id]) 
+          ? s.responses[f.id] 
+          : (f.id === 'f_name' ? s.name : (f.id === 'f_phone' ? s.phone : ''));
+        return `"${(val || '').replace(/"/g, '""')}"`;
+      });
+
+      return [
+        i + 1,
+        ...dynamicRowData,
+        s.score,
+        s.totalPossible,
+        `${s.percentage}%`,
+        new Date(s.submittedAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
+      ];
+    });
 
     const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
     const safeTitle = quizTitle.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
